@@ -7,6 +7,13 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
+		//initialize frame
+		MyFrame frame = new MyFrame();
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+		
 		System.out.println("Enter the story in text form");
 		BufferedReader br =new BufferedReader(new InputStreamReader(System.in));
 		String story=br.readLine();
