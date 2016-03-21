@@ -8,7 +8,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	StringBuilder storystring = new StringBuilder();
 	StringBuilder objectstring = new StringBuilder();
 	StringBuilder affordstring = new StringBuilder();
-	ArrayList<DigitalObject>() objects = new ArrayList<DigitalObject>();
+	//ArrayList<DigitalObject>() objects = new ArrayList<DigitalObject>();
 	//Object panel, left side
 	private JPanel objectpanel = new JPanel();
 		private JLabel object = new JLabel("Smart Objects");
