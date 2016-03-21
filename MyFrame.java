@@ -8,6 +8,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	StringBuilder storystring = new StringBuilder();
 	StringBuilder objectstring = new StringBuilder();
 	StringBuilder affordstring = new StringBuilder();
+	ArrayList<DigitalObject>() objects = new ArrayList<DigitalObject>();
 	//Object panel, left side
 	private JPanel objectpanel = new JPanel();
 		private JLabel object = new JLabel("Smart Objects");
@@ -20,9 +21,13 @@ public class MyFrame extends JFrame implements ActionListener {
 		private JTextArea affordancesList = new JTextArea(10,10);
 	//Story panel, center
 	private JPanel storytxtpanel = new JPanel();
-		private JLabel storylabel = new JLabel("Story");
+		private JPanel labelpanel = new JPanel();
+		private JLabel storylabel = new JLabel("Input Story");
+		private JLabel outputlabel = new JLabel("Output Story");
 		private JScrollPane storypane;
-		private JTextArea storytxt = new JTextArea(10,50);
+		private JScrollPane output;
+		private JTextArea storytxt = new JTextArea(10,25);
+		private JTextArea outputtxt = new JTextArea(10,25);
 	//Bottom panel
 	private JPanel bottom = new JPanel();
 		 private JPanel enterpanel = new JPanel();
@@ -48,9 +53,14 @@ public class MyFrame extends JFrame implements ActionListener {
 			affordpanel.add(affordpane,BorderLayout.CENTER);
 		storytxtpanel.setLayout(new BorderLayout(10,10));
 			storytxt.setEditable(false);
-			storytxtpanel.add(storylabel,BorderLayout.NORTH);
+			labelpanel.setLayout(new BorderLayout(10,10));
+			labelpanel.add(storylabel,BorderLayout.WEST);
+			labelpanel.add(outputlabel, BorderLayout.EAST);
+			storytxtpanel.add(labelpanel, BorderLayout.NORTH);
 			storypane = new JScrollPane(storytxt);
-			storytxtpanel.add(storypane,BorderLayout.CENTER);
+			storytxtpanel.add(storypane,BorderLayout.WEST);
+			output = new JScrollPane(outputtxt);
+			storytxtpanel.add(output, BorderLayout.EAST);
 		enterpanel.setLayout(new BorderLayout(10,10));
 			enterpanel.add(enterlabel,BorderLayout.WEST);
 			enterpanel.add(entertxt,BorderLayout.CENTER);
@@ -147,7 +157,9 @@ public class MyFrame extends JFrame implements ActionListener {
 			entertxt.setText("");
 			break;
 		case "Generate Story":
-			JOptionPane.showMessageDialog(this,"In Progress");
+			//process input into object structure
+			
+			//then generate new story randomly
 			break;
 		
 		}
