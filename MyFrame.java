@@ -8,6 +8,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	StringBuilder storystring = new StringBuilder();
 	StringBuilder objectstring = new StringBuilder();
 	StringBuilder affordstring = new StringBuilder();
+	ArrayList<DigitalObject> objects2;
 	//ArrayList<DigitalObject>() objects = new ArrayList<DigitalObject>();
 	//Object panel, left side
 	private JPanel objectpanel = new JPanel();
@@ -38,9 +39,9 @@ public class MyFrame extends JFrame implements ActionListener {
 		 	private JButton generate = new JButton("Generate Story");
 	
 	
-	public MyFrame(){
+	public MyFrame(ArrayList<DigitalObject> objects){
 		this.setTitle("Story World Generator");
-		
+		objects2=objects;
 		objectpanel.setLayout(new BorderLayout(10,10));
 			objectList.setEditable(false);
 			objectpanel.add(object,BorderLayout.NORTH);
@@ -76,13 +77,15 @@ public class MyFrame extends JFrame implements ActionListener {
 					if(parts.length < 2){
 						JOptionPane.showMessageDialog(MyFrame.this,"Incorrect Format: Enter as Object Action Object*");
 						return;
-					}			
+					}
+					analyze(string, objects2);
 					storystring.append(string + "\n");
 					storytxt.setText(storystring.toString());
 					for(int i = 0; i< parts.length;i++){
 						objects = objectstring.toString().split("\\s+");
 						affords = affordstring.toString().split("\\s+");
 						if(i != 1){
+						// Checks if existing object, if not, then adds to object string
 							int j;
 							for(j = 0;j<objects.length;j++){
 								if(parts[i].equals(objects[j])){
@@ -96,6 +99,7 @@ public class MyFrame extends JFrame implements ActionListener {
 							}							
 						}
 						if(i == 1){
+						//Checks if action is already in the action string, if not then adds it 
 							int k;
 							for(k = 0;k<affords.length;k++){
 								if(parts[i].equals(affords[k])){
@@ -136,7 +140,8 @@ public class MyFrame extends JFrame implements ActionListener {
 			if(parts.length < 2){
 				JOptionPane.showMessageDialog(this,"Incorrect Format: Enter as Object Action Object*");
 				break;
-			}			
+			}
+			analyze(string, objects2);
 			storystring.append(string + "\n");
 			storytxt.setText(storystring.toString());
 			for(int i = 0; i< parts.length;i++){
@@ -158,7 +163,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			break;
 		case "Generate Story":
 			//process input into object structure
-			
+			Main.printData(objects2);
 			//then generate new story randomly
 			break;
 		
@@ -172,5 +177,43 @@ public class MyFrame extends JFrame implements ActionListener {
 	}
 	public String getStory(){
 		return storystring.toString();
+	}
+	private static ArrayList<DigitalObject> analyze(String story, ArrayList<DigitalObject> objects)
+	{
+		//read the story sentence by sentence, separated by period
+		String[] sentences = story.split("\\.");
+		
+
+		
+		//for each sentence: first word is Active Object, second word is action, third word is passive object?
+		for(int i =0;i<sentences.length; ++i)
+		{
+			sentences[i]=sentences[i].trim();
+			String[] words=sentences[i].split(" ");
+			//first word is active object
+			DigitalObject object = null;
+			boolean found=false;
+			for(int j=0; j<objects.size(); ++j)
+			{
+				if(objects.get(j).name.equalsIgnoreCase(words[0]))
+				{
+					object=objects.get(j);
+					found=true;
+					break;
+				}
+			}
+			if(!found)
+			{
+				object = new DigitalObject(words[0]);
+				objects.add(object);
+				
+			}
+			
+			//second word is action, add to active object
+			object.addAction(new DigitalAction(new DigitalAffordance(words[1]), new ArrayList<DigitalObject>(), new DigitalState(words[1].concat(words[2]))));
+			//TODO: third word: what do we do with it?
+			
+		}
+		return objects;
 	}
 }

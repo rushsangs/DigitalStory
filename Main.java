@@ -9,25 +9,25 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		//initialize frame
-		MyFrame frame = new MyFrame();
+		ArrayList<DigitalObject> objects= new ArrayList<DigitalObject>();
+		MyFrame frame = new MyFrame(objects);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
 		
-		System.out.println("Enter the story in text form");
-		BufferedReader br =new BufferedReader(new InputStreamReader(System.in));
-		String story=br.readLine();
-		printData(analyze(story));
+//		System.out.println("Enter the story in text form");
+//		BufferedReader br =new BufferedReader(new InputStreamReader(System.in));
+//		String story=br.readLine();
+//		printData(analyze(story, objects));
 	}
 	
-	private static ArrayList<DigitalObject> analyze(String story)
+	private static ArrayList<DigitalObject> analyze(String story, ArrayList<DigitalObject> objects)
 	{
 		//read the story sentence by sentence, separated by period
 		String[] sentences = story.split("\\.");
 		
-		//traverse through each sentence and build an array of objects first
-		ArrayList<DigitalObject> objects= new ArrayList<DigitalObject>();
+
 		
 		//for each sentence: first word is Active Object, second word is action, third word is passive object?
 		for(int i =0;i<sentences.length; ++i)
@@ -54,7 +54,7 @@ public class Main {
 			}
 			
 			//second word is action, add to active object
-			object.addAction(new DigitalAction(words[1]));
+			object.addAction(new DigitalAction(new DigitalAffordance(words[1]), new ArrayList<DigitalObject>(), new DigitalState(words[1].concat(words[2]))));
 			//TODO: third word: what do we do with it?
 			
 		}
@@ -69,7 +69,7 @@ public class Main {
 			ArrayList<DigitalAction> actions= object.actions;
 			for( int j = 0; j<actions.size();++j)
 			{
-				System.out.println("Action for this object is: "+actions.get(j).name);
+				System.out.println("Action for this object is: "+actions.get(j).affordance.name);
 			}
 		}
 	}
