@@ -172,6 +172,7 @@ public class MyFrame extends JFrame implements ActionListener {
 //					objects2.get(i).isPassive = true;
 					passiveCandidates.add(objects2.get(i));
 				}
+				i++;
 			}
 			SelectionQuestion<DigitalObject> isPassive = new SelectionQuestion<DigitalObject>(
 					"Please check all smart objects that are passive.", objects2) {
