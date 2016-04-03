@@ -23,8 +23,8 @@ public class MyFrame extends JFrame implements ActionListener {
 	//Story panel, center
 	private JPanel storytxtpanel = new JPanel();
 		private JPanel labelpanel = new JPanel();
-		private JLabel storylabel = new JLabel("Input Story");
-		private JLabel outputlabel = new JLabel("Output Story");
+		private JLabel storylabel = new JLabel("                         Input Story");
+		private JLabel outputlabel = new JLabel("Output Story                         ");
 		private JScrollPane storypane;
 		private JScrollPane output;
 		private JTextArea storytxt = new JTextArea(10,25);
@@ -163,7 +163,17 @@ public class MyFrame extends JFrame implements ActionListener {
 			break;
 		case "Generate Story":
 			//process input into object structure
-			Main.printData(objects2);
+			//Main.printData(objects2);
+			int i = 0;
+			while(i < objects2.size()){
+				if(objects2.get(i).actions.isEmpty()){
+					objects2.get(i).isPassive = true;
+				}
+			}
+			String[] lines = storystring.toString().split("\n");
+			for(i = 0;i < lines.length;i++){
+				//ToDo
+			}
 			//then generate new story randomly
 			break;
 		

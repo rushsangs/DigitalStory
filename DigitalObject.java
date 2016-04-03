@@ -6,9 +6,11 @@ public class DigitalObject {
 	public String name;
 	public ArrayList<DigitalState> states = new ArrayList<DigitalState>();
 	public ArrayList<DigitalAction> actions=new ArrayList<DigitalAction>();
+	boolean isPassive;
 	public DigitalObject(String name) {
 		// TODO Auto-generated constructor stub
 		this.name=name;
+		this.isPassive = false;
 	}
 	public void addAction(DigitalAction action)
 	{
