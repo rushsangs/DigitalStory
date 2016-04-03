@@ -1,6 +1,7 @@
 import javax.swing.*;
 
 import java.util.*;
+import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -164,12 +165,27 @@ public class MyFrame extends JFrame implements ActionListener {
 		case "Generate Story":
 			//process input into object structure
 			//Main.printData(objects2);
+			List<DigitalObject> passiveCandidates = new ArrayList<DigitalObject>();			
 			int i = 0;
 			while(i < objects2.size()){
 				if(objects2.get(i).actions.isEmpty()){
-					objects2.get(i).isPassive = true;
+//					objects2.get(i).isPassive = true;
+					passiveCandidates.add(objects2.get(i));
 				}
 			}
+			SelectionQuestion<DigitalObject> isPassive = new SelectionQuestion<DigitalObject>(
+					"Please check all smart objects that are passive.", objects2) {
+				@Override
+				public void applyAnswer() {
+					for (DigitalObject o : list) {
+						o.isPassive = true;
+					}
+				}
+			};
+			isPassive.setDefaultSelection(passiveCandidates);
+			isPassive.promptUser();
+			isPassive.applyAnswer();
+			
 			String[] lines = storystring.toString().split("\n");
 			for(i = 0;i < lines.length;i++){
 				//ToDo
