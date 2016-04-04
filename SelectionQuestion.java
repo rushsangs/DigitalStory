@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -18,28 +19,37 @@ import javax.swing.JOptionPane;
  * not have the property
  */
 public abstract class SelectionQuestion<T> {
-	private JFrame parent;
 	private String prompt;
 	public List<T> list;
-	public HashSet<String> selected;
+	public HashSet<T> selected;
 	
 	public SelectionQuestion(String prompt, List<T> list) {
 		this.prompt = prompt;
 		this.list = list;
-		this.selected = new HashSet<String>();
+		this.selected = new HashSet<T>();
 	}
 	
 	public void setDefaultSelection(List<T> selection) {
 		for (T t : selection) {
 			if (list.contains(t)) {
-				selected.add(getName(t));
+				selected.add(t);
 			}
 		}
 	}
 	
 	public void promptUser() {
-		boolean[] selected2 = null;
-		while (null==selected2) {
+		if (list.isEmpty()) {
+			return;
+		}
+		ArrayList<T> list2 = new ArrayList<T>(list);
+		boolean[] selected2 = new boolean[selected.size()];
+		for (int i = 0; i<list.size(); i++) {
+			if (selected.contains(list2.get(i))) {
+				selected2[i] = true;
+			}
+		}
+		boolean[] selected3 = null;
+		while (null==selected3) {
 		// swing code
 //		Object[] params = new Object[list.size()+1];
 //		params[0] = prompt;
