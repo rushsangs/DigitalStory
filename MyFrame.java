@@ -174,7 +174,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				i++;
 			}
 			SelectionQuestion<DigitalObject> isPassive = new SelectionQuestion<DigitalObject>(
-					"Please check all smart objects that are passive.", objects2) {
+					this, "Please check all smart objects that are passive.", objects2) {
 				@Override
 				public void applyAnswer() {
 					for (DigitalObject o : list) {
