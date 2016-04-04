@@ -56,7 +56,7 @@ public abstract class SelectionQuestion<T> {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-		while (!frame.isDone); // stall until pop-up is closed
+		//while (!frame.isDone); // stall until pop-up is closed
 	}
 	
 	public abstract void applyAnswer();
