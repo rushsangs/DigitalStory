@@ -34,18 +34,15 @@ public class SelectionFrame extends JFrame implements ActionListener{
 		}
 		this.add(mygrid,BorderLayout.CENTER);
 		this.add(ok,BorderLayout.SOUTH);
-		
-		
-		
-		
-		
+		ok.addActionListener(this);
+				
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		switch(e.getActionCommand()){
-		case "ok":
+		case "OK":
 			for(int i = 0; i < myboxes.length; i++){
 				bool[i] = myboxes[i].isSelected();
 			}

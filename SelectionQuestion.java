@@ -57,6 +57,7 @@ public abstract class SelectionQuestion<T> {
 		frame.pack();
 		frame.setVisible(true);
 		//while (!frame.isDone); // stall until pop-up is closed
+		return;
 	}
 	
 	public abstract void applyAnswer();

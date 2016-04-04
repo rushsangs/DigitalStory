@@ -163,7 +163,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			break;
 		case "Generate Story":
 			
-			// PSEUDO UNIT TESTING
+			 //PSEUDO UNIT TESTING
 			objects2.add(new DigitalObject("Alice"));
 			objects2.add(new DigitalObject("Bob"));
 			objects2.add(new DigitalObject("Eve"));
@@ -202,8 +202,8 @@ public class MyFrame extends JFrame implements ActionListener {
 				//ToDo
 			}
 			//then generate new story randomly
-			StoryGenerator sg = new StoryGenerator(objects2);
-			outputtxt.setText(sg.writeStory());
+			//StoryGenerator sg = new StoryGenerator(objects2);
+			//outputtxt.setText(sg.writeStory());
 			break;
 		
 		}
