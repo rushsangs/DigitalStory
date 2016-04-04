@@ -54,13 +54,11 @@ public abstract class SelectionQuestion<T> {
 		boolean isDone = false;
 		while (!isDone) {
 		// swing code
-//		Object[] params = new Object[list.size()+1];
-//		params[0] = prompt;
-//		for (int i = 1; i<=list.size(); i++) {
-//			params[i] = new JCheckBox(getName(list.get(i)));
-//		}
-//		int n = JOptionPane.showConfirmDialog(parent, params, "");
-//		
+		SelectionFrame frame = new SelectionFrame(list2, selected2, prompt);
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
 		// display prompt
 		// display selection list
 		// save button that on click closes the prompt and updates selected
