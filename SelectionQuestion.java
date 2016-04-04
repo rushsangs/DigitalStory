@@ -1,13 +1,7 @@
-import java.awt.Dialog;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /**
  * 
@@ -21,7 +15,7 @@ import javax.swing.JOptionPane;
  * property and members who do 
  * not have the property
  */
-public abstract class SelectionQuestion<T> {
+public abstract class SelectionQuestion<T> implements Question {
 	private String prompt;
 	public List<T> list;
 	public HashSet<T> selected;
@@ -55,29 +49,22 @@ public abstract class SelectionQuestion<T> {
 				selected2[i] = true;
 			}
 		}
-		final int LIST_SIZE = list.size();
-		final List<T> LIST = list;
-		final HashSet<T> SELECTED = selected;
-		final boolean[] SELECTED2 = selected2;
-		SelectionFrame frame = new SelectionFrame(list2, selected2, prompt) {
-			
-			@Override 
-			public void dispose() {
-				for (int i = 0; i<LIST_SIZE; i++) {
-					if (SELECTED2[i]) {
-						SELECTED.add(LIST.get(i));
-					} else {
-						SELECTED.remove(LIST.get(i));
-					}
-				}
-				super.dispose();
-			}
-		};
+		SelectionFrame frame = new SelectionFrame(list2, selected2, prompt);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-		System.out.println(frame.isDone);
+		
+		// after dialog is closed
+		for (int i = 0; i<list.size(); i++) {
+			if (selected2[i]) {
+				selected.add(list.get(i));
+			} else {
+				selected.remove(list.get(i));
+			}
+		}
+		
+		return;
 	}
 	
 	public abstract void applyAnswer();

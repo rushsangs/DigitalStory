@@ -78,7 +78,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						JOptionPane.showMessageDialog(MyFrame.this,"Incorrect Format: Enter as Object Action Object*");
 						return;
 					}
-					//analyze(string, objects2);
+					analyze(string, objects2);
 					storystring.append(string + "\n");
 					storytxt.setText(storystring.toString());
 					for(int i = 0; i< parts.length;i++){
@@ -141,7 +141,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this,"Incorrect Format: Enter as Object Action Object*");
 				break;
 			}
-			//analyze(string, objects2);
+			analyze(string, objects2);
 			storystring.append(string + "\n");
 			storytxt.setText(storystring.toString());
 			for(int i = 0; i< parts.length;i++){
@@ -163,11 +163,10 @@ public class MyFrame extends JFrame implements ActionListener {
 			break;
 		case "Generate Story":
 			
-			 //PSEUDO UNIT TESTING
-			objects2.add(new DigitalObject("Alice"));
-			objects2.add(new DigitalObject("Bob"));
-			objects2.add(new DigitalObject("Eve"));
+			 //PSEUDO UNIT TESTING FOR PASSIVE OBJECTS
+			objects2.add(new DigitalObject("Forest"));
 			objects2.add(new DigitalObject("Cake"));
+			objects2.add(new DigitalObject("Granny"));
 			
 			//process input into object structure
 			//Main.printData(objects2);
@@ -194,11 +193,42 @@ public class MyFrame extends JFrame implements ActionListener {
 				}
 			};
 			isPassive.setDefaultSelection(passiveCandidates);
-			isPassive.promptUser();
-			isPassive.applyAnswer();
-//			for (DigitalObject o : objects2) {
-//				System.out.println(o.name + ": " + ((o.isPassive)? "Passive" : "Active"));
-//			}
+			Set<DigitalAction> uniqueActions = new HashSet<DigitalAction>();
+			for (DigitalObject o : objects2) {
+				uniqueActions.addAll(o.actions);
+			}
+			ArrayList<DigitalAction> actions = new ArrayList<DigitalAction>(uniqueActions);
+			SelectionQuestion<DigitalAction> isTerminal = 
+					new SelectionQuestion<DigitalAction>(
+							"Please check all actions that result in termination.", actions) {
+
+								@Override
+								public void applyAnswer() {
+									for (DigitalAction a : list) {
+										a.isTerminal = selected.contains(a);
+									}
+								}
+
+								@Override
+								public String getName(DigitalAction t) {
+									return t.affordance.name;
+								}
+				
+			};
+			//TODO: set default isTerminal selection
+			
+			Question[] questions = {isPassive, isTerminal};
+			for (Question q : questions) {
+				q.promptUser();
+				q.applyAnswer();
+			}
+			
+			for (DigitalObject o : objects2) {
+				System.out.println(o.name + ": " + ((o.isPassive)? "Passive" : "Active"));
+			}
+			for (DigitalAction a : actions) {
+				System.out.println(a.affordance.name + ": " + ((a.isTerminal)? "Terminal" : "Normal"));
+			}
 			
 			String[] lines = storystring.toString().split("\n");
 			for(i = 0;i < lines.length;i++){
