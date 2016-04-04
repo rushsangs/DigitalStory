@@ -39,7 +39,7 @@ public abstract class SelectionQuestion<T> {
 	
 	public void promptUser() {
 		boolean[] selected2 = null;
-		while (null!=selected2) {
+		while (null==selected2) {
 		// swing code
 //		Object[] params = new Object[list.size()+1];
 //		params[0] = prompt;
