@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
-public class SelectionFrame extends JFrame implements ActionListener{
+public class SelectionFrame extends JDialog implements ActionListener{
 	String[] list = null;
 	boolean[] bool = null;
 	String prompt = null;
@@ -19,6 +19,7 @@ public class SelectionFrame extends JFrame implements ActionListener{
 		this.bool = bool;
 		this.prompt = prompt;
 		this.setLayout(new BorderLayout(10,10));
+		this.setModal(true);
 		this.setTitle(prompt);
 		mylabels = new JLabel[list.length];
 		myboxes = new JCheckBox[list.length];

@@ -185,7 +185,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				@Override
 				public void applyAnswer() {
 					for (DigitalObject o : list) {
-						o.isPassive = true;
+						o.isPassive = selected.contains(o);
 					}
 				}
 				@Override
@@ -196,6 +196,9 @@ public class MyFrame extends JFrame implements ActionListener {
 			isPassive.setDefaultSelection(passiveCandidates);
 			isPassive.promptUser();
 			isPassive.applyAnswer();
+//			for (DigitalObject o : objects2) {
+//				System.out.println(o.name + ": " + ((o.isPassive)? "Passive" : "Active"));
+//			}
 			
 			String[] lines = storystring.toString().split("\n");
 			for(i = 0;i < lines.length;i++){

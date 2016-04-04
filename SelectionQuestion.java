@@ -1,3 +1,6 @@
+import java.awt.Dialog;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +25,7 @@ public abstract class SelectionQuestion<T> {
 	private String prompt;
 	public List<T> list;
 	public HashSet<T> selected;
+	public boolean[] selected2;
 	
 	public SelectionQuestion(String prompt, List<T> list) {
 		this.prompt = prompt;
@@ -45,19 +49,35 @@ public abstract class SelectionQuestion<T> {
 		for (int i = 0; i<list.size(); i++) {
 			list2[i] = getName(list.get(i));
 		}
-		boolean[] selected2 = new boolean[list.size()];
+		selected2 = new boolean[list.size()];
 		for (int i = 0; i<list.size(); i++) {
 			if (selected.contains(list.get(i))) {
 				selected2[i] = true;
 			}
 		}
-		SelectionFrame frame = new SelectionFrame(list2, selected2, prompt);
+		final int LIST_SIZE = list.size();
+		final List<T> LIST = list;
+		final HashSet<T> SELECTED = selected;
+		final boolean[] SELECTED2 = selected2;
+		SelectionFrame frame = new SelectionFrame(list2, selected2, prompt) {
+			
+			@Override 
+			public void dispose() {
+				for (int i = 0; i<LIST_SIZE; i++) {
+					if (SELECTED2[i]) {
+						SELECTED.add(LIST.get(i));
+					} else {
+						SELECTED.remove(LIST.get(i));
+					}
+				}
+				super.dispose();
+			}
+		};
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-		//while (!frame.isDone); // stall until pop-up is closed
-		return;
+		System.out.println(frame.isDone);
 	}
 	
 	public abstract void applyAnswer();
