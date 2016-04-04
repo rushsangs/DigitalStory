@@ -78,7 +78,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						JOptionPane.showMessageDialog(MyFrame.this,"Incorrect Format: Enter as Object Action Object*");
 						return;
 					}
-					analyze(string, objects2);
+					//analyze(string, objects2);
 					storystring.append(string + "\n");
 					storytxt.setText(storystring.toString());
 					for(int i = 0; i< parts.length;i++){
@@ -141,7 +141,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this,"Incorrect Format: Enter as Object Action Object*");
 				break;
 			}
-			analyze(string, objects2);
+			//analyze(string, objects2);
 			storystring.append(string + "\n");
 			storytxt.setText(storystring.toString());
 			for(int i = 0; i< parts.length;i++){
@@ -162,6 +162,13 @@ public class MyFrame extends JFrame implements ActionListener {
 			entertxt.setText("");
 			break;
 		case "Generate Story":
+			
+			// PSEUDO UNIT TESTING
+			objects2.add(new DigitalObject("Alice"));
+			objects2.add(new DigitalObject("Bob"));
+			objects2.add(new DigitalObject("Eve"));
+			objects2.add(new DigitalObject("Cake"));
+			
 			//process input into object structure
 			//Main.printData(objects2);
 			List<DigitalObject> passiveCandidates = new ArrayList<DigitalObject>();			
@@ -171,14 +178,19 @@ public class MyFrame extends JFrame implements ActionListener {
 //					objects2.get(i).isPassive = true;
 					passiveCandidates.add(objects2.get(i));
 				}
+				i++;
 			}
 			SelectionQuestion<DigitalObject> isPassive = new SelectionQuestion<DigitalObject>(
-					"Please check all smart objects that are passive.", objects2) {
+					"Please check all smart objects that are passive.", passiveCandidates) {
 				@Override
 				public void applyAnswer() {
 					for (DigitalObject o : list) {
 						o.isPassive = true;
 					}
+				}
+				@Override
+				public String getName(DigitalObject o) {
+					return o.name;
 				}
 			};
 			isPassive.setDefaultSelection(passiveCandidates);

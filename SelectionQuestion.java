@@ -1,5 +1,10 @@
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  * 
@@ -33,12 +38,28 @@ public abstract class SelectionQuestion<T> {
 	}
 	
 	public void promptUser() {
-		// swing code
-		// display prompt
-		// display selection list
-		// save button that on click closes the prompt and updates selected
-		//	(if selected is not updated every time the selection list is changed)
+		if (list.isEmpty()) {
+			return;
+		}
+		String[] list2 = new String[list.size()];
+		for (int i = 0; i<list.size(); i++) {
+			list2[i] = getName(list.get(i));
+		}
+		boolean[] selected2 = new boolean[list.size()];
+		for (int i = 0; i<list.size(); i++) {
+			if (selected.contains(list.get(i))) {
+				selected2[i] = true;
+			}
+		}
+		SelectionFrame frame = new SelectionFrame(list2, selected2, prompt);
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+		while (!frame.isDone); // stall until pop-up is closed
 	}
 	
 	public abstract void applyAnswer();
+	
+	public abstract String getName(T t);
 }
