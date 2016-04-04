@@ -56,13 +56,13 @@ public abstract class SelectionQuestion<T> {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-		while (!frame.isDone) {
+		//while (!frame.isDone) {
 			// swing code
 			// display prompt
 			// display selection list
 			// save button that on click closes the prompt and updates selected
 			//	(if selected is not updated every time the selection list is changed)
-		}
+		//}
 	}
 	
 	public abstract void applyAnswer();
