@@ -41,10 +41,13 @@ public abstract class SelectionQuestion<T> {
 		if (list.isEmpty()) {
 			return;
 		}
-		ArrayList<T> list2 = new ArrayList<T>(list);
-		boolean[] selected2 = new boolean[selected.size()];
+		String[] list2 = new String[list.size()];
 		for (int i = 0; i<list.size(); i++) {
-			if (selected.contains(list2.get(i))) {
+			list2[i] = getName(list.get(i));
+		}
+		boolean[] selected2 = new boolean[list.size()];
+		for (int i = 0; i<list.size(); i++) {
+			if (selected.contains(list.get(i))) {
 				selected2[i] = true;
 			}
 		}
