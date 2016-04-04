@@ -51,18 +51,17 @@ public abstract class SelectionQuestion<T> {
 				selected2[i] = true;
 			}
 		}
-		boolean isDone = false;
-		while (!isDone) {
-		// swing code
 		SelectionFrame frame = new SelectionFrame(list2, selected2, prompt);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-		// display prompt
-		// display selection list
-		// save button that on click closes the prompt and updates selected
-		//	(if selected is not updated every time the selection list is changed)
+		while (!frame.isDone) {
+			// swing code
+			// display prompt
+			// display selection list
+			// save button that on click closes the prompt and updates selected
+			//	(if selected is not updated every time the selection list is changed)
 		}
 	}
 	
