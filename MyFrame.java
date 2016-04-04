@@ -181,6 +181,10 @@ public class MyFrame extends JFrame implements ActionListener {
 						o.isPassive = true;
 					}
 				}
+				@Override
+				public String getName(DigitalObject o) {
+					return o.name;
+				}
 			};
 			isPassive.setDefaultSelection(passiveCandidates);
 			isPassive.promptUser();
