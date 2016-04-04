@@ -241,8 +241,8 @@ public class MyFrame extends JFrame implements ActionListener {
 				//ToDo
 			}
 			//then generate new story randomly
-			//StoryGenerator sg = new StoryGenerator(objects2);
-			//outputtxt.setText(sg.writeStory());
+			StoryGenerator sg = new StoryGenerator(objects2);
+			outputtxt.setText(sg.writeStory());
 			break;
 		
 		}
@@ -286,10 +286,34 @@ public class MyFrame extends JFrame implements ActionListener {
 				objects.add(object);
 				
 			}
+			ArrayList<DigitalObject> affordees=new ArrayList<DigitalObject>();
+			//TODO: third word: what do we do with it
+			if(words[2]!=null)
+			{
+				//add affordees to the object's action
+				for(int x=2;x<words.length;++x)
+				{
+					boolean fl=false;
+					for(int y=0;y<objects.size();++y)
+					{
+						if(objects.get(y).name.equalsIgnoreCase(words[x]))
+						{
+							affordees.add(objects.get(y));
+							fl=true;
+						}
+					}
+					if(!fl)
+					{
+						objects.add(new DigitalObject(words[x]));
+						affordees.add(objects.get(objects.size()-1));
+					}
+					
+				}
+			}
 			
 			//second word is action, add to active object
-			object.addAction(new DigitalAction(new DigitalAffordance(words[1]), new ArrayList<DigitalObject>(), new DigitalState(words[1].concat(words[2]))));
-			//TODO: third word: what do we do with it?
+			object.addAction(new DigitalAction(new DigitalAffordance(words[1]), affordees, new DigitalState(words[1].concat(words[2]))));
+			
 			
 		}
 		return objects;

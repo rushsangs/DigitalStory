@@ -45,6 +45,7 @@ public class StoryGenerator {
 			break;
 		}
 		//for each line of the story
+		System.out.println("line 48");
 		for(int i = 0; i < length; i++) {
 			//pick an active object to perform an action 
 			boolean active = false;
@@ -80,8 +81,8 @@ public class StoryGenerator {
 		sa = e;
 		switch(e) {
 			case STARTFALSE:
-				MAX_LENGTH = 40;
-				MIN_LENGTH = 10;
+				MAX_LENGTH = 10;
+				MIN_LENGTH = 5;
 				break;
 			case STARTRANDOM:
 				MAX_LENGTH = 40;
