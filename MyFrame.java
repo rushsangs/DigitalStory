@@ -10,7 +10,6 @@ public class MyFrame extends JFrame implements ActionListener {
 	StringBuilder objectstring = new StringBuilder();
 	StringBuilder affordstring = new StringBuilder();
 	ArrayList<DigitalObject> objects2;
-	//ArrayList<DigitalObject>() objects = new ArrayList<DigitalObject>();
 	//Object panel, left side
 	private JPanel objectpanel = new JPanel();
 		private JLabel object = new JLabel("Smart Objects");
@@ -192,6 +191,8 @@ public class MyFrame extends JFrame implements ActionListener {
 				//ToDo
 			}
 			//then generate new story randomly
+			StoryGenerator sg = new StoryGenerator(objects2);
+			outputtxt.setText(sg.writeStory());
 			break;
 		
 		}
