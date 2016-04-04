@@ -223,9 +223,15 @@ public class MyFrame extends JFrame implements ActionListener {
 				q.applyAnswer();
 			}
 			
+			// OUTPUT TO CONSOLE
+			System.out.println("isPassive");
+			System.out.println("---------");
 			for (DigitalObject o : objects2) {
 				System.out.println(o.name + ": " + ((o.isPassive)? "Passive" : "Active"));
 			}
+			System.out.println();
+			System.out.println("isTerminal");
+			System.out.println("----------");
 			for (DigitalAction a : actions) {
 				System.out.println(a.affordance.name + ": " + ((a.isTerminal)? "Terminal" : "Normal"));
 			}
