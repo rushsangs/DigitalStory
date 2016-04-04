@@ -11,8 +11,10 @@ public class SelectionFrame extends JFrame implements ActionListener{
 	private JLabel[] mylabels;
 	private JCheckBox[] myboxes;
 	private JButton ok = new JButton("OK");
+	public boolean isDone;
 	
 	public SelectionFrame(String[] list, boolean[] bool, String prompt){
+		this.isDone = false;
 		this.list = list;
 		this.bool = bool;
 		this.prompt = prompt;
@@ -45,11 +47,10 @@ public class SelectionFrame extends JFrame implements ActionListener{
 			for(int i = 0; i < myboxes.length; i++){
 				bool[i] = myboxes[i].isSelected();
 			}
+			isDone = true;
+			this.dispose();
 		
 		}
 	}
-	public boolean[] getBoolean(){
-		return bool;
-	
-	}
+
 }
