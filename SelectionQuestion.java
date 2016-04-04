@@ -48,8 +48,8 @@ public abstract class SelectionQuestion<T> {
 				selected2[i] = true;
 			}
 		}
-		boolean[] selected3 = null;
-		while (null==selected3) {
+		boolean isDone = false;
+		while (!isDone) {
 		// swing code
 //		Object[] params = new Object[list.size()+1];
 //		params[0] = prompt;
