@@ -1,3 +1,3 @@
 public enum ActionType {
-	NORMAL, TERMINAL, DORMANT
+	NORM, TERM, DORM
 }
