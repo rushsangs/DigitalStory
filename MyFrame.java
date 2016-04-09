@@ -173,7 +173,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			List<DigitalObject> passiveCandidates = new ArrayList<DigitalObject>();			
 			int i = 0;
 			while(i < objects2.size()){
-				if(objects2.get(i).actions.isEmpty()){
+				if(objects2.get(i).affordances.isEmpty()){
 //					objects2.get(i).isPassive = true;
 					passiveCandidates.add(objects2.get(i));
 				}
@@ -193,25 +193,28 @@ public class MyFrame extends JFrame implements ActionListener {
 				}
 			};
 			isPassive.setDefaultSelection(passiveCandidates);
-			Set<DigitalAction> uniqueActions = new HashSet<DigitalAction>();
+			Set<DigitalAffordance> uniqueActions = new HashSet<DigitalAffordance>();
 			for (DigitalObject o : objects2) {
-				uniqueActions.addAll(o.actions);
+				uniqueActions.addAll(o.affordances);
 			}
-			ArrayList<DigitalAction> actions = new ArrayList<DigitalAction>(uniqueActions);
-			SelectionQuestion<DigitalAction> isTerminal = 
-					new SelectionQuestion<DigitalAction>(
+			ArrayList<DigitalAffordance> actions = new ArrayList<DigitalAffordance>(uniqueActions);
+			SelectionQuestion<DigitalAffordance> isTerminal = 
+					new SelectionQuestion<DigitalAffordance>(
 							"Please check all actions that result in termination.", actions) {
 
 								@Override
 								public void applyAnswer() {
-									for (DigitalAction a : list) {
-										a.isTerminal = selected.contains(a);
+									for (DigitalAffordance a : list) {
+										if(selected.contains(a))
+										{
+											//TODO: PATRICK! Set the enum to "terminal R" or something
+										}
 									}
 								}
 
 								@Override
-								public String getName(DigitalAction t) {
-									return t.affordance.name;
+								public String getName(DigitalAffordance t) {
+									return t.name;
 								}
 				
 			};
@@ -232,8 +235,8 @@ public class MyFrame extends JFrame implements ActionListener {
 			System.out.println();
 			System.out.println("isTerminal");
 			System.out.println("----------");
-			for (DigitalAction a : actions) {
-				System.out.println(a.affordance.name + ": " + ((a.isTerminal)? "Terminal" : "Normal"));
+			for (DigitalAffordance a : actions) {
+				//TODO: MAybe delete? System.out.println(a.name + ": " + ((a.isTerminal)? "Terminal" : "Normal"));
 			}
 			
 			String[] lines = storystring.toString().split("\n");
@@ -287,7 +290,6 @@ public class MyFrame extends JFrame implements ActionListener {
 				
 			}
 			ArrayList<DigitalObject> affordees=new ArrayList<DigitalObject>();
-			//TODO: third word: what do we do with it
 			if(words[2]!=null)
 			{
 				//add affordees to the object's action
@@ -312,7 +314,9 @@ public class MyFrame extends JFrame implements ActionListener {
 			}
 			
 			//second word is action, add to active object
-			object.addAction(new DigitalAction(new DigitalAffordance(words[1]), affordees, new DigitalState(words[1].concat(words[2]))));
+			DigitalAffordance affordance=new DigitalAffordance(words[1], null);
+			affordance.addActionTuple(affordees, ActionType.NORM);
+			object.addAffordance(affordance);
 			
 			
 		}

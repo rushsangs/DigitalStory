@@ -5,19 +5,20 @@ public class DigitalObject {
 	//object class for each object in the story
 	public String name;
 	public ArrayList<DigitalState> states = new ArrayList<DigitalState>();
-	public ArrayList<DigitalAction> actions=new ArrayList<DigitalAction>();
+	public ArrayList<DigitalAffordance> affordances=new ArrayList<DigitalAffordance>();
 	boolean isPassive;
 	public DigitalObject(String name) {
 		// TODO Auto-generated constructor stub
 		this.name=name;
 		this.isPassive = false;
 	}
-	public void addAction(DigitalAction action)
+	public void addAffordance(DigitalAffordance affordance)
 	{
-		actions.add(action);
+		affordances.add(affordance);
 	}
-	public void addState(DigitalState state)
-	{
-		states.add(state);
-	}
+	
+//	public void addState(DigitalState state)
+//	{
+//		states.add(state);
+//	}
 }

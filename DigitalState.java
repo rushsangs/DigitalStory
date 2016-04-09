@@ -3,8 +3,7 @@ public class DigitalState {
 	public String name;
 	public boolean isActive;
 	public String type;
-	public DigitalState(String name) {
+	public DigitalState() {
 		// TODO Auto-generated constructor stub
-		this.name=name;
 	}
 }
