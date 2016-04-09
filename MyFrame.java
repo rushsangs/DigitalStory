@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 
 public class MyFrame extends JFrame implements ActionListener {
 	StringBuilder storystring = new StringBuilder();
@@ -37,7 +38,9 @@ public class MyFrame extends JFrame implements ActionListener {
 		 	private JTextField entertxt = new JTextField(50);
 		 private JPanel generatepanel = new JPanel();
 		 	private JButton generate = new JButton("Generate Story");
-	
+		 	private JButton clear = new JButton("Clear");
+		 	private JButton getfile = new JButton("Get File");
+	private JFileChooser filechooser = new JFileChooser();
 	
 	public MyFrame(ArrayList<DigitalObject> objects){
 		this.setTitle("Story World Generator");
@@ -122,6 +125,10 @@ public class MyFrame extends JFrame implements ActionListener {
 		generatepanel.setLayout(new FlowLayout(FlowLayout.CENTER,10,10));
 			generatepanel.add(generate);
 			generate.addActionListener(this);
+			generatepanel.add(clear);
+			clear.addActionListener(this);
+			generatepanel.add(getfile);
+			getfile.addActionListener(this);			
 		bottom.setLayout(new BorderLayout(10,10));
 			bottom.add(enterpanel,BorderLayout.NORTH);
 			bottom.add(generatepanel,BorderLayout.SOUTH);
@@ -137,6 +144,8 @@ public class MyFrame extends JFrame implements ActionListener {
 		case "Enter":
 			String string = entertxt.getText().trim();
 			String[] parts = string.split("\\s+");
+			String[] objects;
+			String[] affords;
 			if(parts.length < 2){
 				JOptionPane.showMessageDialog(this,"Incorrect Format: Enter as Object Action Object*");
 				break;
@@ -145,28 +154,109 @@ public class MyFrame extends JFrame implements ActionListener {
 			storystring.append(string + "\n");
 			storytxt.setText(storystring.toString());
 			for(int i = 0; i< parts.length;i++){
-				if(i == 0){
-					objectstring.append(parts[i] + "\n");
-					//objectList.setText(objectstring.toString());
-					continue;
+				objects = objectstring.toString().split("\\s+");
+				affords = affordstring.toString().split("\\s+");
+				if(i != 1){
+				// Checks if existing object, if not, then adds to object string
+					int j;
+					for(j = 0;j<objects.length;j++){
+						if(parts[i].equals(objects[j])){
+							break;
+						}
+					}
+					if( j == objects.length){
+						objectstring.append(parts[i] + "\n");
+						//objectList.setText(objectstring.toString());
+						continue;
+					}							
 				}
 				if(i == 1){
-					affordstring.append(parts[i] + "\n");
-					//affordancesList.setText(affordstring.toString());
-					continue;
-				}
-				objectList.append(parts[i] + "\n");				
+				//Checks if action is already in the action string, if not then adds it 
+					int k;
+					for(k = 0;k<affords.length;k++){
+						if(parts[i].equals(affords[k])){
+							break;
+						}
+					}
+					if( k == affords.length){
+						affordstring.append(parts[i] + "\n");
+						//affordancesList.setText(affordstring.toString());
+						continue;
+					}							
+				}									
 			}
 			objectList.setText(objectstring.toString());
 			affordancesList.setText(affordstring.toString());
 			entertxt.setText("");
 			break;
+		case "Clear":
+			objects2.clear();
+			storystring = new StringBuilder();
+			objectstring = new StringBuilder();
+			affordstring = new StringBuilder();
+			storytxt.setText("");
+			objectList.setText("");
+			affordancesList.setText("");
+			break;
+		case "Get File":
+			try{
+				if(filechooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+					File file = filechooser.getSelectedFile();
+					Scanner input = new Scanner(file);
+					while(input.hasNext()){
+						String string1 = input.nextLine();
+						String[] parts1 = string1.split("\\s+");
+						String[] objects1;
+						String[] affords1;
+						//analyze(string, objects2);
+						storystring.append(string1 + "\n");
+						storytxt.setText(storystring.toString());
+						for(int i = 0; i< parts1.length;i++){
+							objects1 = objectstring.toString().split("\\s+");
+							affords1 = affordstring.toString().split("\\s+");
+							if(i != 1){
+							// Checks if existing object, if not, then adds to object string
+								int j;
+								for(j = 0;j<objects1.length;j++){
+									if(parts1[i].equals(objects1[j])){
+										break;
+									}
+								}
+								if( j == objects1.length){
+									objectstring.append(parts1[i] + "\n");
+									//objectList.setText(objectstring.toString());
+									continue;
+								}							
+							}
+							if(i == 1){
+							//Checks if action is already in the action string, if not then adds it 
+								int k;
+								for(k = 0;k<affords1.length;k++){
+									if(parts1[i].equals(affords1[k])){
+										break;
+									}
+								}
+								if( k == affords1.length){
+									affordstring.append(parts1[i] + "\n");
+									//affordancesList.setText(affordstring.toString());
+									continue;
+								}							
+							}									
+						}
+						objectList.setText(objectstring.toString());
+						affordancesList.setText(affordstring.toString());
+					}
+				}
+			}catch(Exception e1){
+				e1.printStackTrace();
+			}
+			break;
 		case "Generate Story":
 			
 			 //PSEUDO UNIT TESTING FOR PASSIVE OBJECTS
-			objects2.add(new DigitalObject("Forest"));
-			objects2.add(new DigitalObject("Cake"));
-			objects2.add(new DigitalObject("Granny"));
+			//objects2.add(new DigitalObject("Forest"));
+			//objects2.add(new DigitalObject("Cake"));
+			//objects2.add(new DigitalObject("Granny"));
 			
 			//process input into object structure
 			//Main.printData(objects2);
