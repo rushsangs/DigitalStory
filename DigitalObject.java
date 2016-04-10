@@ -17,7 +17,7 @@ public class DigitalObject {
 	public void addAffordance(DigitalAffordance affordance)
 	{
 		int i = indexOf(affordance);
-		if(i >= 0) {
+		if(i < 0) {
 			affordances.add(affordance);
 		} else {
 			for(int j = 0; j < affordance.instances.size(); j++) {
