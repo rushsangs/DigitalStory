@@ -41,6 +41,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		 	private JButton clear = new JButton("Clear");
 		 	private JButton getfile = new JButton("Get File");
 	private JFileChooser filechooser = new JFileChooser();
+	public int numoflines;
 	
 	public MyFrame(ArrayList<DigitalObject> objects){
 		this.setTitle("Story World Generator");
@@ -83,6 +84,7 @@ public class MyFrame extends JFrame implements ActionListener {
 					}
 					analyze(string, objects2);
 					storystring.append(string + "\n");
+					numoflines++;
 					storytxt.setText(storystring.toString());
 					for(int i = 0; i< parts.length;i++){
 						objects = objectstring.toString().split("\\s+");
@@ -136,7 +138,8 @@ public class MyFrame extends JFrame implements ActionListener {
 			this.add(objectpanel,BorderLayout.WEST);
 			this.add(affordpanel,BorderLayout.EAST);
 			this.add(storytxtpanel,BorderLayout.CENTER);
-			this.add(bottom,BorderLayout.SOUTH);		
+			this.add(bottom,BorderLayout.SOUTH);
+		numoflines = 0;
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -150,6 +153,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this,"Incorrect Format: Enter as Object Action Object*");
 				break;
 			}
+			numoflines++;
 			analyze(string, objects2);
 			storystring.append(string + "\n");
 			storytxt.setText(storystring.toString());
@@ -197,6 +201,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			storytxt.setText("");
 			objectList.setText("");
 			affordancesList.setText("");
+			numoflines = 0;
 			break;
 		case "Get File":
 			try{
@@ -210,6 +215,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						String[] affords1;
 						//analyze(string, objects2);
 						storystring.append(string1 + "\n");
+						numoflines++;
 						storytxt.setText(storystring.toString());
 						for(int i = 0; i< parts1.length;i++){
 							objects1 = objectstring.toString().split("\\s+");
