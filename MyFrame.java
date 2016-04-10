@@ -351,7 +351,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			}
 			
 			//second word is action, add to active object
-			DigitalAffordance affordance=new DigitalAffordance(words[1], null);
+			DigitalAffordance affordance=new DigitalAffordance(words[1]);
 			affordance.addActionTuple(affordees, ActionType.NORM);
 			object.addAffordance(affordance);
 			

@@ -16,7 +16,24 @@ public class DigitalObject {
 	}
 	public void addAffordance(DigitalAffordance affordance)
 	{
-		affordances.add(affordance);
+		int i = indexOf(affordance);
+		if(i >= 0) {
+			affordances.add(affordance);
+		} else {
+			for(int j = 0; j < affordance.instances.size(); j++) {
+				affordances.get(i).addActionTuple(affordance.instances.get(j).affordee, affordance.instances.get(j).type);
+			}
+			
+		}
+	}
+	
+	public int indexOf(DigitalAffordance affordance) {
+		for(int i = 0; i < affordances.size(); i++) {
+			if(affordances.get(i).name.equalsIgnoreCase(affordance.name)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 	
 //	public void addState(DigitalState state)

@@ -24,6 +24,10 @@ public class DigitalAffordance {
 	//add state here
 	public String name;
 	public ArrayList<ActionTuple> instances;
+	public DigitalAffordance(String name) {
+		this.name = name;
+		instances = new ArrayList<ActionTuple>();
+	}
 	public DigitalAffordance(String name, ArrayList<ActionTuple> instances) {
 		// TODO Auto-generated constructor stub
 		this.name = name;
