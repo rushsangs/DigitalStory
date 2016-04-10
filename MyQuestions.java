@@ -5,8 +5,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MyQuestions {
+public class MyQuestions {	
 	public static void ask(ArrayList<DigitalObject> objects2, String storystring) {
+		String[] sentences = storystring.split("\\.");
+		String[][] story = new String[sentences.length][];
+		for (int i = 0; i<sentences.length; i++) {
+			story[i] = sentences[i].trim().split(" ");
+		}
+		
 		List<DigitalObject> passiveCandidates = new ArrayList<DigitalObject>();
 		int i = 0;
 		while(i < objects2.size()){
@@ -53,7 +59,7 @@ public class MyQuestions {
 
 							@Override
 							public String getName(DigitalAffordance t) {
-								return t.name;
+								return t.name + t.instances;
 							}
 			
 		};
