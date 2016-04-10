@@ -4,11 +4,13 @@ class ActionTuple {
 	public DigitalObject affordee;
 	public boolean active;
 	public ActionType type;
+	public ActionEffect effect;
 	
 	public ActionTuple(DigitalObject affordee, boolean active, ActionType type) {
 		this.affordee = affordee;
 		this.active = active;
 		this.type = type;
+		this.effect = ActionEffect.NORM;
 	}
 	
 	@Override
