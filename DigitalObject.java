@@ -8,7 +8,7 @@ public class DigitalObject {
 	public ArrayList<DigitalAffordance> affordances=new ArrayList<DigitalAffordance>();
 	boolean isPassive;
 	public StateType type;
-	public static final emptyObject = new DigitalObject("");
+	public static final DigitalObject emptyObject = new DigitalObject("");
 	public DigitalObject(String name) {
 		// TODO Auto-generated constructor stub
 		this.name=name;
