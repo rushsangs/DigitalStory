@@ -266,7 +266,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			
 			//process input into object structure
 			//Main.printData(objects2);
-			MyQuestions.ask(objects2);
+			MyQuestions.ask(objects2, storystring.toString());
 			
 			int i = 0;
 			

@@ -1,10 +1,12 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class MyQuestions {
-	public static void ask(ArrayList<DigitalObject> objects2) {
+	public static void ask(ArrayList<DigitalObject> objects2, String storystring) {
 		List<DigitalObject> passiveCandidates = new ArrayList<DigitalObject>();
 		int i = 0;
 		while(i < objects2.size()){
@@ -28,14 +30,16 @@ public class MyQuestions {
 			}
 		};
 		isPassive.setDefaultSelection(passiveCandidates);
-		Set<DigitalAffordance> uniqueActions = new HashSet<DigitalAffordance>();
+		HashMap<DigitalAffordance, DigitalObject> parents = new HashMap<DigitalAffordance, DigitalObject>();
 		for (DigitalObject o : objects2) {
-			uniqueActions.addAll(o.affordances);
+			for (DigitalAffordance affordance : o.affordances) {
+				parents.put(affordance, o);
+			}
 		}
-		ArrayList<DigitalAffordance> actions = new ArrayList<DigitalAffordance>(uniqueActions);
 		SelectionQuestion<DigitalAffordance> isTerminal = 
 				new SelectionQuestion<DigitalAffordance>(
-						"Please check all actions that result in termination.", actions) {
+						"Please check all actions that result in termination for all affordees.", 
+						new ArrayList<DigitalAffordance>(parents.keySet())) {
 
 							@Override
 							public void applyAnswer() {
@@ -67,11 +71,11 @@ public class MyQuestions {
 		for (DigitalObject o : objects2) {
 			System.out.println(o.name + ": " + ((o.isPassive)? "Passive" : "Active"));
 		}
-		System.out.println();
-		System.out.println("isTerminal");
-		System.out.println("----------");
-		for (DigitalAffordance a : actions) {
-			//TODO: MAybe delete? System.out.println(a.name + ": " + ((a.isTerminal)? "Terminal" : "Normal"));
-		}
+//		System.out.println();
+//		System.out.println("isTerminal");
+//		System.out.println("----------");
+//		for (DigitalAffordance a : actions) {
+//			//TODO: MAybe delete? System.out.println(a.name + ": " + ((a.isTerminal)? "Terminal" : "Normal"));
+//		}
 	}
 }
