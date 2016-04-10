@@ -347,8 +347,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			else
 			{
 				//this is a sentence like "Wolf dies", we add emptyObject to the affordees instead.
-				//TODO: JAMES replace null with emptyObject
-				affordees.add(null);
+				affordees.add(DigitalObject.EMPTY_OBJECT);
 			}
 			
 			//second word is action, add to active object
