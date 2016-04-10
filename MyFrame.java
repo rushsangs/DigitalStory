@@ -386,7 +386,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				
 			}
 			ArrayList<DigitalObject> affordees=new ArrayList<DigitalObject>();
-			if(words[2]!=null)
+			if(words.length>2)
 			{
 				//add affordees to the object's action
 				for(int x=2;x<words.length;++x)
@@ -407,6 +407,12 @@ public class MyFrame extends JFrame implements ActionListener {
 					}
 					
 				}
+			}
+			else
+			{
+				//this is a sentence like "Wolf dies", we add emptyObject to the affordees instead.
+				//TODO: JAMES replace null with emptyObject
+				affordees.add(null);
 			}
 			
 			//second word is action, add to active object
