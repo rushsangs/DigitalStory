@@ -20,7 +20,10 @@ public class DigitalAffordance {
 	public DigitalAffordance(String name, ArrayList<ActionTuple> instances) {
 		// TODO Auto-generated constructor stub
 		this.name = name;
-		this.instances = instances;
+		if (instances==null)
+			this.instances=new ArrayList<ActionTuple>();
+		else
+			this.instances = instances;
 	}
 	
 	public void addActionTuple(DigitalObject affordee, ActionType type) {
