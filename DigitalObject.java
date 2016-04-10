@@ -7,6 +7,7 @@ public class DigitalObject {
 	public ArrayList<DigitalState> states = new ArrayList<DigitalState>();
 	public ArrayList<DigitalAffordance> affordances=new ArrayList<DigitalAffordance>();
 	boolean isPassive;
+	public StateType type;
 	public DigitalObject(String name) {
 		// TODO Auto-generated constructor stub
 		this.name=name;
