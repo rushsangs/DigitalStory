@@ -10,6 +10,11 @@ class ActionTuple {
 		this.active = active;
 		this.type = type;
 	}
+	
+	@Override
+	public String toString() {
+		return affordee.name;
+	}
 }
 
 public class DigitalAffordance {
