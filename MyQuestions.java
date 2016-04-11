@@ -6,24 +6,23 @@ import java.util.List;
 import java.util.Set;
 
 public class MyQuestions {	
+	public static final String IS_PASSIVE_TEXT = "Please check all smart objects that are passive.";
+	public static final String IS_TERMINAL_TEXT = "Please check all actions that result in termination for either the actor or the affordees.";
+	
 	public static void ask(ArrayList<DigitalObject> objects2, String storystring) {
-		String[] sentences = storystring.split("\\.");
-		String[][] story = new String[sentences.length][];
-		for (int i = 0; i<sentences.length; i++) {
-			story[i] = sentences[i].trim().split(" ");
-		}
 		
 		List<DigitalObject> passiveCandidates = new ArrayList<DigitalObject>();
 		int i = 0;
 		while(i < objects2.size()){
 			if(objects2.get(i).affordances.isEmpty()){
-//				objects2.get(i).isPassive = true;
 				passiveCandidates.add(objects2.get(i));
 			}
 			i++;
 		}
-		SelectionQuestion<DigitalObject> isPassive = new SelectionQuestion<DigitalObject>(
-				"Please check all smart objects that are passive.", passiveCandidates) {
+		SelectionQuestion<DigitalObject> isPassive = 
+				new SelectionQuestion<DigitalObject>(
+						IS_PASSIVE_TEXT, 
+						passiveCandidates) {
 			@Override
 			public void applyAnswer() {
 				for (DigitalObject o : list) {
@@ -36,30 +35,79 @@ public class MyQuestions {
 			}
 		};
 		isPassive.setDefaultSelection(passiveCandidates);
-		HashMap<DigitalAffordance, DigitalObject> parents = new HashMap<DigitalAffordance, DigitalObject>();
+		
+		HashMap<String, DigitalObject> objectLookup = 
+				new HashMap<String, DigitalObject>();
+		for (DigitalObject o : objects2) {
+			objectLookup.put(o.name, o);
+		}
+		class ActionBundle {
+			public DigitalObject actor;
+			public DigitalAffordance affordance;
+			public ActionTuple instance;
+		}
+		HashMap<DigitalObject, ActionBundle> LTermCandidates = 
+				new HashMap<DigitalObject, ActionBundle>();
+		HashMap<DigitalObject, ActionBundle> RTermCandidates =
+				new HashMap<DigitalObject, ActionBundle>();
+		String[] sentences = storystring.split("\n");
+		for (i = 0; i<sentences.length; i++) {
+			String[] sentence = sentences[i].trim().split(" ");
+			if (sentence.length<=2) {
+				ActionBundle a = new ActionBundle();
+				a.actor = objectLookup.get(sentence[0]);
+				a.affordance = affordanceLookup(a.actor, sentence[1]);
+				a.instance = a.affordance.instances.get(0);
+				LTermCandidates.put(a.actor, a);
+			} else {
+				for (int j = 2; j<sentence.length; j++) {
+					ActionBundle a = new ActionBundle();
+					a.actor = objectLookup.get(sentence[0]);
+					a.affordance = affordanceLookup(a.actor, sentence[1]);
+					a.instance = a.affordance.instances.get(j-2);
+					LTermCandidates.put(a.actor, a);
+					RTermCandidates.put(a.instance.affordee, a);
+				}
+			}		
+		}
+		
+		HashMap<DigitalAffordance, DigitalObject> parents = 
+				new HashMap<DigitalAffordance, DigitalObject>();
 		for (DigitalObject o : objects2) {
 			for (DigitalAffordance affordance : o.affordances) {
 				parents.put(affordance, o);
 			}
 		}
-		SelectionQuestion<DigitalAffordance> isTerminal = 
-				new SelectionQuestion<DigitalAffordance>(
-						"Please check all actions that result in termination for all affordees.", 
-						new ArrayList<DigitalAffordance>(parents.keySet())) {
+		
+		HashSet<ActionBundle> uniqueActions = new HashSet<ActionBundle>();
+		uniqueActions.addAll(LTermCandidates.values());
+		uniqueActions.addAll(RTermCandidates.values());		
+		SelectionQuestion<ActionBundle> isTerminal = 
+				new SelectionQuestion<ActionBundle>(
+						IS_TERMINAL_TEXT, 
+						new ArrayList<ActionBundle>(uniqueActions)) {
 
 							@Override
 							public void applyAnswer() {
-								for (DigitalAffordance a : list) {
+								for (ActionBundle a : list) {
 									if(selected.contains(a))
 									{
-										//TODO: PATRICK! Set the enum to "terminal R" or something
+										a.instance.type = ActionType.TERM;
 									}
 								}
 							}
 
 							@Override
-							public String getName(DigitalAffordance t) {
-								return t.name + t.instances;
+							public String getName(ActionBundle t) {
+								StringBuilder s = new StringBuilder();
+								s.append(t.actor.name);
+								s.append(" ");
+								s.append(t.affordance.name);
+								if (null!=t.instance) {
+									s.append(" ");
+									s.append(t.instance.affordee.name);
+								}
+								return s.toString();
 							}
 			
 		};
@@ -77,11 +125,24 @@ public class MyQuestions {
 		for (DigitalObject o : objects2) {
 			System.out.println(o.name + ": " + ((o.isPassive)? "Passive" : "Active"));
 		}
-//		System.out.println();
-//		System.out.println("isTerminal");
-//		System.out.println("----------");
-//		for (DigitalAffordance a : actions) {
-//			//TODO: MAybe delete? System.out.println(a.name + ": " + ((a.isTerminal)? "Terminal" : "Normal"));
-//		}
+		System.out.println();
+		System.out.println("isTerminal");
+		System.out.println("----------");
+		for (DigitalAffordance a : parents.keySet()) {
+			for (ActionTuple instance : a.instances) {
+				System.out.println(parents.get(a).name + " " +
+						a.name + " " + instance.affordee.name + 
+						": "+ instance.type);
+			}
+		}
+	}
+	
+	public static DigitalAffordance affordanceLookup(DigitalObject actor, String name) {
+		for (DigitalAffordance aff : actor.affordances) {
+			if (aff.name.equals(name)) {
+				return aff;
+			}
+		}
+		return null;
 	}
 }
