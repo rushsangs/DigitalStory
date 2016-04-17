@@ -4,19 +4,18 @@ import java.util.*;
 import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
+
 public class SelectionFrame extends JDialog implements ActionListener{
 	String[] list = null;
-	enum[] enums = null;
+	ActionEffect[] enums = null;
 	String prompt = null;
 	private JLabel[] mylabels;
 	private JLabel myquestion;
-	//private JCheckBox[] myboxes;
-	//new code
+	private JPanel[] buttons;
 	private JRadioButton norm[];
 	private JRadioButton LDorm[];
 	private JRadioButton RDorm[];
 	private JRadioButton LRDorm[];
-	private JRadioButton RTerm[];
 	private JRadioButton RTerm[];
 	private JRadioButton LTerm[];
 	private JRadioButton LRTerm[];
@@ -25,18 +24,16 @@ public class SelectionFrame extends JDialog implements ActionListener{
 	private JButton ok = new JButton("OK");
 	public boolean isDone;
 	
-	public SelectionFrame(String[] list, enum[] enums, String prompt){
+	public SelectionFrame(String[] list, ActionEffect[] enums, String prompt){
 		this.isDone = false;
 		this.list = list;
-		this.selected = selected;
+		this.enums = enums;
 		this.prompt = prompt;
 		this.setLayout(new BorderLayout(10,10));
 		this.setModal(true);
-		//this.setTitle(prompt);
+		this.setTitle("Action Type and Effect Questions");
 		myquestion = new JLabel(prompt);
 		mylabels = new JLabel[list.length];
-		//myboxes = new JCheckBox[list.length];
-		//new code
 		norm = new JRadioButton[list.length];
 		LDorm = new JRadioButton[list.length];
 		RDorm = new JRadioButton[list.length];
@@ -50,6 +47,8 @@ public class SelectionFrame extends JDialog implements ActionListener{
 		mygrid.setLayout(new GridLayout(list.length,2));
 		for(int i = 0; i < list.length; i++){
 			mylabels[i] = new JLabel(list[i]);
+			buttons[i] = new JPanel();
+			buttons[i].setLayout(new FlowLayout(FlowLayout.LEFT));
 			norm[i] = new JRadioButton("Norm");
 			LDorm[i] = new JRadioButton("LDorm");
 			RDorm[i] = new JRadioButton("RDorm");
@@ -62,15 +61,30 @@ public class SelectionFrame extends JDialog implements ActionListener{
 			group[i].add(norm[i]);
 			group[i].add(LDorm[i]);
 			group[i].add(RDorm[i]);
-			group[i].add(LRorm[i]);
-			group[i].add(LTorm[i]);
-			group[i].add(RTorm[i]);
-			group[i].add(LRorm[i]);
+			group[i].add(LRDorm[i]);
+			group[i].add(LTerm[i]);
+			group[i].add(RTerm[i]);
+			group[i].add(LRTerm[i]);
+			
+			group[i] = new ButtonGroup();
+			buttons[i].add(norm[i]);
+			group[i].add(LDorm[i]);
+			buttons[i].add(LDorm[i]);
+			group[i].add(RDorm[i]);
+			buttons[i].add(RDorm[i]);
+			group[i].add(LRDorm[i]);
+			buttons[i].add(LRDorm[i]);
+			group[i].add(LTerm[i]);
+			buttons[i].add(LTerm[i]);
+			group[i].add(RTerm[i]);
+			buttons[i].add(RTerm[i]);
+			group[i].add(LRTerm[i]);
+			buttons[i].add(LRTerm[i]);
 			//myboxes[i] = new JCheckBox();
 			//myboxes[i].setSelected(true);
 			//myboxes[i].setVisible(true);
 			mygrid.add(mylabels[i]);
-			mygrid.add(group[i]);
+			mygrid.add(buttons[i]);
 		}
 		this.add(mygrid,BorderLayout.CENTER);
 		this.add(myquestion,BorderLayout.NORTH);
@@ -86,38 +100,36 @@ public class SelectionFrame extends JDialog implements ActionListener{
 		case "OK":
 			for(int i = 0; i < list.length; i++){
 				if(norm[i].isSelected()){
-					enum[i] = NORM;
+					enums[i] = ActionEffect.NORM;
 					continue;
 				}
 				if(LDorm[i].isSelected()){
-					enum[i] = LDORM;
+					enums[i] = ActionEffect.LDORM;
 					continue;
 				}
 				if(RDorm[i].isSelected()){
-					enum[i] = RDorm;
+					enums[i] = ActionEffect.RDORM;
 					continue;
 				}
 				if(LRDorm[i].isSelected()){
-					enum[i] = LRDorm;
+					enums[i] = ActionEffect.LRDORM;
 					continue;
 				}
 				if(LTerm[i].isSelected()){
-					enum[i] = LTerm;
+					enums[i] = ActionEffect.LTERM;
 					continue;
 				}
 				if(RTerm[i].isSelected()){
-					enum[i] = RTerm;
+					enums[i] = ActionEffect.RTERM;
 					continue;
 				}
 				if(LRTerm[i].isSelected()){
-					enum[i] = LRTerm;
+					enums[i] = ActionEffect.LRTERM;
 					continue;
 				}
 			}
 			isDone = true;
 			this.dispose();
-		
 		}
 	}
-
 }
