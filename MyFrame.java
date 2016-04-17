@@ -340,7 +340,8 @@ public class MyFrame extends JFrame implements ActionListener {
 			if(words.length>2 && words[1]=="is")
 			{
 				//words[2] is the type!
-				System.out.println("is is used!");
+				//System.out.println("is is used!");
+				
 			}
 			
 			ArrayList<DigitalObject> affordees=new ArrayList<DigitalObject>();
