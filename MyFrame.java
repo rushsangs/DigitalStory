@@ -369,6 +369,8 @@ public class MyFrame extends JFrame implements ActionListener {
 					object.ObjectType = type;
 					object.affordances= object.ObjectType.affordances;
 				}
+				System.out.println("cleannn");
+				world.cleanObjectTypes();
 			}
 			else{
 				
@@ -416,6 +418,26 @@ public class MyFrame extends JFrame implements ActionListener {
 		for(int i=0;i<world.objects.size();++i)
 		{
 			DigitalObject obj=world.objects.get(i);
+			System.out.println("\nNAME: "+ obj.name);
+			//object contains affordances too!
+			for(int j=0;j<obj.affordances.size();++j)
+			{
+				DigitalAffordance aff= obj.affordances.get(j);
+				System.out.println("Affordance: "+ obj.affordances.get(j).name);
+				//affordance has tuples, etc
+				for(int k=0;k<aff.instances.size();++k)
+				{
+					ActionTuple tuple = aff.instances.get(k);
+					System.out.println("Affordee: "+ tuple.affordee.name);
+					System.out.println("Type: "+ tuple.type.name());
+					System.out.println("Active: " + tuple.active);
+				}
+			}
+		}
+		System.out.println("Object Types: \n");
+		for(int i=0;i<world.types.size();++i)
+		{
+			DigitalObject obj=world.types.get(i);
 			System.out.println("\nNAME: "+ obj.name);
 			//object contains affordances too!
 			for(int j=0;j<obj.affordances.size();++j)

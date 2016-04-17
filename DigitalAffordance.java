@@ -60,5 +60,15 @@ public class DigitalAffordance {
 		}
 		return false;
 	}
+	public boolean isIdentical(ActionTuple a1, ActionTuple a2)
+	{
+		if(!a1.affordee.name.equals(a2.affordee.name))
+			return false;
+		if(a1.effect!=a2.effect)
+			return false;
+		if(a1.type!=a2.type)
+			return false;
+		return true;
+	}
 }
 
