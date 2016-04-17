@@ -5,7 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MyQuestions {	
+public class MyQuestions {
+	
 	public static final String IS_PASSIVE_TEXT = "Please check all smart objects that are passive.";
 	public static final String IS_TERMINAL_TEXT = "Please check all actions that result in termination for either the actor or the affordees.";
 	
@@ -63,6 +64,9 @@ public class MyQuestions {
 				a.instance = a.affordance.instances.get(0);
 				LTermCandidates.put(a.actor, a);
 			} else {
+				if (sentence[1].equals(DigitalStoryWorld.KEYWORD_IS)) {
+					continue;
+				}
 				for (int j = 2; j<sentence.length; j++) {
 					ActionBundle a = new ActionBundle();
 					a.actor = objectLookup.get(sentence[0]);
@@ -114,7 +118,8 @@ public class MyQuestions {
 							}
 			
 		};
-		//TODO: set default isTerminal selection
+		// set default isTerminal selection
+		
 		
 //		Question[] questions = {isPassive, isTerminal};
 		Question[] questions = {isTerminal};
