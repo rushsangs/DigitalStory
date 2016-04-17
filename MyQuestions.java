@@ -11,30 +11,31 @@ public class MyQuestions {
 	
 	public static void ask(ArrayList<DigitalObject> objects2, String storystring) {
 		
-		List<DigitalObject> passiveCandidates = new ArrayList<DigitalObject>();
 		int i = 0;
-		while(i < objects2.size()){
-			if(objects2.get(i).affordances.isEmpty()){
-				passiveCandidates.add(objects2.get(i));
-			}
-			i++;
-		}
-		SelectionQuestion<DigitalObject> isPassive = 
-				new SelectionQuestion<DigitalObject>(
-						IS_PASSIVE_TEXT, 
-						passiveCandidates) {
-			@Override
-			public void applyAnswer() {
-				for (DigitalObject o : list) {
-					o.isPassive = selected.contains(o);
-				}
-			}
-			@Override
-			public String getName(DigitalObject o) {
-				return o.name;
-			}
-		};
-		isPassive.setDefaultSelection(passiveCandidates);
+		
+//		List<DigitalObject> passiveCandidates = new ArrayList<DigitalObject>();
+//		while(i < objects2.size()){
+//			if(objects2.get(i).affordances.isEmpty()){
+//				passiveCandidates.add(objects2.get(i));
+//			}
+//			i++;
+//		}
+//		SelectionQuestion<DigitalObject> isPassive = 
+//				new SelectionQuestion<DigitalObject>(
+//						IS_PASSIVE_TEXT, 
+//						passiveCandidates) {
+//			@Override
+//			public void applyAnswer() {
+//				for (DigitalObject o : list) {
+//					o.isPassive = selected.contains(o);
+//				}
+//			}
+//			@Override
+//			public String getName(DigitalObject o) {
+//				return o.name;
+//			}
+//		};
+//		isPassive.setDefaultSelection(passiveCandidates);
 		
 		HashMap<String, DigitalObject> objectLookup = 
 				new HashMap<String, DigitalObject>();
@@ -90,10 +91,10 @@ public class MyQuestions {
 							@Override
 							public void applyAnswer() {
 								for (ActionBundle a : list) {
-									if(selected.contains(a))
-									{
-										a.instance.type = ActionType.TERM;
-									}
+//									if(selected.contains(a))
+//									{
+//										a.instance.type = ActionType.TERM;
+//									}
 								}
 							}
 
@@ -113,19 +114,20 @@ public class MyQuestions {
 		};
 		//TODO: set default isTerminal selection
 		
-		Question[] questions = {isPassive, isTerminal};
+//		Question[] questions = {isPassive, isTerminal};
+		Question[] questions = {isTerminal};
 		for (Question q : questions) {
 			q.promptUser();
 			q.applyAnswer();
 		}
 		
 		// OUTPUT TO CONSOLE
-		System.out.println("isPassive");
-		System.out.println("---------");
-		for (DigitalObject o : objects2) {
-			System.out.println(o.name + ": " + ((o.isPassive)? "Passive" : "Active"));
-		}
-		System.out.println();
+//		System.out.println("isPassive");
+//		System.out.println("---------");
+//		for (DigitalObject o : objects2) {
+//			System.out.println(o.name + ": " + ((o.isPassive)? "Passive" : "Active"));
+//		}
+//		System.out.println();
 		System.out.println("isTerminal");
 		System.out.println("----------");
 		for (DigitalAffordance a : parents.keySet()) {
