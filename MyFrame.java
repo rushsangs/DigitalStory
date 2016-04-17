@@ -224,7 +224,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						String[] parts1 = string1.split("\\s+");
 						String[] objects1;
 						String[] affords1;
-						//analyze(string, objects2);
+						analyze(string1, world);
 						storystring.append(string1 + "\n");
 						numoflines++;
 						storytxt.setText(storystring.toString());
