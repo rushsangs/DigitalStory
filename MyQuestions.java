@@ -96,22 +96,11 @@ public class MyQuestions {
 
 							@Override
 							public void applyAnswer() {
-								for (ActionBundle a : selected.keySet()) {
-									// TODO: dormant
-									switch(selected.get(a)) {
-									case LTERM:
-										a.instance.type = ActionType.TERM;
-										a.instance.effect = ActionEffect.LTERM;
-										break;
-									case RTERM:
-										a.instance.type = ActionType.TERM;
-										a.instance.effect = ActionEffect.RTERM;
-										break;
-									case LRTERM:
-										a.instance.type = ActionType.TERM;
-										a.instance.effect = ActionEffect.RTERM;
-										break;
-									}
+								for (ActionBundle a : list) {
+//									if(selected.contains(a))
+//									{
+//										a.instance.type = ActionType.TERM;
+//									}
 								}
 							}
 

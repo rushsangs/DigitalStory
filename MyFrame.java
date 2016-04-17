@@ -279,7 +279,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			//Main.printData(objects2);
 			
 			//COMMENTING OUT STUFF BELOW FOR TESTING
-			MyQuestions.ask(world, storystring.toString());
+//			MyQuestions.ask(world, storystring.toString());
 //			
 //			int i = 0;
 //			
@@ -410,6 +410,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			
 			}
 		}
+		world.cleanObjectTypes();
 		return objects;
 	}
 	public void printOutWorld(DigitalStoryWorld world)
