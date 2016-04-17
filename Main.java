@@ -9,8 +9,9 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		//initialize frame
-		ArrayList<DigitalObject> objects= new ArrayList<DigitalObject>();
-		MyFrame frame = new MyFrame(objects);
+		//ArrayList<DigitalObject> objects= new ArrayList<DigitalObject>();
+		DigitalStoryWorld world= new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
+		MyFrame frame = new MyFrame(world);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();

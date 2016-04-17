@@ -1,16 +1,27 @@
-import javax.swing.*;
-
-import java.util.*;
-import java.util.List;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class MyFrame extends JFrame implements ActionListener {
 	StringBuilder storystring = new StringBuilder();
 	StringBuilder objectstring = new StringBuilder();
 	StringBuilder affordstring = new StringBuilder();
 	ArrayList<DigitalObject> objects2;
+	DigitalStoryWorld world;
 	//Object panel, left side
 	private JPanel objectpanel = new JPanel();
 		private JLabel object = new JLabel("Smart Objects");
@@ -43,9 +54,9 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JFileChooser filechooser = new JFileChooser();
 	public int numoflines;
 	
-	public MyFrame(ArrayList<DigitalObject> objects){
+	public MyFrame(DigitalStoryWorld world){
 		this.setTitle("Story World Generator");
-		objects2=objects;
+		this.world=world;
 		objectpanel.setLayout(new BorderLayout(10,10));
 			objectList.setEditable(false);
 			objectpanel.add(object,BorderLayout.NORTH);
@@ -82,7 +93,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						JOptionPane.showMessageDialog(MyFrame.this,"Incorrect Format: Enter as Object Action Object*");
 						return;
 					}
-					analyze(string, objects2);
+					analyze(string, world);
 					storystring.append(string + "\n");
 					numoflines++;
 					storytxt.setText(storystring.toString());
@@ -154,7 +165,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				break;
 			}
 			numoflines++;
-			analyze(string, objects2);
+			analyze(string, world);
 			storystring.append(string + "\n");
 			storytxt.setText(storystring.toString());
 			for(int i = 0; i< parts.length;i++){
@@ -266,20 +277,22 @@ public class MyFrame extends JFrame implements ActionListener {
 			
 			//process input into object structure
 			//Main.printData(objects2);
-			MyQuestions.ask(objects2, storystring.toString());
 			
-			int i = 0;
-			
-			
-			String[] lines = storystring.toString().split("\n");
-			for(i = 0;i < lines.length;i++){
-				//ToDo
-			}
-			//then generate new story randomly
-			StoryGenerator sg = new StoryGenerator(objects2);
-			outputtxt.setText(sg.writeStory());
-			break;
-		
+			//COMMENTING OUT STUFF BELOW FOR TESTING
+//			MyQuestions.ask(objects2, storystring.toString());
+//			
+//			int i = 0;
+//			
+//			
+//			String[] lines = storystring.toString().split("\n");
+//			for(i = 0;i < lines.length;i++){
+//				//ToDo
+//			}
+//			//then generate new story randomly
+//			StoryGenerator sg = new StoryGenerator(objects2);
+//			outputtxt.setText(sg.writeStory());
+//			break;
+			printOutWorld(world);
 		}
 	}
 	public String getAffordances(){
@@ -291,12 +304,13 @@ public class MyFrame extends JFrame implements ActionListener {
 	public String getStory(){
 		return storystring.toString();
 	}
-	private static ArrayList<DigitalObject> analyze(String story, ArrayList<DigitalObject> objects)
+	private static ArrayList<DigitalObject> analyze(String story, DigitalStoryWorld world)
 	{
+		ArrayList<DigitalObject> objects=world.objects;
 		//read the story sentence by sentence, separated by period
 		String[] sentences = story.split("\\.");
 		
-
+		
 		
 		//for each sentence: first word is Active Object, second word is action, third word is passive object?
 		for(int i =0;i<sentences.length; ++i)
@@ -321,6 +335,14 @@ public class MyFrame extends JFrame implements ActionListener {
 				objects.add(object);
 				
 			}
+			
+			//if second word is "is" IT IS NOT AN AFFORDANCE
+			if(words.length>2 && words[1]=="is")
+			{
+				//words[2] is the type!
+				System.out.println("is is used!");
+			}
+			
 			ArrayList<DigitalObject> affordees=new ArrayList<DigitalObject>();
 			if(words.length>2)
 			{
@@ -358,5 +380,28 @@ public class MyFrame extends JFrame implements ActionListener {
 			
 		}
 		return objects;
+	}
+	public void printOutWorld(DigitalStoryWorld world)
+	{
+		System.out.println("Objects: \n");
+		for(int i=0;i<world.objects.size();++i)
+		{
+			DigitalObject obj=world.objects.get(i);
+			System.out.println("\nNAME: "+ obj.name);
+			//object contains affordances too!
+			for(int j=0;j<obj.affordances.size();++j)
+			{
+				DigitalAffordance aff= obj.affordances.get(j);
+				System.out.println("Affordance: "+ obj.affordances.get(j).name);
+				//affordance has tuples, etc
+				for(int k=0;k<aff.instances.size();++k)
+				{
+					ActionTuple tuple = aff.instances.get(k);
+					System.out.println("Affordee: "+ tuple.affordee.name);
+					System.out.println("Type: "+ tuple.type.name());
+					System.out.println("Active: " + tuple.active);
+				}
+			}
+		}
 	}
 }
