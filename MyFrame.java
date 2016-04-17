@@ -279,7 +279,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			//Main.printData(objects2);
 			
 			//COMMENTING OUT STUFF BELOW FOR TESTING
-//			MyQuestions.ask(objects2, storystring.toString());
+			MyQuestions.ask(world, storystring.toString());
 //			
 //			int i = 0;
 //			
@@ -337,13 +337,41 @@ public class MyFrame extends JFrame implements ActionListener {
 			}
 			
 			//if second word is "is" IT IS NOT AN AFFORDANCE
-			if(words.length>2 && words[1]=="is")
+			if(words.length>2 && words[1].equalsIgnoreCase("is"))
 			{
 				//words[2] is the type!
-				//System.out.println("is is used!");
+				System.out.println("is is used!");
+				//search for the Type in current Story World, if doesn't exist, add it
+				DigitalObject type=null;
+				for(int z=0;z<world.types.size();++z)
+				{
+					if(world.types.get(z).name.equalsIgnoreCase(words[2]))
+						type=world.types.get(z);
+				}
 				
+				if(type==null)
+				{
+					//Create new type and link
+					type=new DigitalObject(words[2]);
+					object.ObjectType=type;
+					//we also copy all of current object's affordances into the type
+					type.affordances= new ArrayList<DigitalAffordance>(object.affordances);
+					world.types.add(type);
+					//delete all of object's current affordances
+					object.affordances.clear();
+					object.affordances=object.ObjectType.affordances;
+				}
+				else
+				{
+					//the Object Type already existed, we don't create one, we update it with newer affordances that may be possessed by this other object
+					//Basically we are updating the Object Type and making it smarter
+					type.affordances.addAll(object.affordances);
+					object.ObjectType = type;
+					object.affordances= object.ObjectType.affordances;
+				}
 			}
-			
+			else{
+				
 			ArrayList<DigitalObject> affordees=new ArrayList<DigitalObject>();
 			if(words.length>2)
 			{
@@ -378,7 +406,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			affordance.addActionTuple(affordees, ActionType.NORM);
 			object.addAffordance(affordance);
 			
-			
+			}
 		}
 		return objects;
 	}

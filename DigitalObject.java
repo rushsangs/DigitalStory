@@ -4,6 +4,7 @@ public class DigitalObject {
 
 	//object class for each object in the story
 	public String name;
+	public DigitalObject ObjectType;
 	public ArrayList<DigitalState> states = new ArrayList<DigitalState>();
 	public ArrayList<DigitalAffordance> affordances=new ArrayList<DigitalAffordance>();
 	boolean isPassive;
