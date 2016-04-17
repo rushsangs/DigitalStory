@@ -279,7 +279,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			//Main.printData(objects2);
 			
 			//COMMENTING OUT STUFF BELOW FOR TESTING
-//			MyQuestions.ask(world, storystring.toString());
+			MyQuestions.ask(world, storystring.toString());
 //			
 //			int i = 0;
 //			
@@ -431,6 +431,7 @@ public class MyFrame extends JFrame implements ActionListener {
 					ActionTuple tuple = aff.instances.get(k);
 					System.out.println("Affordee: "+ tuple.affordee.name);
 					System.out.println("Type: "+ tuple.type.name());
+					System.out.println("Effect: " + tuple.effect.name());
 					System.out.println("Active: " + tuple.active);
 				}
 			}
@@ -450,8 +451,9 @@ public class MyFrame extends JFrame implements ActionListener {
 				{
 					ActionTuple tuple = aff.instances.get(k);
 					System.out.println("Affordee: "+ tuple.affordee.name);
-					System.out.println("Type: "+ tuple.type.name());
-					System.out.println("Active: " + tuple.active);
+					System.out.println(" Type: "+ tuple.type.name());
+					System.out.println(" Effect: "+ tuple.effect.name());
+					System.out.println(" Active: " + tuple.active);
 				}
 			}
 		}

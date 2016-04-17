@@ -9,6 +9,7 @@ public class MyQuestions {
 	
 	public static final String IS_PASSIVE_TEXT = "Please check all smart objects that are passive.";
 	public static final String IS_TERMINAL_TEXT = "Please check all actions that result in termination for either the actor or the affordees.";
+	public static final String DISCONNECT_ERROR = "Only reachable if there is disconnect between world and storystring.";
 	
 	public static void ask(DigitalStoryWorld world, String storystring) {
 		ArrayList<DigitalObject> objects2 = world.objects;
@@ -71,7 +72,7 @@ public class MyQuestions {
 					ActionBundle a = new ActionBundle();
 					a.actor = objectLookup.get(sentence[0]);
 					a.affordance = affordanceLookup(a.actor, sentence[1]);
-					a.instance = instanceLookup(a.affordance, sentence[j]);
+					a.instance = instanceLookup(a.affordance, objectLookup.get(sentence[j]));
 					LTermCandidates.put(a.actor, a);
 					RTermCandidates.put(a.instance.affordee, a);
 				}
@@ -96,11 +97,21 @@ public class MyQuestions {
 
 							@Override
 							public void applyAnswer() {
-								for (ActionBundle a : list) {
-//									if(selected.contains(a))
-//									{
-//										a.instance.type = ActionType.TERM;
-//									}
+								for (ActionBundle a : selected.keySet()) {
+									switch(selected.get(a)) {
+									case LDORM:
+									case RDORM:
+									case LRDORM:
+										a.instance.type = ActionType.DORM;
+										break;
+									case LTERM:
+									case RTERM:
+									case LRTERM:
+										a.instance.type = ActionType.TERM;
+										break;
+									default:
+									}
+									a.instance.effect = selected.get(a);
 								}
 							}
 
@@ -146,13 +157,19 @@ public class MyQuestions {
 		}
 	}
 	
-	private static ActionTuple instanceLookup(DigitalAffordance affordance, String name) {
+	private static ActionTuple instanceLookup(DigitalAffordance affordance, DigitalObject affordee) {
+		DigitalObject affordee2 = affordee;
+		while (affordee2.ObjectType!=null) {
+			affordee2 = affordee2.ObjectType;
+		}
 		for (ActionTuple instance : affordance.instances) {
-			if (instance.affordee.name.equals(name)) {
+			if (instance.affordee.name.equals(affordee2.name)) {
 				return instance;
 			}
 		}
 		// only reachable if there is disconnect between world and storystring
+		System.err.println(affordance.name + " " + affordee.name + "->" + affordee2.name);
+		new Exception(DISCONNECT_ERROR).printStackTrace();
 		return null;
 	}
 
@@ -163,6 +180,8 @@ public class MyQuestions {
 			}
 		}
 		// only reachable if there is disconnect between world and storystring
+		System.err.println(actor.name + " " + name);
+		new Exception(DISCONNECT_ERROR).printStackTrace();
 		return null;
 	}
 }

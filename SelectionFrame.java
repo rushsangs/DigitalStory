@@ -125,6 +125,7 @@ public class SelectionFrame extends JDialog implements ActionListener{
 			}
 			isDone = true;
 			this.dispose();
+			
 		
 		}
 	}
