@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -18,19 +19,21 @@ import javax.swing.JFrame;
 public abstract class SelectionQuestion<T> implements Question {
 	private String prompt;
 	public List<T> list;
-	public HashSet<T> selected;
-	public boolean[] selected2;
+	//public HashSet<T> selected;
+	HashMap<T, ActionEffect> selected;
+	//public boolean[] selected2;
+	ActionEffect[] selected2;
 	
 	public SelectionQuestion(String prompt, List<T> list) {
 		this.prompt = prompt;
 		this.list = list;
-		this.selected = new HashSet<T>();
+		this.selected = new HashMap<T, ActionEffect>();
 	}
 	
-	public void setDefaultSelection(List<T> selection) {
-		for (T t : selection) {
+	public void setDefaultSelection(HashMap<T, ActionEffect> selection) {
+		for (T t : selection.keySet()) {
 			if (list.contains(t)) {
-				selected.add(t);
+				selected.put(t, selection.get(t));
 			}
 		}
 	}
@@ -43,12 +46,13 @@ public abstract class SelectionQuestion<T> implements Question {
 		for (int i = 0; i<list.size(); i++) {
 			list2[i] = getName(list.get(i));
 		}
-		selected2 = new boolean[list.size()];
-		for (int i = 0; i<list.size(); i++) {
-			if (selected.contains(list.get(i))) {
-				selected2[i] = true;
-			}
-		}
+//		selected2 = new boolean[list.size()];
+//		for (int i = 0; i<list.size(); i++) {
+//			if (selected.contains(list.get(i))) {
+//				selected2[i] = true;
+//			}
+//		}
+		selected2 = new ActionEffect[list.size()];
 		SelectionFrame frame = new SelectionFrame(list2, selected2, prompt);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -57,13 +61,9 @@ public abstract class SelectionQuestion<T> implements Question {
 		
 		// after dialog is closed
 		for (int i = 0; i<list.size(); i++) {
-			if (selected2[i]) {
-				selected.add(list.get(i));
-			} else {
-				selected.remove(list.get(i));
-			}
+			selected = new HashMap<T, ActionEffect>();
+			selected.put(list.get(i), selected2[i]);
 		}
-		
 		return;
 	}
 	

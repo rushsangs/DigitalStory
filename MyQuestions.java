@@ -9,32 +9,35 @@ public class MyQuestions {
 	public static final String IS_PASSIVE_TEXT = "Please check all smart objects that are passive.";
 	public static final String IS_TERMINAL_TEXT = "Please check all actions that result in termination for either the actor or the affordees.";
 	
-	public static void ask(ArrayList<DigitalObject> objects2, String storystring) {
+	public static void ask(DigitalStoryWorld world, String storystring) {
+		ArrayList<DigitalObject> objects2 = world.objects;
 		
-		List<DigitalObject> passiveCandidates = new ArrayList<DigitalObject>();
 		int i = 0;
-		while(i < objects2.size()){
-			if(objects2.get(i).affordances.isEmpty()){
-				passiveCandidates.add(objects2.get(i));
-			}
-			i++;
-		}
-		SelectionQuestion<DigitalObject> isPassive = 
-				new SelectionQuestion<DigitalObject>(
-						IS_PASSIVE_TEXT, 
-						passiveCandidates) {
-			@Override
-			public void applyAnswer() {
-				for (DigitalObject o : list) {
-					o.isPassive = selected.contains(o);
-				}
-			}
-			@Override
-			public String getName(DigitalObject o) {
-				return o.name;
-			}
-		};
-		isPassive.setDefaultSelection(passiveCandidates);
+		
+//		List<DigitalObject> passiveCandidates = new ArrayList<DigitalObject>();
+//		int i = 0;
+//		while(i < objects2.size()){
+//			if(objects2.get(i).affordances.isEmpty()){
+//				passiveCandidates.add(objects2.get(i));
+//			}
+//			i++;
+//		}
+//		SelectionQuestion<DigitalObject> isPassive = 
+//				new SelectionQuestion<DigitalObject>(
+//						IS_PASSIVE_TEXT, 
+//						passiveCandidates) {
+//			@Override
+//			public void applyAnswer() {
+//				for (DigitalObject o : list) {
+//					o.isPassive = selected.contains(o);
+//				}
+//			}
+//			@Override
+//			public String getName(DigitalObject o) {
+//				return o.name;
+//			}
+//		};
+//		isPassive.setDefaultSelection(passiveCandidates);
 		
 		HashMap<String, DigitalObject> objectLookup = 
 				new HashMap<String, DigitalObject>();
@@ -64,7 +67,7 @@ public class MyQuestions {
 					ActionBundle a = new ActionBundle();
 					a.actor = objectLookup.get(sentence[0]);
 					a.affordance = affordanceLookup(a.actor, sentence[1]);
-					a.instance = a.affordance.instances.get(j-2);
+					a.instance = instanceLookup(a.affordance, sentence[j]);
 					LTermCandidates.put(a.actor, a);
 					RTermCandidates.put(a.instance.affordee, a);
 				}
@@ -90,10 +93,10 @@ public class MyQuestions {
 							@Override
 							public void applyAnswer() {
 								for (ActionBundle a : list) {
-									if(selected.contains(a))
-									{
-										a.instance.type = ActionType.TERM;
-									}
+//									if(selected.contains(a))
+//									{
+//										a.instance.type = ActionType.TERM;
+//									}
 								}
 							}
 
@@ -113,19 +116,20 @@ public class MyQuestions {
 		};
 		//TODO: set default isTerminal selection
 		
-		Question[] questions = {isPassive, isTerminal};
+//		Question[] questions = {isPassive, isTerminal};
+		Question[] questions = {isTerminal};
 		for (Question q : questions) {
 			q.promptUser();
 			q.applyAnswer();
 		}
 		
 		// OUTPUT TO CONSOLE
-		System.out.println("isPassive");
-		System.out.println("---------");
-		for (DigitalObject o : objects2) {
-			System.out.println(o.name + ": " + ((o.isPassive)? "Passive" : "Active"));
-		}
-		System.out.println();
+//		System.out.println("isPassive");
+//		System.out.println("---------");
+//		for (DigitalObject o : objects2) {
+//			System.out.println(o.name + ": " + ((o.isPassive)? "Passive" : "Active"));
+//		}
+//		System.out.println();
 		System.out.println("isTerminal");
 		System.out.println("----------");
 		for (DigitalAffordance a : parents.keySet()) {
@@ -137,12 +141,23 @@ public class MyQuestions {
 		}
 	}
 	
+	private static ActionTuple instanceLookup(DigitalAffordance affordance, String name) {
+		for (ActionTuple instance : affordance.instances) {
+			if (instance.affordee.name.equals(name)) {
+				return instance;
+			}
+		}
+		// only reachable if there is disconnect between world and storystring
+		return null;
+	}
+
 	public static DigitalAffordance affordanceLookup(DigitalObject actor, String name) {
 		for (DigitalAffordance aff : actor.affordances) {
 			if (aff.name.equals(name)) {
 				return aff;
 			}
 		}
+		// only reachable if there is disconnect between world and storystring
 		return null;
 	}
 }
