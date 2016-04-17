@@ -79,14 +79,6 @@ public class MyQuestions {
 			}		
 		}
 		
-		HashMap<DigitalAffordance, DigitalObject> parents = 
-				new HashMap<DigitalAffordance, DigitalObject>();
-		for (DigitalObject o : objects2) {
-			for (DigitalAffordance affordance : o.affordances) {
-				parents.put(affordance, o);
-			}
-		}
-		
 		HashSet<ActionBundle> uniqueActions = new HashSet<ActionBundle>();
 		uniqueActions.addAll(LTermCandidates.values());
 		uniqueActions.addAll(RTermCandidates.values());		
@@ -146,15 +138,6 @@ public class MyQuestions {
 //			System.out.println(o.name + ": " + ((o.isPassive)? "Passive" : "Active"));
 //		}
 //		System.out.println();
-		System.out.println("isTerminal");
-		System.out.println("----------");
-		for (DigitalAffordance a : parents.keySet()) {
-			for (ActionTuple instance : a.instances) {
-				System.out.println(parents.get(a).name + " " +
-						a.name + " " + instance.affordee.name + 
-						": "+ instance.type);
-			}
-		}
 	}
 	
 	private static ActionTuple instanceLookup(DigitalAffordance affordance, DigitalObject affordee) {
@@ -163,7 +146,9 @@ public class MyQuestions {
 			affordee2 = affordee2.ObjectType;
 		}
 		for (ActionTuple instance : affordance.instances) {
-			if (instance.affordee.name.equals(affordee2.name)) {
+			if (instance.affordee.name.equals(affordee2.name) || 
+					//TODO: remove below workaround for null-pointer
+					instance.affordee.name.equals(affordee.name)) {
 				return instance;
 			}
 		}
