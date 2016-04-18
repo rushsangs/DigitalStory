@@ -205,11 +205,12 @@ public class MyFrame extends JFrame implements ActionListener {
 			entertxt.setText("");
 			break;
 		case "Clear":
-			objects2.clear();
+			world = null;
 			storystring = new StringBuilder();
 			objectstring = new StringBuilder();
 			affordstring = new StringBuilder();
 			storytxt.setText("");
+			outputtxt.setText("");
 			objectList.setText("");
 			affordancesList.setText("");
 			numoflines = 0;
