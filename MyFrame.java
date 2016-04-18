@@ -386,7 +386,14 @@ public class MyFrame extends JFrame implements ActionListener {
 					{
 						if(objects.get(y).name.equalsIgnoreCase(words[x]))
 						{
-							affordees.add(objects.get(y));
+							//we found the object, lets try adding its object type name if possible
+							if(objects.get(y).ObjectType!=null)
+							{
+								affordees.add(objects.get(y).ObjectType);
+							}
+							else{
+								affordees.add(objects.get(y));
+							}
 							fl=true;
 						}
 					}
