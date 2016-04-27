@@ -3,6 +3,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -16,12 +17,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import java.sql.*;
+
 public class MyFrame extends JFrame implements ActionListener {
 	StringBuilder storystring = new StringBuilder();
 	StringBuilder objectstring = new StringBuilder();
 	StringBuilder affordstring = new StringBuilder();
 	ArrayList<DigitalObject> objects2;
 	DigitalStoryWorld world;
+	public Statement stmt;
+	public ResultSet resultset;
 	//Object panel, left side
 	private JPanel objectpanel = new JPanel();
 		private JLabel object = new JLabel("Smart Objects");
@@ -55,6 +60,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	public int numoflines;
 	
 	public MyFrame(DigitalStoryWorld world){
+		this.initializeDB();
 		this.setTitle("Story World Generator");
 		this.world=world;
 		objectpanel.setLayout(new BorderLayout(10,10));
@@ -304,6 +310,31 @@ public class MyFrame extends JFrame implements ActionListener {
 	}
 	public String getStory(){
 		return storystring.toString();
+	}
+	private void initializeDB(){
+		try { 
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			System.out.println("Driver loaded\n");
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		Connection con = null;
+		String url = "jdbc:mysql://storyuniversedb.c99bh6mgf9xw.us-west-2.rds.amazonaws.com:3306/";
+		String user = "root";
+		String password = "group5group5";
+		String dbname = "mydb";
+		try{
+			con = DriverManager.getConnection(url + dbname, user, password);
+			System.out.println("Database connected\n");
+		}catch (SQLException e){
+			System.err.println("SQLException: " + e.getMessage());
+			//System.err.println("SQLState: " + e,getSQLState());			
+		}
+		try{
+			stmt = con.createStatement();
+		}catch (SQLException e){
+			e.printStackTrace();
+		}		
 	}
 	private static ArrayList<DigitalObject> analyze(String story, DigitalStoryWorld world)
 	{
