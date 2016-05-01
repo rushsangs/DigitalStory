@@ -3,7 +3,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -276,7 +275,12 @@ public class MyFrame extends JFrame implements ActionListener {
 			}
 			break;
 		case "Generate Story":
-			
+			try {
+				createNodes(world);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			 //PSEUDO UNIT TESTING FOR PASSIVE OBJECTS
 			//objects2.add(new DigitalObject("Forest"));
 			//objects2.add(new DigitalObject("Cake"));
@@ -286,7 +290,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			//Main.printData(objects2);
 			
 			//COMMENTING OUT STUFF BELOW FOR TESTING
-			MyQuestions.ask(world, storystring.toString());
+//			MyQuestions.ask(world, storystring.toString());
 //			
 //			int i = 0;
 //			
@@ -335,6 +339,102 @@ public class MyFrame extends JFrame implements ActionListener {
 		}catch (SQLException e){
 			e.printStackTrace();
 		}		
+	}
+	//this function creates Nodes for ALL affordances for the types
+	private void createNodes(DigitalStoryWorld world) throws SQLException{
+		System.out.println("yo");
+		DigitalObject ObjectType;
+		//for each Type, it checks if the type exists. If doesn't exist, insert it.
+		for(int i=0; i< world.types.size();++i)
+		{
+			ObjectType=world.types.get(i);
+			String sql="SELECT * FROM Types WHERE Name = '" + ObjectType.name + "';";
+			if(stmt.execute(sql) && !stmt.getResultSet().first())
+			{
+				//we didn't get any rows, insert type.
+				sql = "INSERT INTO Types(Name) VALUES('" + ObjectType.name.trim() + "');";
+				try
+				{
+					stmt.execute(sql);
+				}
+				catch(Exception e)
+				{
+					System.out.println("The following statement failed: "+sql);
+				}
+			}
+			
+		}
+		// for all digital objects that don't have a type
+		for(int i=0;i<world.objects.size();++i)
+		{
+			if(world.objects.get(i).ObjectType!=null)
+				continue;
+			//add types if they don't exist
+			DigitalObject obj=world.objects.get(i);
+			String sql="SELECT * FROM Types WHERE Name = '" + obj.name + "';";
+			if(stmt.execute(sql) && !stmt.getResultSet().first())
+			{
+				//we didn't get any rows, insert type.
+				sql = "INSERT INTO Types(Name) VALUES('" + obj.name.trim() + "');";
+				try
+				{
+					stmt.execute(sql);
+				}
+				catch(Exception e)
+				{
+					System.out.println("The following statement failed: "+sql);
+				}
+			}
+			
+		}
+		for(int i=0; i< world.types.size();++i)
+		{
+			//now that the type exists, add nodes for each type's affordance's tuple
+			String sql;
+			ObjectType=world.types.get(i);
+			for(int j=0; j< ObjectType.affordances.size(); ++j)
+			{
+				DigitalAffordance aff=ObjectType.affordances.get(j);
+				for(int k=0;k<aff.instances.size();++k)
+				{
+					ActionTuple instance=aff.instances.get(k);
+					sql="INSERT INTO `Nodes` (`Name`, `AfforderType`, `ActionEffect`, `AffordeeType`) VALUES ('"+ aff.name +"', '"+ ObjectType.name + "', '"+ instance.effect.toString() + "', '"+ instance.affordee.name +"');";
+					try
+					{
+						stmt.execute(sql);
+					}
+					catch(Exception e)
+					{
+						System.out.println("The following statement failed: "+sql);
+					}
+				}
+			}
+		}
+		for(int i=0;i<world.objects.size();++i)
+		{
+			if(world.objects.get(i).ObjectType!=null)
+				continue;
+			DigitalObject obj=world.objects.get(i);
+			//we add nodes for all the unique affordance tuples for this object
+			for(int j=0;j<obj.affordances.size();++j)
+			{
+				DigitalAffordance aff=obj.affordances.get(j);
+				for(int k=0;k< aff.instances.size();++k)
+				{
+					ActionTuple instance=aff.instances.get(k);
+					String sql="INSERT INTO `Nodes` (`Name`, `AfforderType`, `ActionEffect`, `AffordeeType`) VALUES ('"+ aff.name +"', '"+ obj.name + "', '"+ instance.effect.toString() + "', '"+ instance.affordee.name +"');";
+					try
+					{
+						stmt.execute(sql);
+					}
+					catch(Exception e)
+					{
+						System.out.println("The following statement failed: "+sql);
+					}
+				}
+			}
+		}
+	
 	}
 	private static ArrayList<DigitalObject> analyze(String story, DigitalStoryWorld world)
 	{
@@ -401,8 +501,6 @@ public class MyFrame extends JFrame implements ActionListener {
 					object.ObjectType = type;
 					object.affordances= object.ObjectType.affordances;
 				}
-				System.out.println("cleannn");
-				world.cleanObjectTypes();
 			}
 			else{
 				
