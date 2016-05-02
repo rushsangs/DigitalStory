@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,8 +24,11 @@ public class MyFrame extends JFrame implements ActionListener {
 	StringBuilder storystring = new StringBuilder();
 	StringBuilder objectstring = new StringBuilder();
 	StringBuilder affordstring = new StringBuilder();
+	StringBuilder beginstring = new StringBuilder();
+	StringBuilder middlestring = new StringBuilder();
+	StringBuilder endstring = new StringBuilder();
 	ArrayList<DigitalObject> objects2;
-	DigitalStoryWorld world;
+	static DigitalStoryWorld world;
 	public Statement stmt;
 	public ResultSet resultset;
 	//Object panel, left side
@@ -41,15 +46,23 @@ public class MyFrame extends JFrame implements ActionListener {
 		private JPanel labelpanel = new JPanel();
 		private JLabel storylabel = new JLabel("                         Input Story");
 		private JLabel outputlabel = new JLabel("Output Story                         ");
-		private JScrollPane storypane;
+		private JScrollPane beginpane;
+		private JScrollPane middlepane;
+		private JScrollPane endpane;
 		private JScrollPane output;
-		private JTextArea storytxt = new JTextArea(10,25);
-		private JTextArea outputtxt = new JTextArea(10,25);
+		private JTextArea begintxt = new JTextArea(10,25);
+		private JTextArea middletxt = new JTextArea(10,25);
+		private JTextArea endtxt = new JTextArea(10,25);
+		private JTextArea outputtxt = new JTextArea(30,25);
+		private JPanel storytextpanel = new JPanel();
 	//Bottom panel
 	private JPanel bottom = new JPanel();
 		 private JPanel enterpanel = new JPanel();
 		 	private JLabel enterlabel = new JLabel("Text Here");
 		 	private JButton enter = new JButton("Enter");
+		 	String[] sections = {"begin","middle","end"};
+		 	JComboBox<String> storysections = new JComboBox<String>(sections);
+		 	private JPanel box = new JPanel();
 		 	private JTextField entertxt = new JTextField(50);
 		 private JPanel generatepanel = new JPanel();
 		 	private JButton generate = new JButton("Generate Story");
@@ -73,19 +86,30 @@ public class MyFrame extends JFrame implements ActionListener {
 			affordpane = new JScrollPane(affordancesList);
 			affordpanel.add(affordpane,BorderLayout.CENTER);
 		storytxtpanel.setLayout(new BorderLayout(10,10));
-			storytxt.setEditable(false);
+			begintxt.setEditable(false);
+			middletxt.setEditable(false);
+			endtxt.setEditable(false);
 			labelpanel.setLayout(new BorderLayout(10,10));
 			labelpanel.add(storylabel,BorderLayout.WEST);
 			labelpanel.add(outputlabel, BorderLayout.EAST);
 			storytxtpanel.add(labelpanel, BorderLayout.NORTH);
-			storypane = new JScrollPane(storytxt);
-			storytxtpanel.add(storypane,BorderLayout.WEST);
+			beginpane = new JScrollPane(begintxt);
+			middlepane = new JScrollPane(middletxt);
+			endpane = new JScrollPane(endtxt);
+			storytextpanel.setLayout(new GridLayout(3,1));
+				storytextpanel.add(beginpane);
+				storytextpanel.add(middlepane);
+				storytextpanel.add(endpane);
+			storytxtpanel.add(storytextpanel,BorderLayout.WEST);
 			output = new JScrollPane(outputtxt);
 			storytxtpanel.add(output, BorderLayout.EAST);
 		enterpanel.setLayout(new BorderLayout(10,10));
 			enterpanel.add(enterlabel,BorderLayout.WEST);
 			enterpanel.add(entertxt,BorderLayout.CENTER);
-			enterpanel.add(enter,BorderLayout.EAST);
+			box.setLayout(new FlowLayout(FlowLayout.CENTER,10,10));
+			box.add(storysections);
+			box.add(enter);
+			enterpanel.add(box,BorderLayout.EAST);
 			enter.addActionListener(this);
 			entertxt.addActionListener(new ActionListener(){
 				@Override
@@ -98,10 +122,9 @@ public class MyFrame extends JFrame implements ActionListener {
 						JOptionPane.showMessageDialog(MyFrame.this,"Incorrect Format: Enter as Object Action Object*");
 						return;
 					}
-					analyze(string, world);
+					MyFrame.analyze(string, MyFrame.world);
 					storystring.append(string + "\n");
 					numoflines++;
-					storytxt.setText(storystring.toString());
 					for(int i = 0; i< parts.length;i++){
 						objects = objectstring.toString().split("\\s+");
 						affords = affordstring.toString().split("\\s+");
@@ -122,6 +145,9 @@ public class MyFrame extends JFrame implements ActionListener {
 						if(i == 1){
 						//Checks if action is already in the action string, if not then adds it 
 							int k;
+							if(parts[i].equals("is")){
+								break;
+							}
 							for(k = 0;k<affords.length;k++){
 								if(parts[i].equals(affords[k])){
 									break;
@@ -133,6 +159,16 @@ public class MyFrame extends JFrame implements ActionListener {
 								continue;
 							}							
 						}									
+					}
+					if(storysections.getSelectedItem().toString().equals("begin")){
+						beginstring.append(string + "\n");
+						begintxt.setText(beginstring.toString());
+					}else if(storysections.getSelectedItem().toString().equals("middle")){
+						middlestring.append(string + "\n");
+						middletxt.setText(middlestring.toString());
+					}else if(storysections.getSelectedItem().toString().equals("end")){
+						endstring.append(string + "\n");
+						endtxt.setText(endstring.toString());
 					}
 					objectList.setText(objectstring.toString());
 					affordancesList.setText(affordstring.toString());
@@ -172,7 +208,6 @@ public class MyFrame extends JFrame implements ActionListener {
 			numoflines++;
 			analyze(string, world);
 			storystring.append(string + "\n");
-			storytxt.setText(storystring.toString());
 			for(int i = 0; i< parts.length;i++){
 				objects = objectstring.toString().split("\\s+");
 				affords = affordstring.toString().split("\\s+");
@@ -193,6 +228,9 @@ public class MyFrame extends JFrame implements ActionListener {
 				if(i == 1){
 				//Checks if action is already in the action string, if not then adds it 
 					int k;
+					if(parts[i].equals("is")){
+						break;
+					}
 					for(k = 0;k<affords.length;k++){
 						if(parts[i].equals(affords[k])){
 							break;
@@ -205,6 +243,16 @@ public class MyFrame extends JFrame implements ActionListener {
 					}							
 				}									
 			}
+			if(storysections.getSelectedItem().toString().equals("begin")){
+				beginstring.append(string + "\n");
+				begintxt.setText(beginstring.toString());
+			}else if(storysections.getSelectedItem().toString().equals("middle")){
+				middlestring.append(string + "\n");
+				middletxt.setText(middlestring.toString());
+			}else if(storysections.getSelectedItem().toString().equals("end")){
+				endstring.append(string + "\n");
+				endtxt.setText(endstring.toString());
+			}
 			objectList.setText(objectstring.toString());
 			affordancesList.setText(affordstring.toString());
 			entertxt.setText("");
@@ -214,13 +262,18 @@ public class MyFrame extends JFrame implements ActionListener {
 			storystring = new StringBuilder();
 			objectstring = new StringBuilder();
 			affordstring = new StringBuilder();
-			storytxt.setText("");
+			beginstring = new StringBuilder();
+			middlestring = new StringBuilder();
+			endstring = new StringBuilder();
+			begintxt.setText("");
+			middletxt.setText("");
+			endtxt.setText("");
 			outputtxt.setText("");
 			objectList.setText("");
 			affordancesList.setText("");
 			numoflines = 0;
 			break;
-		case "Get File":
+		case "Get File": //how to make work with story sections?
 			try{
 				if(filechooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
 					File file = filechooser.getSelectedFile();
@@ -233,7 +286,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						analyze(string1, world);
 						storystring.append(string1 + "\n");
 						numoflines++;
-						storytxt.setText(storystring.toString());
+						begintxt.setText(storystring.toString());
 						for(int i = 0; i< parts1.length;i++){
 							objects1 = objectstring.toString().split("\\s+");
 							affords1 = affordstring.toString().split("\\s+");
@@ -254,6 +307,9 @@ public class MyFrame extends JFrame implements ActionListener {
 							if(i == 1){
 							//Checks if action is already in the action string, if not then adds it 
 								int k;
+								if(parts1[i].equals("is")){
+									break;
+								}
 								for(k = 0;k<affords1.length;k++){
 									if(parts1[i].equals(affords1[k])){
 										break;
@@ -339,6 +395,18 @@ public class MyFrame extends JFrame implements ActionListener {
 		}catch (SQLException e){
 			e.printStackTrace();
 		}		
+	}
+	
+	public String sqlStatement (String name1, String name2){
+		StringBuilder s = new StringBuilder();
+		s.append("SELECT * FROM Edges WHERE(StartNode, EndNode) IN(");
+		s.append("SELECT n1.NodeId, n2.NodeId From Nodes n1, Nodes n2");
+		s.append("WHERE n1.name =");
+		s.append("" + name1 + "");
+		s.append("AND n2.Name=");
+		s.append("" + name2 + "");
+		s.append(");");
+		return s.toString();
 	}
 	//this function creates Nodes for ALL affordances for the types
 	private void createNodes(DigitalStoryWorld world) throws SQLException{
