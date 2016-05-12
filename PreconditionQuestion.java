@@ -60,6 +60,14 @@ public class PreconditionQuestion implements Question {
 				}
 			}
 		}
+		// SEND matrix2 TO DATABASE
+		for (int i = 0; i<matrix2.length; i++) {
+			for (int j = 0; j<matrix2[i].length; j++) {
+				if (matrix2[i][j]) {
+					DbHelper.inputEdge(mA[i], eA[j]);
+				}
+			}
+		}
 	}
 
 }
