@@ -24,7 +24,7 @@ public class PreconditionFrame extends JDialog implements ActionListener{
 		}
 		topstring = new JLabel[top.length];
 		for(int i = 0; i< top.length; i++){
-			topstring[i] = new JLabel(top[i]);
+			topstring[i] = new JLabel(top[i]+ "   ");
 		}
 		this.setLayout(new BorderLayout(10,10));
 		checkboxgrid.setLayout(new GridLayout(left.length+1,top.length));
