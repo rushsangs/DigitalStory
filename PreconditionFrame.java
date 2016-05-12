@@ -15,6 +15,7 @@ public class PreconditionFrame extends JDialog implements ActionListener{
 	public boolean isDone;
 	public PreconditionFrame(String question, String[] left, String[] top, boolean[][] matrix){
 		this.matrix = matrix;
+		this.setModal(true);
 		this.question = new JLabel(question);
 		isDone = false;
 		leftstring = new JLabel[left.length];
@@ -26,16 +27,17 @@ public class PreconditionFrame extends JDialog implements ActionListener{
 			topstring[i] = new JLabel(top[i]);
 		}
 		this.setLayout(new BorderLayout(10,10));
-		checkboxgrid.setLayout(new GridLayout(left.length+1,top.length+1));
+		checkboxgrid.setLayout(new GridLayout(left.length+1,top.length));
 		checkboxgrid.add(storyline);
 		int j = 0;
 		for(int i =0; i< top.length; i++){
 			checkboxgrid.add(topstring[i]);
 		}
+		mycheckboxes = new JCheckBox[left.length*top.length];
 		for(int i = 0; i< left.length;i++){
 			checkboxgrid.add(leftstring[i]);
 			int temp = top.length +j;
-			for(j =j; j< temp; j++){
+			for(; j< temp; j++){
 				mycheckboxes[j]= new JCheckBox();
 				mycheckboxes[j].setVisible(true);
 				mycheckboxes[j].setSelected(false);
