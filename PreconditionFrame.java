@@ -55,18 +55,18 @@ public class PreconditionFrame extends JDialog implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-//		switch(e.getActionCommand()){
-//		case "OK":
-//			int k = 0;
-//			for(int i = 0; i< leftstring.length;i++){
-//				int temp = topstring.length +k;
-//				for(int j = 0; j< temp; j++){
-//					matrix[i][k] = mycheckboxes[j].isSelected();
-//					k++;					
-//				}
-//			}
-//			this.isDone = true;
-//			this.dispose();
-//		}
+		switch(e.getActionCommand()){
+		case "OK":
+			int k = 0;
+			for(int i = 0; i< leftstring.length;i++){
+				int temp = topstring.length +k;
+				for(; k< temp; k++){
+					int newK = k%topstring.length;
+					matrix[i][newK] = mycheckboxes[newK].isSelected();	
+				}
+			}
+			this.isDone = true;
+			this.dispose();
+		}
 	}
 }
