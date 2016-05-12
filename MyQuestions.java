@@ -10,7 +10,8 @@ public class MyQuestions {
 	public static final String IS_TERMINAL_TEXT = "Please check all actions that result in termination for either the actor or the affordees.";
 	public static final String DISCONNECT_ERROR = "Only reachable if there is disconnect between world and storystring.";
 	
-	public static void ask(DigitalStoryWorld world, String storystring) {
+	public static void ask(DigitalStoryWorld world, String storystring, 
+			String beginstring, String middlestring, String endstring) {
 		ArrayList<DigitalObject> objects2 = world.objects;
 		
 		int i = 0;
