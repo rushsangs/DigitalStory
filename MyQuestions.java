@@ -81,7 +81,7 @@ public class MyQuestions {
 		
 		HashSet<ActionBundle> uniqueActions = new HashSet<ActionBundle>();
 		uniqueActions.addAll(LTermCandidates.values());
-		uniqueActions.addAll(RTermCandidates.values());		
+		uniqueActions.addAll(RTermCandidates.values());
 		SelectionQuestion<ActionBundle> isTerminal = 
 				new SelectionQuestion<ActionBundle>(
 						IS_TERMINAL_TEXT, 
@@ -89,8 +89,9 @@ public class MyQuestions {
 
 							@Override
 							public void applyAnswer() {
-								for (ActionBundle a : selected.keySet()) {
-									switch(selected.get(a)) {
+								for (int i = 0; i<list.size(); i++) {
+									ActionBundle a = list.get(i);
+									switch(selected[i]) {
 									case LDORM:
 									case RDORM:
 									case LRDORM:
@@ -103,7 +104,7 @@ public class MyQuestions {
 										break;
 									default:
 									}
-									a.instance.effect = selected.get(a);
+									a.instance.effect = selected[i];
 								}
 							}
 
@@ -142,7 +143,7 @@ public class MyQuestions {
 	
 	private static ActionTuple instanceLookup(DigitalAffordance affordance, DigitalObject affordee) {
 		DigitalObject affordee2 = affordee;
-		while (affordee2.ObjectType!=null) {
+		while (affordee2.ObjectType!=null && affordee2.ObjectType!=affordee2) {
 			affordee2 = affordee2.ObjectType;
 		}
 		for (ActionTuple instance : affordance.instances) {
@@ -159,6 +160,7 @@ public class MyQuestions {
 	}
 
 	public static DigitalAffordance affordanceLookup(DigitalObject actor, String name) {
+		
 		for (DigitalAffordance aff : actor.affordances) {
 			if (aff.name.equals(name)) {
 				return aff;

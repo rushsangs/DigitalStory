@@ -20,22 +20,17 @@ public abstract class SelectionQuestion<T> implements Question {
 	private String prompt;
 	public List<T> list;
 	//public HashSet<T> selected;
-	HashMap<T, ActionEffect> selected;
+	ActionEffect[] selected;
 	//public boolean[] selected2;
 	ActionEffect[] selected2;
 	
 	public SelectionQuestion(String prompt, List<T> list) {
 		this.prompt = prompt;
 		this.list = list;
-		this.selected = new HashMap<T, ActionEffect>();
 	}
 	
 	public void setDefaultSelection(HashMap<T, ActionEffect> selection) {
-		for (T t : selection.keySet()) {
-			if (list.contains(t)) {
-				selected.put(t, selection.get(t));
-			}
-		}
+		// TODO: remove from interface
 	}
 	
 	public void promptUser() {
@@ -61,9 +56,9 @@ public abstract class SelectionQuestion<T> implements Question {
 		
 		// after dialog is closed
 		for (int i = 0; i<list.size(); i++) {
-			selected = new HashMap<T, ActionEffect>();
-			selected.put(list.get(i), selected2[i]);
+			selected = selected2.clone();
 		}
+
 		return;
 	}
 	
