@@ -135,6 +135,10 @@ public class MyQuestions {
 //			System.out.println(o.name + ": " + ((o.isPassive)? "Passive" : "Active"));
 //		}
 //		System.out.println();
+		
+		// PRECONDITION QUESTION
+		PreconditionQuestion isPrecondition = new PreconditionQuestion(world, beginstring, middlestring, endstring);
+		isPrecondition.promptUser();
 	}
 	
 	private static ActionTuple instanceLookup(DigitalAffordance affordance, DigitalObject affordee) {

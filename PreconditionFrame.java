@@ -17,9 +17,11 @@ public class PreconditionFrame extends JDialog implements ActionListener{
 		this.matrix = matrix;
 		this.question = new JLabel(question);
 		isDone = false;
+		leftstring = new JLabel[left.length];
 		for(int i =0; i < left.length; i++){
 			leftstring[i] = new JLabel(left[i]);
 		}
+		topstring = new JLabel[top.length];
 		for(int i = 0; i< top.length; i++){
 			topstring[i] = new JLabel(top[i]);
 		}
