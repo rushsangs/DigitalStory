@@ -90,6 +90,7 @@ public class DbHelper {
 			int i = 0;
 			while (rs.next()) {
 				ret[i] = new int[]{rs.getInt(1), rs.getInt(2), rs.getInt(3)};
+				i++;
 			}
 			return ret;
 		} catch (Exception e) {
