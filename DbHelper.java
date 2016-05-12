@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DbHelper {
 	static Connection con = MyFrame.con;
@@ -59,6 +61,41 @@ public class DbHelper {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static HashMap<Integer, String> getAllNodes() {
+		try {
+			rs = st.executeQuery("SELECT * FROM Nodes;");
+			HashMap<Integer, String> ret = new HashMap<Integer, String>();
+			while (rs.next()) {
+				ret.put(rs.getInt("NodeId"), rs.getString("AfforderType") + " " + 
+							rs.getString("Name") + " " + rs.getString("AffordeeType"));
+			}
+			return ret;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static int[][] getAllEdges() {
+		try {
+			int[][] ret = null;
+			rs = st.executeQuery("SELECT Count(*) FROM Edges;");
+			if (rs.next()) {
+				ret = new int[rs.getInt(1)][3];
+			}
+			rs = st.executeQuery("SELECT * FROM Edges;");
+			int i = 0;
+			while (rs.next()) {
+				ret[i] = new int[]{rs.getInt(1), rs.getInt(2), rs.getInt(3)};
+				i++;
+			}
+			return ret;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }
