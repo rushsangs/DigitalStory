@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DbHelper {
 	static Connection con = MyFrame.con;
@@ -63,13 +64,13 @@ public class DbHelper {
 		}
 	}
 	
-	public static ArrayList<String> getAllNodes() {
+	public static HashMap<Integer, String> getAllNodes() {
 		try {
 			rs = st.executeQuery("SELECT * FROM Nodes;");
-			ArrayList<String> ret = new ArrayList<String>();
+			HashMap<Integer, String> ret = new HashMap<Integer, String>();
 			while (rs.next()) {
-				ret.add(rs.getString("AfforderType") + " " + rs.getString("Name") + " " + 
-							rs.getString("AffordeeType"));
+				ret.put(rs.getInt("NodeId"), rs.getString("AfforderType") + " " + 
+							rs.getString("Name") + " " + rs.getString("AffordeeType"));
 			}
 			return ret;
 		} catch (Exception e) {
