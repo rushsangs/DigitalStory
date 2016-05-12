@@ -17,9 +17,9 @@ public class PreconditionQuestion implements Question {
 
 	@Override
 	public void promptUser() {
-		String[] bA = b.split("\\n");
-		String[] mA = m.split("\\n");
-		String[] eA = e.split("\\n");
+		String[] bA = (b.length()==0)? new String[0] : b.split("\\n");
+		String[] mA = (m.length()==0)? new String[0] : m.split("\\n");
+		String[] eA = (e.length()==0)? new String[0] : e.split("\\n");
 		
 		String[] meA = new String[mA.length + eA.length];
 		int meA_index = 0;
