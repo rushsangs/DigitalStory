@@ -29,6 +29,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	StringBuilder endstring = new StringBuilder();
 	ArrayList<DigitalObject> objects2;
 	static DigitalStoryWorld world;
+	public static Connection con;
 	public static Statement stmt;
 	public static ResultSet resultset;
 	//Object panel, left side
@@ -379,7 +380,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-		Connection con = null;
+		con = null;
 		String url = "jdbc:mysql://storyuniversedb.c99bh6mgf9xw.us-west-2.rds.amazonaws.com:3306/";
 		String user = "root";
 		String password = "group5group5";

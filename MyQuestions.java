@@ -118,11 +118,13 @@ public class MyQuestions {
 							}
 			
 		};
-		// set default isTerminal selection
+		
+		// PRECONDITION QUESTION
+		PreconditionQuestion isPrecondition = new PreconditionQuestion(world, beginstring, middlestring, endstring);
 		
 		
 //		Question[] questions = {isPassive, isTerminal};
-		Question[] questions = {isTerminal};
+		Question[] questions = {isTerminal, isPrecondition};
 		for (Question q : questions) {
 			q.promptUser();
 			q.applyAnswer();
@@ -135,10 +137,6 @@ public class MyQuestions {
 //			System.out.println(o.name + ": " + ((o.isPassive)? "Passive" : "Active"));
 //		}
 //		System.out.println();
-		
-		// PRECONDITION QUESTION
-		PreconditionQuestion isPrecondition = new PreconditionQuestion(world, beginstring, middlestring, endstring);
-		isPrecondition.promptUser();
 	}
 	
 	private static ActionTuple instanceLookup(DigitalAffordance affordance, DigitalObject affordee) {

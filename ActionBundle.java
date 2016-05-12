@@ -11,7 +11,7 @@ public class ActionBundle {
 		return o2.name;
 	}
 	
-	public static ActionBundle getBundle(DigitalStoryWorld story, String line) {
+	public static ActionBundle getBundle(DigitalStoryWorld world, String line) {
 		String[] lineA = line.split(" ");
 		String actorName = lineA[0].trim();
 		String affordanceName = lineA[1].trim();
@@ -24,7 +24,7 @@ public class ActionBundle {
 		
 		ActionBundle ret = new ActionBundle();
 		
-		for (DigitalObject o : story.objects) {
+		for (DigitalObject o : world.objects) {
 			if (o.name.equals(actorName)) {
 				ret.actor = o;
 				break;

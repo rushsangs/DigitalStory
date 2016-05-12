@@ -56,7 +56,7 @@ public class PreconditionQuestion implements Question {
 		for (int i = 0; i<matrix1.length; i++) {
 			for (int j = 0; j<matrix1[i].length; j++) {
 				if (matrix1[i][j]) {
-					DbHelper.inputEdge(bA[i], meA[j]);
+					DbHelper.inputEdge(world, bA[i], meA[j]);
 				}
 			}
 		}
@@ -64,7 +64,7 @@ public class PreconditionQuestion implements Question {
 		for (int i = 0; i<matrix2.length; i++) {
 			for (int j = 0; j<matrix2[i].length; j++) {
 				if (matrix2[i][j]) {
-					DbHelper.inputEdge(mA[i], eA[j]);
+					DbHelper.inputEdge(world, mA[i], eA[j]);
 				}
 			}
 		}
