@@ -5,6 +5,7 @@ public class PreconditionQuestion implements Question {
 	String b;
 	String m;
 	String e;
+	String[] bA, mA, eA, meA;
 	boolean[][] matrix1;
 	boolean[][] matrix2;
 	
@@ -17,11 +18,11 @@ public class PreconditionQuestion implements Question {
 
 	@Override
 	public void promptUser() {
-		String[] bA = (b.length()==0)? new String[0] : b.split("\\n");
-		String[] mA = (m.length()==0)? new String[0] : m.split("\\n");
-		String[] eA = (e.length()==0)? new String[0] : e.split("\\n");
+		bA = (b.length()==0)? new String[0] : b.split("\\n");
+		mA = (m.length()==0)? new String[0] : m.split("\\n");
+		eA = (e.length()==0)? new String[0] : e.split("\\n");
 		
-		String[] meA = new String[mA.length + eA.length];
+		meA = new String[mA.length + eA.length];
 		int meA_index = 0;
 		for (int i = 0; i<mA.length; i++, meA_index++) {
 			meA[meA_index] = mA[i];
@@ -51,19 +52,14 @@ public class PreconditionQuestion implements Question {
 
 	@Override
 	public void applyAnswer() {
-		
-	}
-	
-	private String sqlStatement(String name1, String name2) {
-		StringBuilder s = new StringBuilder();
-		s.append("SELECT * FROM Edges WHERE (StartNode, EndNode) IN (");
-		s.append("SELECT n1.NodeId, n2.NodeId FROM Nodes n1, Nodes n2");
-		s.append("WHERE n1.Name=");
-		s.append('"' + name1 + '"');
-		s.append("AND n2.Name=");
-		s.append('"' + name2 + '"');
-		s.append(");");
-		return s.toString();
+		// SEND matrix1 TO DATABASE
+		for (int i = 0; i<matrix1.length; i++) {
+			for (int j = 0; j<matrix1[i].length; j++) {
+				if (matrix1[i][j]) {
+					DbHelper.inputEdge(bA[i], meA[j]);
+				}
+			}
+		}
 	}
 
 }
