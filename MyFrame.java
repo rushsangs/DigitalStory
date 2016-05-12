@@ -29,8 +29,8 @@ public class MyFrame extends JFrame implements ActionListener {
 	StringBuilder endstring = new StringBuilder();
 	ArrayList<DigitalObject> objects2;
 	static DigitalStoryWorld world;
-	public Statement stmt;
-	public ResultSet resultset;
+	public static Statement stmt;
+	public static ResultSet resultset;
 	//Object panel, left side
 	private JPanel objectpanel = new JPanel();
 		private JLabel object = new JLabel("Smart Objects");

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 public class MyQuestions {
-	
 	public static final String IS_PASSIVE_TEXT = "Please check all smart objects that are passive.";
 	public static final String IS_TERMINAL_TEXT = "Please check all actions that result in termination for either the actor or the affordees.";
 	public static final String DISCONNECT_ERROR = "Only reachable if there is disconnect between world and storystring.";
@@ -45,11 +44,6 @@ public class MyQuestions {
 				new HashMap<String, DigitalObject>();
 		for (DigitalObject o : objects2) {
 			objectLookup.put(o.name, o);
-		}
-		class ActionBundle {
-			public DigitalObject actor;
-			public DigitalAffordance affordance;
-			public ActionTuple instance;
 		}
 		HashMap<DigitalObject, ActionBundle> LTermCandidates = 
 				new HashMap<DigitalObject, ActionBundle>();
@@ -105,6 +99,7 @@ public class MyQuestions {
 									default:
 									}
 									a.instance.effect = selected[i];
+									DbHelper.updateActionEffect(a);
 								}
 							}
 
