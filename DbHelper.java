@@ -17,4 +17,41 @@ public class DbHelper {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void inputEdge(String name1, String name2) {
+		StringBuilder s = new StringBuilder();
+		s.append("SELECT * FROM Edges WHERE (StartNode, EndNode) IN (");
+		s.append("SELECT n1.NodeId, n2.NodeId FROM Nodes n1, Nodes n2");
+		s.append("WHERE n1.Name=");
+		s.append('"' + name1 + '"');
+		s.append("AND n2.Name=");
+		s.append('"' + name2 + '"');
+		s.append(");");
+		try {
+			rs = st.executeQuery(s.toString());
+			if (rs.next()) {
+				s = new StringBuilder();
+				s.append("UPDATE Edges SET Count=Count+1 WHERE (StartNode, EndNode) IN (");
+				s.append("SELECT n1.NodeId, n2.NodeId FROM Nodes n1, Nodes n2");
+				s.append("WHERE n1.Name=");
+				s.append('"' + name1 + '"');
+				s.append("AND n2.Name=");
+				s.append('"' + name2 + '"');
+				s.append(");");
+				st.execute(s.toString());
+			} else {
+				s = new StringBuilder();
+				s.append("INSERT INTO Edges VALUES(StartNode, EndNode, 1)");
+				s.append("WHERE (StartNode, EndNode) IN (");
+				s.append("SELECT n1.NodeId, n2.NodeId FROM Nodes n1, Nodes n2");
+				s.append("WHERE n1.Name=");
+				s.append('"' + name1 + '"');
+				s.append("AND n2.Name=");
+				s.append('"' + name2 + '"');
+				s.append(");");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
