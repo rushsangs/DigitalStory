@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.ArrayList;
 
 public class DbHelper {
 	static Connection con = MyFrame.con;
@@ -59,6 +60,21 @@ public class DbHelper {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static ArrayList<String> getAllNodes() {
+		try {
+			rs = st.executeQuery("SELECT * FROM Nodes;");
+			ArrayList<String> ret = new ArrayList<String>();
+			while (rs.next()) {
+				ret.add(rs.getString("AfforderType") + " " + rs.getString("Name") + " " + 
+							rs.getString("AffordeeType"));
+			}
+			return ret;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }
