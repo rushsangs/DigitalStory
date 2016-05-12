@@ -78,4 +78,23 @@ public class DbHelper {
 			return null;
 		}
 	}
+	
+	public static int[][] getAllEdges() {
+		try {
+			int[][] ret = null;
+			rs = st.executeQuery("SELECT Count(*) FROM Edges;");
+			if (rs.next()) {
+				ret = new int[rs.getInt(1)][3];
+			}
+			rs = st.executeQuery("SELECT * FROM Edges;");
+			int i = 0;
+			while (rs.next()) {
+				ret[i] = new int[]{rs.getInt(1), rs.getInt(2), rs.getInt(3)};
+			}
+			return ret;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
