@@ -41,7 +41,7 @@ public class PreconditionQuestion implements Question {
 		frame1.setVisible(true);
 		// matrix1 populated
 		
-		PreconditionFrame frame2 = new PreconditionFrame("alskjfs #2", bA, meA, matrix2);
+		PreconditionFrame frame2 = new PreconditionFrame("l;kj;ll #2", mA, eA, matrix2);
 		frame2.setLocationRelativeTo(null);
 		frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame2.pack();
