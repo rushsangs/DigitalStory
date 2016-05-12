@@ -480,7 +480,7 @@ public class MyFrame extends JFrame implements ActionListener {
 					for(int k=0;k<aff.instances.size();++k)
 					{
 						ActionTuple instance=aff.instances.get(k);
-						sql="SELECT * FROM Nodes WHERE Name= '"+ aff.name +"', AfforderType = '"+ ObjectType.name + "', ActionEffect = '"+ instance.effect.toString() + "', AffordeeType = '"+ instance.affordee.name +"';";
+						sql="SELECT * FROM Nodes WHERE Name= '"+ aff.name +"' AND AfforderType = '"+ ObjectType.name + "' AND ActionEffect = '"+ instance.effect.toString() + "' AND AffordeeType = '"+ instance.affordee.name +"';";
 						if(stmt.execute(sql) && !stmt.getResultSet().first())
 						{
 							sql="INSERT INTO `Nodes` (`Name`, `AfforderType`, `ActionEffect`, `AffordeeType`) VALUES ('"+ aff.name +"', '"+ ObjectType.name + "', '"+ instance.effect.toString() + "', '"+ instance.affordee.name +"');";
@@ -508,7 +508,7 @@ public class MyFrame extends JFrame implements ActionListener {
 					for(int k=0;k< aff.instances.size();++k)
 					{
 						ActionTuple instance=aff.instances.get(k);
-						String sql="SELECT * FROM Nodes WHERE Name= '"+ aff.name +"', AfforderType = '"+ obj.name + "', ActionEffect = '"+ instance.effect.toString() + "', AffordeeType = '"+ instance.affordee.name +"';";
+						String sql="SELECT * FROM Nodes WHERE Name= '"+ aff.name +"' AND AfforderType = '"+ obj.name + "' AND ActionEffect = '"+ instance.effect.toString() + "' AND AffordeeType = '"+ instance.affordee.name +"';";
 						if(stmt.execute(sql) && !stmt.getResultSet().first())
 						{
 							sql="INSERT INTO `Nodes` (`Name`, `AfforderType`, `ActionEffect`, `AffordeeType`) VALUES ('"+ aff.name +"', '"+ obj.name + "', '"+ instance.effect.toString() + "', '"+ instance.affordee.name +"');";
