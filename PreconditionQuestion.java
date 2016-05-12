@@ -17,7 +17,6 @@ public class PreconditionQuestion implements Question {
 
 	@Override
 	public void promptUser() {
-		// TODO Auto-generated method stub
 		String[] bA = b.split("\\n");
 		String[] mA = m.split("\\n");
 		String[] eA = e.split("\\n");
@@ -52,7 +51,6 @@ public class PreconditionQuestion implements Question {
 
 	@Override
 	public void applyAnswer() {
-		// TODO Auto-generated method stub
 		
 	}
 	
