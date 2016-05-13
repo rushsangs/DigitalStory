@@ -379,8 +379,6 @@ public class MyFrame extends JFrame implements ActionListener {
 //			outputtxt.setText(sg.writeStory());
 //			break;
 			printOutWorld(world);
-			GraphVisualizer gv = new GraphVisualizer(DbHelper.getAllNodes(), DbHelper.getAllEdges());
-			gv.visualize();
 		}
 	}
 	public String removeIsFromString(String storysection){
