@@ -279,15 +279,31 @@ public class MyFrame extends JFrame implements ActionListener {
 				if(filechooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
 					File file = filechooser.getSelectedFile();
 					Scanner input = new Scanner(file);
+					int section = 0;
 					while(input.hasNext()){
 						String string1 = input.nextLine();
+						if(string1.equals("/")){
+							section++;
+							continue;
+						}
 						String[] parts1 = string1.split("\\s+");
 						String[] objects1;
 						String[] affords1;
 						analyze(string1, world);
 						storystring.append(string1 + "\n");
 						numoflines++;
-						begintxt.setText(storystring.toString());
+						if(section == 0){
+							beginstring.append(string1 + "\n");
+							begintxt.setText(beginstring.toString());
+						}
+						if(section == 1){
+							middlestring.append(string1 + "\n");
+							middletxt.setText(middlestring.toString());
+						}
+						if(section == 2){
+							endstring.append(string1 + "\n");
+							endtxt.setText(string1 + "\n");
+						}
 						for(int i = 0; i< parts1.length;i++){
 							objects1 = objectstring.toString().split("\\s+");
 							affords1 = affordstring.toString().split("\\s+");
