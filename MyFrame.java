@@ -276,7 +276,7 @@ public class MyFrame extends JFrame implements ActionListener {
 					int section = 0;
 					while(input.hasNext()){
 						String string1 = input.nextLine();
-						if(string1.equals("/")){
+						if(string1.equals("\\")){
 							section++;
 							continue;
 						}
@@ -296,7 +296,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						}
 						if(section == 2){
 							endstring.append(string1 + "\n");
-							endtxt.setText(string1 + "\n");
+							endtxt.setText(endstring.toString() + "\n");
 						}
 						for(int i = 0; i< parts1.length;i++){
 							objects1 = objectstring.toString().split("\\s+");

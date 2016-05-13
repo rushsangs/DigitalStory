@@ -34,14 +34,14 @@ public class PreconditionQuestion implements Question {
 		matrix1 = new boolean[bA.length][meA.length];
 		matrix2 = new boolean[mA.length][eA.length];
 		
-		PreconditionFrame frame1 = new PreconditionFrame("alskjfs #1", bA, meA, matrix1);
+		PreconditionFrame frame1 = new PreconditionFrame("What are the preconditions from the beginning to the middle and end section?", bA, meA, matrix1);
 		frame1.setLocationRelativeTo(null);
 		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame1.pack();
 		frame1.setVisible(true);
 		// matrix1 populated
 		
-		PreconditionFrame frame2 = new PreconditionFrame("l;kj;ll #2", mA, eA, matrix2);
+		PreconditionFrame frame2 = new PreconditionFrame("What are the preconditions from the middle to the end section?", mA, eA, matrix2);
 		frame2.setLocationRelativeTo(null);
 		frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame2.pack();
