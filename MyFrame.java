@@ -45,8 +45,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	//Story panel, center
 	private JPanel storytxtpanel = new JPanel();
 		private JPanel labelpanel = new JPanel();
-		private JLabel storylabel = new JLabel("                         Input Story");
-		private JLabel outputlabel = new JLabel("Output Story                         ");
+		private JLabel storylabel = new JLabel("Input Story");
 		private JScrollPane beginpane;
 		private JScrollPane middlepane;
 		private JScrollPane endpane;
@@ -54,7 +53,6 @@ public class MyFrame extends JFrame implements ActionListener {
 		private JTextArea begintxt = new JTextArea(10,25);
 		private JTextArea middletxt = new JTextArea(10,25);
 		private JTextArea endtxt = new JTextArea(10,25);
-		private JTextArea outputtxt = new JTextArea(30,25);
 		private JPanel storytextpanel = new JPanel();
 	//Bottom panel
 	private JPanel bottom = new JPanel();
@@ -91,8 +89,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			middletxt.setEditable(false);
 			endtxt.setEditable(false);
 			labelpanel.setLayout(new BorderLayout(10,10));
-			labelpanel.add(storylabel,BorderLayout.WEST);
-			labelpanel.add(outputlabel, BorderLayout.EAST);
+			labelpanel.add(storylabel,BorderLayout.CENTER);
 			storytxtpanel.add(labelpanel, BorderLayout.NORTH);
 			beginpane = new JScrollPane(begintxt);
 			middlepane = new JScrollPane(middletxt);
@@ -101,9 +98,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				storytextpanel.add(beginpane);
 				storytextpanel.add(middlepane);
 				storytextpanel.add(endpane);
-			storytxtpanel.add(storytextpanel,BorderLayout.WEST);
-			output = new JScrollPane(outputtxt);
-			storytxtpanel.add(output, BorderLayout.EAST);
+			storytxtpanel.add(storytextpanel,BorderLayout.CENTER);
 		enterpanel.setLayout(new BorderLayout(10,10));
 			enterpanel.add(enterlabel,BorderLayout.WEST);
 			enterpanel.add(entertxt,BorderLayout.CENTER);
@@ -269,7 +264,6 @@ public class MyFrame extends JFrame implements ActionListener {
 			begintxt.setText("");
 			middletxt.setText("");
 			endtxt.setText("");
-			outputtxt.setText("");
 			objectList.setText("");
 			affordancesList.setText("");
 			numoflines = 0;
