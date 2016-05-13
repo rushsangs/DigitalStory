@@ -46,7 +46,7 @@ public class GraphVisualizer {
 				 new BasicVisualizationServer<node,Integer>(layout);
 				 vv.setPreferredSize(new Dimension(350,350));
 				 
-		 JFrame frame = new JFrame("Story Graph Visualization");
+		 JFrame frame = new JFrame("Simple Graph View");
 		 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		 frame.getContentPane().add(vv);
 		 frame.pack();
