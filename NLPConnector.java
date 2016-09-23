@@ -63,13 +63,13 @@ public class NLPConnector {
 					
 					//look for dobj with affordance
 					String affordee = sentence.substring(sentence.indexOf(',', sentence.indexOf("dobj(" + affordance)), sentence.indexOf(')', sentence.indexOf("dobj(" + affordance)) );
-					index = sentence.indexOf("nsub", index+1);					
-					out.println(afforder + " "+ affordance + " " +  affordee);
+					index = sentence.indexOf("nsub", index+1);
+					result += afforder + " "+ affordance + " " +  affordee + '\n';
 					
 				}
 			}
 		}
-		
+		out.println(result);
 		return result;
 	}
 }
