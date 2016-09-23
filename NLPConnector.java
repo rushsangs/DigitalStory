@@ -5,6 +5,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Properties;
 
+import edu.stanford.nlp.io.EncodingPrintWriter.out;
 import edu.stanford.nlp.io.IOUtils;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.pipeline.Annotation;
@@ -39,5 +40,36 @@ public class NLPConnector {
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}
+	}
+	public static String convertNLPToProlog(String nlptext)
+	{
+		String result="";
+		//split per root tag
+		String[] sentences = nlptext.split("root");
+		for(int i=0; i< sentences.length; ++i)
+		{
+			String sentence = sentences[i];
+			if(sentence.indexOf("nsub")>0)
+			{
+				//it does have atleast 1 nsub tag
+				int index=sentence.indexOf("nsub");
+				while(index>=0)
+				{
+					//using string handling to extract afforder and affordee
+					String affordance = sentence.substring(sentence.indexOf('(',sentence.indexOf("nsub", index))+1, sentence.indexOf(',', sentence.indexOf("nsub", index)) );
+					String afforder = sentence.substring(sentence.indexOf(',', sentence.indexOf("nsub", index))+2, sentence.indexOf(')',sentence.indexOf("nsub", index)) );
+					
+
+					
+					//look for dobj with affordance
+					String affordee = sentence.substring(sentence.indexOf(',', sentence.indexOf("dobj(" + affordance)), sentence.indexOf(')', sentence.indexOf("dobj(" + affordance)) );
+					index = sentence.indexOf("nsub", index+1);					
+					out.println(afforder + " "+ affordance + " " +  affordee);
+					
+				}
+			}
+		}
+		
+		return result;
 	}
 }
