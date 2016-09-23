@@ -51,14 +51,14 @@ public class StanfordCoreNlpDemo {
     if (args.length > 0) {
       annotation = new Annotation(IOUtils.slurpFileNoExceptions(args[0]));
     } else {
-      annotation = new Annotation("Kosgi Santosh Morrone Don sent an email to Stanford University. He didn't get a reply.");
+      annotation = new Annotation("Cat chased dog while Maria watched");
     }
 
     // run all the selected Annotators on this text
     pipeline.annotate(annotation);
 
     // this prints out the results of sentence analysis to file(s) in good formats
-//    pipeline.prettyPrint(annotation, out);
+    pipeline.prettyPrint(annotation, out);
 //    if (xmlOut != null) {
 //      pipeline.xmlPrint(annotation, xmlOut);
 //    }

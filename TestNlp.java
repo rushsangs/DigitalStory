@@ -19,7 +19,16 @@ public class TestNlp {
 
   /** Usage: java -cp "*" StanfordCoreNlpDemo [inputFile [outputTextFile [outputXmlFile]]] */
   public static void main(String[] args) throws IOException {
-    NLPConnector.analyze("Writes bytes to a file. The options parameter specifies how the the file is created or opened. If no options are present then this method works as if the CREATE, TRUNCATE_EXISTING, and WRITE options are present. In other words, it opens the file for writing, creating the file if it doesn't exist, or initially truncating an existing regular-file to a size of 0. All bytes in the byte array are written to the file. The method ensures that the file is closed when all bytes have been written (or an I/O error or other runtime exception is thrown). If an I/O error occurs then it may do so after the file has created or truncated, or after some bytes have been written to the file.", "patrick_test.txt");
+    NLPConnector.analyze("Ned Stark met King Robert in Winterfell, and King Robert asked Ned to accompany him to Kings Landing. Ned took Sansa with him as he wanted Sansa to marry Robert's son Joffrey. Ned and Sansa went to Kings Landing. Cersei Lannister was unhappy about it because she wanted to rule Kings Landing but Ned would stop her from doing so.", "patrick_test.txt");
+    File file = new File("patrick_test.txt");
+	Scanner input = new Scanner(file);
+	String s="";
+	while(input.hasNext())
+	{
+		 s += input.nextLine();
+		
+	}
+	NLPConnector.convertNLPToProlog(s);
   }
 
 }
