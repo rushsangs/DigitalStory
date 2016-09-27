@@ -19,53 +19,73 @@ public class NLPConnector {
 		Properties props = new Properties();
 		props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref, sentiment");
 		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-		
-		// Initialize an Annotation with some text to be annotated. The text is the argument to the constructor.
+
+		// Initialize an Annotation with some text to be annotated. The text is
+		// the argument to the constructor.
 		Annotation annotation = new Annotation(storytext);
-		
+
 		// run all the selected Annotators on this text
 		pipeline.annotate(annotation);
-		
+
 		List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
-		try {	    
+		try {
 			Files.write(Paths.get(fileURI), "".getBytes());
-			for(int i =0; i< sentences.size(); ++i)
-			{
-					CoreMap test_sentence = sentences.get(i);
-				    Files.write(Paths.get(fileURI), 
-				    		test_sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class).toString(SemanticGraph.OutputFormat.LIST).getBytes(),
-				    		StandardOpenOption.APPEND);
+			for (int i = 0; i < sentences.size(); ++i) {
+				CoreMap test_sentence = sentences.get(i);
+				Files.write(Paths.get(fileURI),
+						test_sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class)
+								.toString(SemanticGraph.OutputFormat.LIST).getBytes(),
+						StandardOpenOption.APPEND);
 
 			}
 		} catch (IOException e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
-	public static String convertNLPToProlog(String nlptext)
-	{
-		String result="";
-		//split per root tag
-		String[] sentences = nlptext.split("root");
-		for(int i=0; i< sentences.length; ++i)
-		{
-			String sentence = sentences[i];
-			if(sentence.indexOf("nsub")>0)
-			{
-				//it does have atleast 1 nsub tag
-				int index=sentence.indexOf("nsub");
-				while(index>=0)
-				{
-					//using string handling to extract afforder and affordee
-					String affordance = sentence.substring(sentence.indexOf('(',sentence.indexOf("nsub", index))+1, sentence.indexOf(',', sentence.indexOf("nsub", index)) );
-					String afforder = sentence.substring(sentence.indexOf(',', sentence.indexOf("nsub", index))+2, sentence.indexOf(')',sentence.indexOf("nsub", index)) );
-					
 
-					
-					//look for dobj with affordance
-					String affordee = sentence.substring(sentence.indexOf(',', sentence.indexOf("dobj(" + affordance)), sentence.indexOf(')', sentence.indexOf("dobj(" + affordance)) );
-					index = sentence.indexOf("nsub", index+1);
-					result += afforder + " "+ affordance + " " +  affordee + '\n';
-					
+	public static String convertNLPToProlog(String nlptext) {
+		String result = "";
+		// split per root tag
+		String[] sentences = nlptext.split("root");
+		for (int i = 0; i < sentences.length; ++i) {
+			String sentence = sentences[i];
+			if (sentence.indexOf("nsub") > 0) {
+				// it does have atleast 1 nsub tag
+				int index = sentence.indexOf("nsub");
+				while (index >= 0) {
+					// using string handling to extract afforder and affordee
+					String affordance = sentence.substring(sentence.indexOf('(', sentence.indexOf("nsub", index)) + 1,
+							sentence.indexOf(',', sentence.indexOf("nsub", index)));
+					String afforder = sentence.substring(sentence.indexOf(',', sentence.indexOf("nsub", index)) + 2,
+							sentence.indexOf(')', sentence.indexOf("nsub", index)));
+					String affordee;
+
+					// look for dobj with affordance
+					if (sentence.indexOf("dobj("+affordance, index) == -1) {
+						if (sentence.indexOf("cop", index) == -1) {
+							index = sentence.indexOf("nsub", index + 1);
+							continue;
+						} else {
+							affordee = sentence.substring(
+									sentence.indexOf(',', sentence.indexOf("cop(" + affordance)) + 2,
+									sentence.indexOf(')', sentence.indexOf("cop(" + affordance)));
+							String tmp=null;
+							tmp = affordance;
+							affordance = affordee;
+							affordee = tmp;
+
+						}
+					} else {
+						affordee = sentence.substring(
+								sentence.indexOf(',', sentence.indexOf("dobj(" + affordance)) + 2,
+								sentence.indexOf(')', sentence.indexOf("dobj(" + affordance)));
+					}
+					index = sentence.indexOf("nsub", index + 1);
+					if (afforder.equalsIgnoreCase(affordee) || afforder.equalsIgnoreCase(affordance)
+							|| affordance.equalsIgnoreCase(affordee))
+						continue;
+					result += afforder + " " + affordance + " " + affordee + '\n';
+
 				}
 			}
 		}
