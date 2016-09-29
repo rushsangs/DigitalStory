@@ -19,7 +19,7 @@ public class PreconditionQuestion implements Question {
 		
 		matrix = new boolean[sA.length][sA.length];
 		
-		newPreconditionFrame frame1 = new newPreconditionFrame("What are the preconditions from the beginning to the middle and end section?", sA, sA, matrix);
+		newPreconditionFrame frame1 = new newPreconditionFrame("Please Select the Preconditions for the following Sentences", sA, sA, matrix);
 		frame1.setLocationRelativeTo(null);
 		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame1.pack();
