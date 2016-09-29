@@ -4,6 +4,9 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -249,6 +252,8 @@ public class MyFrame extends JFrame implements ActionListener {
 					StringBuilder storystring2 = new StringBuilder(
 							NLPConnector.convertNLPToOAO(NLPConnector.analyze(storytxt, "abc.txt")));
 					System.out.println("OAO facts are : \n" + storystring2.toString());
+					// ???????
+					NLPConnector.convertOAOToProlog(storystring2.toString(), PrologQueryMaster.FACTS_FILE);
 					this.storytxt.setText(storystring2.toString());
 					String[] parts1 = storystring2.toString().split("\\n+");
 					String[] objects1 = {};
@@ -307,7 +312,9 @@ public class MyFrame extends JFrame implements ActionListener {
 					frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					frame1.pack();
 					frame1.setVisible(true);
-					getPrologTypesString(objects1, types_for_objects1);
+					Files.write(Paths.get(PrologQueryMaster.FACTS_FILE), 
+							getPrologTypesString(objects1, types_for_objects1).getBytes(), 
+							StandardOpenOption.APPEND);
 				}
 			} catch (Exception e1) {
 				e1.printStackTrace();

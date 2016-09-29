@@ -1,3 +1,7 @@
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
 import gnu.prolog.term.AtomTerm;
 import gnu.prolog.term.AtomicTerm;
 import gnu.prolog.term.CompoundTerm;
@@ -9,9 +13,10 @@ import gnu.prolog.vm.PrologCode;
 import gnu.prolog.vm.PrologException;
 
 public class PrologQueryMaster {
-	private static final String factsFile = "prolog/facts.pro";
-	private static final String rules1File = "prolog/rules1.pro";
-	private static final String rules2File = "prolog/rules2.pro";
+	public static final String FACTS_FILE = "prolog/facts.pro";
+	public static final String RULES1_FILE = "prolog/rules1.pro";
+	public static final String RULES2_FILE = "prolog/rules2.pro";
+	private static final String TMP_FILE = "prolog/tmp.pro";
 	
 	private Environment env;
 	private Interpreter interpreter;
@@ -45,5 +50,23 @@ public class PrologQueryMaster {
 		}
 		return false;
 	}
+	
+	public static int[][] guessPreconditions() {
+		ArrayList<Integer> preconditions = new ArrayList<Integer>();
+		ArrayList<Integer> postconditions = new ArrayList<Integer>();
+		try {
+			Files.write(Paths.get(TMP_FILE), 
+					Files.readAllBytes(Paths.get(RULES1_FILE)));
+		} catch (Exception e) {
+			
+		}
+		
+		
+		return new int[][]{
+			preconditions.stream().mapToInt(i -> i).toArray(),
+			postconditions.stream().mapToInt(i -> i).toArray()};
+	}
+	
+	
 
 }
