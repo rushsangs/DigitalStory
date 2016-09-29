@@ -29,6 +29,8 @@ public class TestNlp {
 		
 	}
 	NLPConnector.convertNLPToProlog(s);
+	
+	NLPConnector.convertNLPToProlog(s, "patrick_test.pro");
   }
 
 }

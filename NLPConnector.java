@@ -4,6 +4,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Properties;
+import java.lang.StringBuilder;
 
 import edu.stanford.nlp.io.EncodingPrintWriter.out;
 import edu.stanford.nlp.io.IOUtils;
@@ -44,7 +45,20 @@ public class NLPConnector {
 	}
 
 	public static String convertNLPToProlog(String nlptext) {
+		return convertNLPToProlog(nlptext, "");
+	}
+	public static String convertNLPToProlog(String nlptext, String outputFile) {
+		final String ACTION = "action(%s, %s, %s).\n";
+		
 		String result = "";
+		boolean firstStmt = true;
+		if (outputFile.length()!=0) {
+			try {
+				Files.write(Paths.get(outputFile), "".getBytes());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		// split per root tag
 		String[] sentences = nlptext.split("root");
 		for (int i = 0; i < sentences.length; ++i) {
@@ -85,7 +99,19 @@ public class NLPConnector {
 							|| affordance.equalsIgnoreCase(affordee))
 						continue;
 					result += afforder + " " + affordance + " " + affordee + '\n';
-
+					if (outputFile.length()!=0) {
+						try {
+							String[] args = {afforder, affordance, affordee};
+							for (int j = 0; j<args.length; j++) {
+								args[j] = args[j].toLowerCase().substring(0, args[j].lastIndexOf('-'));
+							}
+							Files.write(Paths.get(outputFile),
+									String.format(ACTION, args[0], args[1], args[2]).getBytes(),
+									StandardOpenOption.APPEND);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		}
