@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-public class SelectTypeFrame extends JFrame implements ActionListener{
+public class SelectTypeFrame extends JDialog implements ActionListener{
 	private JLabel question = new JLabel("Select a type for each character");
 	private JButton ok = new JButton("OK");
 	private String[] characters;
@@ -15,7 +15,7 @@ public class SelectTypeFrame extends JFrame implements ActionListener{
 	private JPanel gridpanel = new JPanel();
 	
 	public SelectTypeFrame( String[] characters, String[] types, String[] results){
-		//this.setModal(true);
+		this.setModal(true);
 		this.characters = characters;
 		this.types = types;
 		this.results = results;

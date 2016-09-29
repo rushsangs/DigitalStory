@@ -11,21 +11,21 @@ public class Main {
 		//initialize frame
 		//ArrayList<DigitalObject> objects= new ArrayList<DigitalObject>();
 		DigitalStoryWorld world= new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
-	/*MyFrame frame = new MyFrame(world);
+		MyFrame frame = new MyFrame(world);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
-		frame.setVisible(true);*/
-		String[] types = {"human","animal"};
-		String[] characters = {"bob","alice","wolf"};
-		String[] results = new String[characters.length];
-		
-
-		SelectTypeFrame frame1 = new SelectTypeFrame(characters, types, results);
-		frame1.setLocationRelativeTo(null);
-		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame1.pack();
-		frame1.setVisible(true); 
+		frame.setVisible(true);
+//		String[] types = {"human","animal"};
+//		String[] characters = {"bob","alice","wolf"};
+//		String[] results = new String[characters.length];
+//		
+//
+//		SelectTypeFrame frame1 = new SelectTypeFrame(characters, types, results);
+//		frame1.setLocationRelativeTo(null);
+//		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//		frame1.pack();
+//		frame1.setVisible(true); 
 	}
 //		System.out.println("Enter the story in text form");
 //		BufferedReader br =new BufferedReader(new InputStreamReader(System.in));
