@@ -16,7 +16,7 @@ import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 
 public class NLPConnector {
-	public static void analyze(String storytext, String fileURI) {
+	public static String analyze(String storytext, String fileURI) {
 		Properties props = new Properties();
 		props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref, sentiment");
 		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
@@ -24,24 +24,28 @@ public class NLPConnector {
 		// Initialize an Annotation with some text to be annotated. The text is
 		// the argument to the constructor.
 		Annotation annotation = new Annotation(storytext);
-
+		
 		// run all the selected Annotators on this text
 		pipeline.annotate(annotation);
-
+		String result="";
 		List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
 		try {
+			
 			Files.write(Paths.get(fileURI), "".getBytes());
 			for (int i = 0; i < sentences.size(); ++i) {
 				CoreMap test_sentence = sentences.get(i);
+				String tmp = test_sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class)
+						.toString(SemanticGraph.OutputFormat.LIST);
 				Files.write(Paths.get(fileURI),
-						test_sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class)
-								.toString(SemanticGraph.OutputFormat.LIST).getBytes(),
+						tmp.getBytes(),
 						StandardOpenOption.APPEND);
+				result += tmp;
 
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return result;
 	}
 
 	public static String convertNLPToProlog(String nlptext) {

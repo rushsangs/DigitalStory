@@ -299,7 +299,9 @@ public class MyFrame extends JFrame implements ActionListener {
 						
 						
 						String[] affords1;
-						analyze(string1, world);
+//						analyze(string1, world);
+						//!!!!!!!
+						
 						storystring.append(string1 + "\n");
 						numoflines++;
 						if(section == 0){
@@ -354,6 +356,8 @@ public class MyFrame extends JFrame implements ActionListener {
 						affordancesList.setText(affordstring.toString());
 						
 					}
+					System.out.println("Prolog facts are : \n"
+							+ NLPConnector.convertNLPToProlog(NLPConnector.analyze(storystring.toString(), "a.txt"), "facts.pro"));
 					String[] types_for_objects1= new String[objects1.length];
 					SelectTypeFrame frame1 = new SelectTypeFrame(objects1,types1,types_for_objects1);
 					frame1.setLocationRelativeTo(null);
