@@ -16,7 +16,17 @@ public class Main {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-		
+//		String[] types = {"human","animal"};
+//		String[] characters = {"bob","alice","wolf"};
+//		String[] results = new String[characters.length];
+//		
+//
+//		SelectTypeFrame frame1 = new SelectTypeFrame(characters, types, results);
+//		frame1.setLocationRelativeTo(null);
+//		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//		frame1.pack();
+//		frame1.setVisible(true); 
+	}
 //		System.out.println("Enter the story in text form");
 //		BufferedReader br =new BufferedReader(new InputStreamReader(System.in));
 //		String story=br.readLine();
@@ -75,4 +85,3 @@ public class Main {
 //		}
 //	}
 
-}

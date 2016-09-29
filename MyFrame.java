@@ -18,6 +18,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import edu.stanford.nlp.io.EncodingPrintWriter.out;
+
 import java.sql.*;
 
 public class MyFrame extends JFrame implements ActionListener {
@@ -112,8 +114,10 @@ public class MyFrame extends JFrame implements ActionListener {
 				public void actionPerformed(ActionEvent e){
 					String string = entertxt.getText().trim();
 					String[] parts = string.split("\\s+");
-					String[] objects;
+					String[] objects ={};
+					String[] types= {"human", "animal", "none"};
 					String[] affords;
+					String[] types_for_objects ={};
 					if(parts.length < 2){
 						JOptionPane.showMessageDialog(MyFrame.this,"Incorrect Format: Enter as Object Action Object*");
 						return;
@@ -169,6 +173,13 @@ public class MyFrame extends JFrame implements ActionListener {
 					objectList.setText(objectstring.toString());
 					affordancesList.setText(affordstring.toString());
 					entertxt.setText("");
+					SelectTypeFrame frame1 = new SelectTypeFrame(objects,types,types_for_objects);
+					frame1.setLocationRelativeTo(null);
+					frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					frame1.pack();
+					frame1.setVisible(true);
+					getPrologTypesString(objects, types_for_objects);
+					
 					return;
 				}
 			});
@@ -192,6 +203,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand()){
+		//button enter
 		case "Enter":
 			String string = entertxt.getText().trim();
 			String[] parts = string.split("\\s+");
@@ -274,6 +286,8 @@ public class MyFrame extends JFrame implements ActionListener {
 					File file = filechooser.getSelectedFile();
 					Scanner input = new Scanner(file);
 					int section = 0;
+					String[] objects1={};
+					String[] types1={"human", "animal", "none"};
 					while(input.hasNext()){
 						String string1 = input.nextLine();
 						if(string1.equals("\\")){
@@ -281,7 +295,9 @@ public class MyFrame extends JFrame implements ActionListener {
 							continue;
 						}
 						String[] parts1 = string1.split("\\s+");
-						String[] objects1;
+						
+						
+						
 						String[] affords1;
 						analyze(string1, world);
 						storystring.append(string1 + "\n");
@@ -333,9 +349,18 @@ public class MyFrame extends JFrame implements ActionListener {
 								}							
 							}									
 						}
+						
 						objectList.setText(objectstring.toString());
 						affordancesList.setText(affordstring.toString());
+						
 					}
+					String[] types_for_objects1= new String[objects1.length];
+					SelectTypeFrame frame1 = new SelectTypeFrame(objects1,types1,types_for_objects1);
+					frame1.setLocationRelativeTo(null);
+					frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					frame1.pack();
+					frame1.setVisible(true);
+					getPrologTypesString(objects1, types_for_objects1);
 				}
 			}catch(Exception e1){
 				e1.printStackTrace();
@@ -696,5 +721,18 @@ public class MyFrame extends JFrame implements ActionListener {
 				}
 			}
 		}
+	}
+	
+	/** Creates prolog type statements and returns the string
+	 * Prolog type statements are of the form: type(Character, Type).*/
+	public String getPrologTypesString(String[] characters, String[] types)
+	{
+		String result = "";
+		for(int i =0; i< characters.length; ++i)
+		{
+			result += "type(" + characters[i].toLowerCase() + "," + types[i].toLowerCase() + ").\n";
+		}
+		out.println("Prolog type statements are: \n" + result);
+		return result;
 	}
 }
