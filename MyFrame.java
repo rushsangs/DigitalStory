@@ -285,16 +285,13 @@ public class MyFrame extends JFrame implements ActionListener {
 				if(filechooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
 					File file = filechooser.getSelectedFile();
 					Scanner input = new Scanner(file);
-					int section = 0;
-					String[] objects1={};
+					System.out.println("OAO facts are : \n"
+							+ NLPConnector.convertNLPToOAO(NLPConnector.analyze(storystring.toString(), "a.txt"), "facts.pro"));
+					storystring = new StringBuilder(NLPConnector.convertNLPToOAO(NLPConnector.analyze(storystring.toString(), "b.txt"));
+					String[] parts1 = string.split("\\s+");
+					String[] objects1;
 					String[] types1={"human", "animal", "none"};
-					while(input.hasNext()){
-						String string1 = input.nextLine();
-						if(string1.equals("\\")){
-							section++;
-							continue;
-						}
-						String[] parts1 = string1.split("\\s+");
+
 						
 						
 						
@@ -302,20 +299,7 @@ public class MyFrame extends JFrame implements ActionListener {
 //						analyze(string1, world);
 						//!!!!!!!
 						
-						storystring.append(string1 + "\n");
-						numoflines++;
-						if(section == 0){
-							beginstring.append(string1 + "\n");
-							begintxt.setText(beginstring.toString());
-						}
-						if(section == 1){
-							middlestring.append(string1 + "\n");
-							middletxt.setText(middlestring.toString());
-						}
-						if(section == 2){
-							endstring.append(string1 + "\n");
-							endtxt.setText(endstring.toString() + "\n");
-						}
+
 						for(int i = 0; i< parts1.length;i++){
 							objects1 = objectstring.toString().split("\\s+");
 							affords1 = affordstring.toString().split("\\s+");
@@ -354,10 +338,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						
 						objectList.setText(objectstring.toString());
 						affordancesList.setText(affordstring.toString());
-						
-					}
-					System.out.println("Prolog facts are : \n"
-							+ NLPConnector.convertNLPToProlog(NLPConnector.analyze(storystring.toString(), "a.txt"), "facts.pro"));
+					
 					String[] types_for_objects1= new String[objects1.length];
 					SelectTypeFrame frame1 = new SelectTypeFrame(objects1,types1,types_for_objects1);
 					frame1.setLocationRelativeTo(null);
