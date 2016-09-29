@@ -26,9 +26,6 @@ public class MyFrame extends JFrame implements ActionListener {
 	StringBuilder storystring = new StringBuilder();
 	StringBuilder objectstring = new StringBuilder();
 	StringBuilder affordstring = new StringBuilder();
-	StringBuilder beginstring = new StringBuilder();
-	StringBuilder middlestring = new StringBuilder();
-	StringBuilder endstring = new StringBuilder();
 	ArrayList<DigitalObject> objects2;
 	static DigitalStoryWorld world;
 	public static Connection con;
@@ -48,29 +45,22 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JPanel storytxtpanel = new JPanel();
 	private JPanel labelpanel = new JPanel();
 	private JLabel storylabel = new JLabel("Input Story");
-	private JScrollPane beginpane;
-	private JScrollPane middlepane;
-	private JScrollPane endpane;
-	private JScrollPane output;
-	private JTextArea begintxt = new JTextArea(10, 25);
-	private JTextArea middletxt = new JTextArea(10, 25);
-	private JTextArea endtxt = new JTextArea(10, 25);
+	private JScrollPane storypane;
+	private JTextArea storytxt = new JTextArea(25, 25);
 	private JPanel storytextpanel = new JPanel();
 	// Bottom panel
 	private JPanel bottom = new JPanel();
 	private JPanel enterpanel = new JPanel();
 	private JLabel enterlabel = new JLabel("Text Here");
 	private JButton enter = new JButton("Enter");
-	String[] sections = { "begin", "middle", "end" };
-	JComboBox<String> storysections = new JComboBox<String>(sections);
 	private JPanel box = new JPanel();
 	private JTextField entertxt = new JTextField(50);
 	private JPanel generatepanel = new JPanel();
+	private JButton addtype = new JButton("Add New Type");
 	private JButton generate = new JButton("Generate Graph");
 	private JButton clear = new JButton("Clear");
 	private JButton getfile = new JButton("Get File");
 	private JFileChooser filechooser = new JFileChooser();
-	public int numoflines;
 
 	public MyFrame(DigitalStoryWorld world) {
 		this.initializeDB();
@@ -87,25 +77,16 @@ public class MyFrame extends JFrame implements ActionListener {
 		affordpane = new JScrollPane(affordancesList);
 		affordpanel.add(affordpane, BorderLayout.CENTER);
 		storytxtpanel.setLayout(new BorderLayout(10, 10));
-		begintxt.setEditable(false);
-		middletxt.setEditable(false);
-		endtxt.setEditable(false);
+		storytxt.setEditable(false);
 		labelpanel.setLayout(new BorderLayout(10, 10));
 		labelpanel.add(storylabel, BorderLayout.CENTER);
 		storytxtpanel.add(labelpanel, BorderLayout.NORTH);
-		beginpane = new JScrollPane(begintxt);
-		middlepane = new JScrollPane(middletxt);
-		endpane = new JScrollPane(endtxt);
-		storytextpanel.setLayout(new GridLayout(3, 1));
-		storytextpanel.add(beginpane);
-		storytextpanel.add(middlepane);
-		storytextpanel.add(endpane);
-		storytxtpanel.add(storytextpanel, BorderLayout.CENTER);
+		storypane = new JScrollPane(storytxt);
+		storytxtpanel.add(storypane, BorderLayout.CENTER);
 		enterpanel.setLayout(new BorderLayout(10, 10));
 		enterpanel.add(enterlabel, BorderLayout.WEST);
 		enterpanel.add(entertxt, BorderLayout.CENTER);
 		box.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-		box.add(storysections);
 		box.add(enter);
 		enterpanel.add(box, BorderLayout.EAST);
 		enter.addActionListener(this);
@@ -124,7 +105,6 @@ public class MyFrame extends JFrame implements ActionListener {
 				}
 				MyFrame.analyze(string, MyFrame.world);
 				storystring.append(string + "\n");
-				numoflines++;
 				for (int i = 0; i < parts.length; i++) {
 					objects = objectstring.toString().split("\\s+");
 					affords = affordstring.toString().split("\\s+");
@@ -162,16 +142,6 @@ public class MyFrame extends JFrame implements ActionListener {
 						}
 					}
 				}
-				if (storysections.getSelectedItem().toString().equals("begin")) {
-					beginstring.append(string + "\n");
-					begintxt.setText(beginstring.toString());
-				} else if (storysections.getSelectedItem().toString().equals("middle")) {
-					middlestring.append(string + "\n");
-					middletxt.setText(middlestring.toString());
-				} else if (storysections.getSelectedItem().toString().equals("end")) {
-					endstring.append(string + "\n");
-					endtxt.setText(endstring.toString());
-				}
 				objectList.setText(objectstring.toString());
 				affordancesList.setText(affordstring.toString());
 				entertxt.setText("");
@@ -200,7 +170,6 @@ public class MyFrame extends JFrame implements ActionListener {
 		this.add(affordpanel, BorderLayout.EAST);
 		this.add(storytxtpanel, BorderLayout.CENTER);
 		this.add(bottom, BorderLayout.SOUTH);
-		numoflines = 0;
 	}
 
 	@Override
@@ -216,7 +185,6 @@ public class MyFrame extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, "Incorrect Format: Enter as Object Action Object*");
 				break;
 			}
-			numoflines++;
 			analyze(string, world);
 			storystring.append(string + "\n");
 			for (int i = 0; i < parts.length; i++) {
@@ -256,36 +224,19 @@ public class MyFrame extends JFrame implements ActionListener {
 					}
 				}
 			}
-			if (storysections.getSelectedItem().toString().equals("begin")) {
-				beginstring.append(string + "\n");
-				begintxt.setText(beginstring.toString());
-			} else if (storysections.getSelectedItem().toString().equals("middle")) {
-				middlestring.append(string + "\n");
-				middletxt.setText(middlestring.toString());
-			} else if (storysections.getSelectedItem().toString().equals("end")) {
-				endstring.append(string + "\n");
-				endtxt.setText(endstring.toString());
-			}
 			objectList.setText(objectstring.toString());
 			affordancesList.setText(affordstring.toString());
 			entertxt.setText("");
 			break;
 		case "Clear":
 			world = new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
-			// storystring = new StringBuilder();
 			objectstring = new StringBuilder();
 			affordstring = new StringBuilder();
-			beginstring = new StringBuilder();
-			middlestring = new StringBuilder();
-			endstring = new StringBuilder();
-			begintxt.setText("");
-			middletxt.setText("");
-			endtxt.setText("");
+			storystring = new StringBuilder();
 			objectList.setText("");
-			affordancesList.setText("");
-			numoflines = 0;
+			affordancesList.setText("");	
 			break;
-		case "Get File": // how to make work with story sections?
+		case "Get File": 
 			try {
 				if (filechooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = filechooser.getSelectedFile();
@@ -298,7 +249,7 @@ public class MyFrame extends JFrame implements ActionListener {
 					StringBuilder storystring2 = new StringBuilder(
 							NLPConnector.convertNLPToOAO(NLPConnector.analyze(storytxt, "abc.txt")));
 					System.out.println("OAO facts are : \n" + storystring2.toString());
-
+					this.storytxt.setText(storystring2.toString());
 					String[] parts1 = storystring2.toString().split("\\n+");
 					String[] objects1 = {};
 					String[] types1 = { "human", "animal", "none" };
@@ -366,33 +317,10 @@ public class MyFrame extends JFrame implements ActionListener {
 			try {
 				createNodes(world);
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			// PSEUDO UNIT TESTING FOR PASSIVE OBJECTS
-			// objects2.add(new DigitalObject("Forest"));
-			// objects2.add(new DigitalObject("Cake"));
-			// objects2.add(new DigitalObject("Granny"));
-
-			// process input into object structure
-			// Main.printData(objects2);
-
-			// COMMENTING OUT STUFF BELOW FOR TESTING
-			MyQuestions.ask(world, storystring.toString(), removeIsFromString(beginstring.toString()),
-					removeIsFromString(middlestring.toString()), removeIsFromString(endstring.toString()));
-
-			//
-			// int i = 0;
-			//
-			//
-			// String[] lines = storystring.toString().split("\n");
-			// for(i = 0;i < lines.length;i++){
-			// //ToDo
-			// }
-			// //then generate new story randomly
-			// StoryGenerator sg = new StoryGenerator(objects2);
-			// outputtxt.setText(sg.writeStory());
-			// break;
+			MyQuestions.ask(world, storystring.toString(), removeIsFromString(storystring.toString()),
+					removeIsFromString(storystring.toString()), removeIsFromString(storystring.toString()));
 			printOutWorld(world);
 			GraphVisualizer gv = new GraphVisualizer(DbHelper.getAllNodes(), DbHelper.getAllEdges());
 			gv.visualize();
