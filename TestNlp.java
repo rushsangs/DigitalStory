@@ -28,9 +28,8 @@ public class TestNlp {
 		 s += input.nextLine();
 		
 	}
-	NLPConnector.convertNLPToProlog(s);
-	
-	NLPConnector.convertNLPToProlog(s, "patrick_test.pro");
+	String oaotext = NLPConnector.convertNLPToOAO(s);
+	NLPConnector.convertOAOToProlog(oaotext, "patrick_test.pro");
   }
 
 }

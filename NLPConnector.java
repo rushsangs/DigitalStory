@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
@@ -47,22 +48,9 @@ public class NLPConnector {
 		}
 		return result;
 	}
-
-	public static String convertNLPToProlog(String nlptext) {
-		return convertNLPToProlog(nlptext, "");
-	}
-	public static String convertNLPToProlog(String nlptext, String outputFile) {
-		final String ACTION = "action(%s, %s, %s).\n";
-		
+	
+	public static String convertNLPToOAO(String nlptext) {
 		String result = "";
-		boolean firstStmt = true;
-		if (outputFile.length()!=0) {
-			try {
-				Files.write(Paths.get(outputFile), "".getBytes());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 		// split per root tag
 		String[] sentences = nlptext.split("root");
 		for (int i = 0; i < sentences.length; ++i) {
@@ -102,24 +90,33 @@ public class NLPConnector {
 					if (afforder.equalsIgnoreCase(affordee) || afforder.equalsIgnoreCase(affordance)
 							|| affordance.equalsIgnoreCase(affordee))
 						continue;
-					result += afforder + " " + affordance + " " + affordee + '\n';
-					if (outputFile.length()!=0) {
-						try {
-							String[] args = {afforder, affordance, affordee};
-							for (int j = 0; j<args.length; j++) {
-								args[j] = args[j].toLowerCase().substring(0, args[j].lastIndexOf('-'));
-							}
-							Files.write(Paths.get(outputFile),
-									String.format(ACTION, args[0], args[1], args[2]).getBytes(),
-									StandardOpenOption.APPEND);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+					String[] args = {afforder, affordance, affordee};
+					for (int j = 0; j<args.length; j++) {
+						args[j] = args[j].substring(0, args[j].lastIndexOf('-'));
 					}
+					result += args[0] + " " + args[1] + " " + args[2] + '\n';
 				}
 			}
 		}
 		out.println(result);
 		return result;
+	}
+	
+	public static String convertOAOToProlog(String oaotext, String outputFile) {
+		final String ACTION = "action(%s, %s, %s).\n";
+		StringBuilder result = new StringBuilder();
+		for (String oao : oaotext.split("\\n")) {
+			String[] args = oao.split(" ");
+			for (int i = 0; i<args.length; i++) {
+				args[i] = args[i].toLowerCase();
+			}
+			result.append(String.format(ACTION, args[0], args[1], args[2]));
+		}
+		try {
+			Files.write(Paths.get(outputFile), result.toString().getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result.toString();
 	}
 }

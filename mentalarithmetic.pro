@@ -43,6 +43,6 @@ recFactors(N, C, [C|T]) :- 0 is N mod C, !, NC is C -1, recFactors(N,NC,T).
 %we could perhaps gain 2 factors here and speed things up
 recFactors(N, C, L) :- NC is C -1, recFactors(N, NC, L).%case where C is not a factor.
 
-:- factors(1,[]), factors(0,[]), factors(2,[]), factors(3,[]), factors(4,[2]),
+factors(1,[]), factors(0,[]), factors(2,[]), factors(3,[]), factors(4,[2]),
         factors(5,[]), factors(6,[3,2]), factors(7,[]), factors(8,[4,2]), 
         factors(9,[3]), factors(10,[5,2]), factors(11,[]), factors(12,[6,4,3,2]).
