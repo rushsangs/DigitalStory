@@ -2,69 +2,39 @@ import javax.swing.JFrame;
 
 public class PreconditionQuestion implements Question {
 	DigitalStoryWorld world;
-	String b;
-	String m;
-	String e;
-	String[] bA, mA, eA, meA;
-	boolean[][] matrix1;
-	boolean[][] matrix2;
+	String s;
+	String[] sA;
+	boolean[][] matrix;
 	
-	public PreconditionQuestion(DigitalStoryWorld world, String b, String m, String e) {
+	public PreconditionQuestion(DigitalStoryWorld world, String storystring) {
 		this.world = world;
-		this.b = b;
-		this.m = m;
-		this.e = e;
+		s=storystring;
 	}
 
 	@Override
 	public void promptUser() {
-		bA = (b.length()==0)? new String[0] : b.split("\\n");
-		mA = (m.length()==0)? new String[0] : m.split("\\n");
-		eA = (e.length()==0)? new String[0] : e.split("\\n");
+		sA = (s.length()==0)? new String[0] : s.split("\\n");
 		
-		meA = new String[mA.length + eA.length];
-		int meA_index = 0;
-		for (int i = 0; i<mA.length; i++, meA_index++) {
-			meA[meA_index] = mA[i];
-		}
-		for (int i = 0; i<eA.length; i++, meA_index++) {
-			meA[meA_index] = eA[i];
-		}
 		
-		matrix1 = new boolean[bA.length][meA.length];
-		matrix2 = new boolean[mA.length][eA.length];
 		
-		PreconditionFrame frame1 = new PreconditionFrame("What are the preconditions from the beginning to the middle and end section?", bA, meA, matrix1);
+		matrix = new boolean[sA.length][sA.length];
+		
+		newPreconditionFrame frame1 = new newPreconditionFrame("What are the preconditions from the beginning to the middle and end section?", sA, sA, matrix);
 		frame1.setLocationRelativeTo(null);
 		frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame1.pack();
 		frame1.setVisible(true);
 		// matrix1 populated
-		
-		PreconditionFrame frame2 = new PreconditionFrame("What are the preconditions from the middle to the end section?", mA, eA, matrix2);
-		frame2.setLocationRelativeTo(null);
-		frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame2.pack();
-		frame2.setVisible(true);
-		// matrix2 populated
 
 	}
 
 	@Override
 	public void applyAnswer() {
 		// SEND matrix1 TO DATABASE
-		for (int i = 0; i<matrix1.length; i++) {
-			for (int j = 0; j<matrix1[i].length; j++) {
-				if (matrix1[i][j]) {
-					DbHelper.inputEdge(world, bA[i], meA[j]);
-				}
-			}
-		}
-		// SEND matrix2 TO DATABASE
-		for (int i = 0; i<matrix2.length; i++) {
-			for (int j = 0; j<matrix2[i].length; j++) {
-				if (matrix2[i][j]) {
-					DbHelper.inputEdge(world, mA[i], eA[j]);
+		for (int i = 0; i<matrix.length; i++) {
+			for (int j = 0; j<matrix[i].length; j++) {
+				if (matrix[i][j]) {
+					DbHelper.inputEdge(world, sA[i], sA[j]);
 				}
 			}
 		}

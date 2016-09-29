@@ -254,8 +254,8 @@ public class MyFrame extends JFrame implements ActionListener {
 					String[] objects1 = {};
 					String[] types1 = { "human", "animal", "none" };
 					String[] affords1;
-					// analyze(string1, world);
-					// !!!!!!!
+					analyze(storystring2.toString(), world);
+					storystring = storystring2;
 
 					for (int j = 0; j < parts1.length; j++) {
 						String[] parts2 = parts1[j].split("\\s+");
@@ -319,8 +319,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			MyQuestions.ask(world, storystring.toString(), removeIsFromString(storystring.toString()),
-					removeIsFromString(storystring.toString()), removeIsFromString(storystring.toString()));
+			MyQuestions.ask(world, storystring.toString());
 			printOutWorld(world);
 			GraphVisualizer gv = new GraphVisualizer(DbHelper.getAllNodes(), DbHelper.getAllEdges());
 			gv.visualize();

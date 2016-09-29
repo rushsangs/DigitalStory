@@ -10,8 +10,7 @@ public class MyQuestions {
 	public static final String IS_TERMINAL_TEXT = "Please check all actions that result in termination for either the actor or the affordees.";
 	public static final String DISCONNECT_ERROR = "Only reachable if there is disconnect between world and storystring.";
 	
-	public static void ask(DigitalStoryWorld world, String storystring, 
-			String beginstring, String middlestring, String endstring) {
+	public static void ask(DigitalStoryWorld world, String storystring) {
 		ArrayList<DigitalObject> objects2 = world.objects;
 		
 		int i = 0;
@@ -65,11 +64,11 @@ public class MyQuestions {
 				}
 				for (int j = 2; j<sentence.length; j++) {
 					ActionBundle a = new ActionBundle();
-					a.actor = objectLookup.get(sentence[0]);
-					a.affordance = affordanceLookup(a.actor, sentence[1]);
-					a.instance = instanceLookup(a.affordance, objectLookup.get(sentence[j]));
-					LTermCandidates.put(a.actor, a);
-					RTermCandidates.put(a.instance.affordee, a);
+					//a.actor = objectLookup.get(sentence[0]);
+					//a.affordance = affordanceLookup(a.actor, sentence[1]);
+					//a.instance = instanceLookup(a.affordance, objectLookup.get(sentence[j]));
+					//LTermCandidates.put(a.actor, a);
+					//RTermCandidates.put(a.instance.affordee, a);
 				}
 			}		
 		}
@@ -119,8 +118,8 @@ public class MyQuestions {
 			
 		};
 		
-		// PRECONDITION QUESTION
-		PreconditionQuestion isPrecondition = new PreconditionQuestion(world, beginstring, middlestring, endstring);
+		// PRECONDITION QUESTION Rush
+		PreconditionQuestion isPrecondition = new PreconditionQuestion(world, storystring);
 		
 		
 //		Question[] questions = {isPassive, isTerminal};
