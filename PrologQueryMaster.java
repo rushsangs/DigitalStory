@@ -1,6 +1,7 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 import gnu.prolog.term.AtomTerm;
 import gnu.prolog.term.AtomicTerm;
@@ -29,18 +30,8 @@ public class PrologQueryMaster {
 		env.runInitialization(interpreter);
 	}
 	
-	public boolean query(String fnName, String[] argNames) {
-		Term[] args = new Term[argNames.length];
-		for (int i = 0; i<args.length; i++) {
-			if (Character.isLowerCase(argNames[i].charAt(0))) {
-				args[i] = AtomTerm.get(argNames[i]);
-			} else if (argNames[i].equals("_")) {
-				args[i] = new VariableTerm();
-			} else {
-				args[i] = new VariableTerm(argNames[i]);
-			}
-		}
-		CompoundTerm goalTerm = new CompoundTerm(AtomTerm.get(fnName), args);
+	public boolean verify(String fnName, String[] argNames) {
+		CompoundTerm goalTerm = prep(fnName, argNames);
 		try {
 			int rc = interpreter.runOnce(goalTerm);
 			if (rc == PrologCode.SUCCESS || rc == PrologCode.SUCCESS_LAST) {
@@ -51,6 +42,24 @@ public class PrologQueryMaster {
 		}
 		return false;
 	}
+	public String[][] query(String fnName, String[] argNames) {
+		//TODO: complete
+		return null;
+	}
+	private CompoundTerm prep(String fnName, String[] argNames) {
+		Term[] args = new Term[argNames.length];
+		for (int i = 0; i<args.length; i++) {
+			if (Character.isLowerCase(argNames[i].charAt(0))) {
+				args[i] = AtomTerm.get(argNames[i]);
+			} else if (argNames[i].equals("_")) {
+				args[i] = new VariableTerm();
+			} else {
+				args[i] = new VariableTerm(argNames[i]);
+			}
+		}
+		return new CompoundTerm(AtomTerm.get(fnName), args);
+	}
+	
 	
 	public static int[][] guessPreconditions() {
 		ArrayList<Integer> preconditions = new ArrayList<Integer>();
