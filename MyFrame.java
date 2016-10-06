@@ -59,7 +59,8 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JPanel box = new JPanel();
 	private JTextField entertxt = new JTextField(50);
 	private JPanel generatepanel = new JPanel();
-	private JButton addtype = new JButton("Add New Type");
+	private JButton addtype = new JButton("Add Type");
+	private JButton query = new JButton("Query");
 	private JButton generate = new JButton("Generate Graph");
 	private JButton clear = new JButton("Clear");
 	private JButton getfile = new JButton("Get File");
@@ -148,7 +149,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				objectList.setText(objectstring.toString());
 				affordancesList.setText(affordstring.toString());
 				entertxt.setText("");
-				SelectTypeFrame frame1 = new SelectTypeFrame(objects, types, types_for_objects);
+				SelectTypeFrame frame1 = new SelectTypeFrame(objects, getTypes(), types_for_objects);
 				frame1.setLocationRelativeTo(null);
 				frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				frame1.pack();
@@ -159,6 +160,10 @@ public class MyFrame extends JFrame implements ActionListener {
 			}
 		});
 		generatepanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+		generatepanel.add(query);
+		generatepanel.add(addtype);
+		addtype.addActionListener(this);
+		query.addActionListener(this);
 		generatepanel.add(generate);
 		generate.addActionListener(this);
 		generatepanel.add(clear);
@@ -179,6 +184,15 @@ public class MyFrame extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		// button enter
+		case "Add Type":
+			String type = entertxt.getText().trim();
+			addType(type);
+			entertxt.setText("");
+			break;
+		case "Query":
+			//
+			//
+			
 		case "Enter":
 			String string = entertxt.getText().trim();
 			String[] parts = string.split("\\s+");
@@ -307,7 +321,7 @@ public class MyFrame extends JFrame implements ActionListener {
 					affordancesList.setText(affordstring.toString());
 
 					String[] types_for_objects1 = new String[objects1.length];
-					SelectTypeFrame frame1 = new SelectTypeFrame(objects1, types1, types_for_objects1);
+					SelectTypeFrame frame1 = new SelectTypeFrame(objects1, getTypes(), types_for_objects1);
 					frame1.setLocationRelativeTo(null);
 					frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					frame1.pack();
@@ -637,5 +651,51 @@ public class MyFrame extends JFrame implements ActionListener {
 		}
 		out.println("Prolog type statements are: \n" + result);
 		return result;
+	}
+	public void addType(String type){
+		try {
+			resultset = stmt.executeQuery("SELECT Name " +
+										  "FROM Types");
+			while(resultset.next()) {
+				if(type.equals(resultset.getString(1))){
+					System.out.print("type already exists");
+					return;
+				}
+			}
+			String sql = "INSERT INTO Types(Name) VALUES('" + type + "');";
+			stmt.execute(sql);
+			System.out.print("Type " + type + "inserted");
+			return;
+		
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public String[] getTypes(){
+		int numOfRows = 0;
+		int i = 0;
+		String[] types = null;
+		try{
+			resultset = stmt.executeQuery("SELECT Name " +
+										  "FROM Types");
+			
+			while(resultset.next()){
+				//types[i] = resultset.getString(1);
+				numOfRows++;
+			}
+			types = new String[numOfRows];
+			System.out.println(numOfRows);
+			resultset = stmt.executeQuery("SELECT Name " +
+					  "FROM Types");
+
+			while(resultset.next()){
+				types[i] = resultset.getString(1);
+				i++;
+			}
+			return types;
+		}catch (SQLException e){
+			e.printStackTrace();
+		}
+		return types;
 	}
 }
