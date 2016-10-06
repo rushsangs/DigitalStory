@@ -13,6 +13,7 @@ import gnu.prolog.vm.PrologCode;
 import gnu.prolog.vm.PrologException;
 
 public class PrologQueryMaster {
+	public static final String DIR = "prolog";
 	public static final String FACTS_FILE = "prolog/facts.pro";
 	public static final String RULES1_FILE = "prolog/rules1.pro";
 	public static final String RULES2_FILE = "prolog/rules2.pro";

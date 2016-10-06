@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
@@ -10,6 +12,7 @@ public class Main {
 		// TODO Auto-generated method stub
 		//initialize frame
 		//ArrayList<DigitalObject> objects= new ArrayList<DigitalObject>();
+		Files.createDirectory(Paths.get(PrologQueryMaster.DIR));
 		DigitalStoryWorld world= new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
 		MyFrame frame = new MyFrame(world);
 		frame.setLocationRelativeTo(null);
