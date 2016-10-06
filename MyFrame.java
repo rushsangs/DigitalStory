@@ -97,65 +97,73 @@ public class MyFrame extends JFrame implements ActionListener {
 		entertxt.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String string = entertxt.getText().trim();
-				String[] parts = string.split("\\s+");
-				String[] objects = {};
-				String[] types = { "human", "animal", "none" };
-				String[] affords;
-				String[] types_for_objects = {};
-				if (parts.length < 2) {
-					JOptionPane.showMessageDialog(MyFrame.this, "Incorrect Format: Enter as Object Action Object*");
-					return;
-				}
-				MyFrame.analyze(string, MyFrame.world);
-				storystring.append(string + "\n");
-				for (int i = 0; i < parts.length; i++) {
-					objects = objectstring.toString().split("\\s+");
-					affords = affordstring.toString().split("\\s+");
-					if (i != 1) {
-						// Checks if existing object, if not, then adds to
-						// object string
-						int j;
-						for (j = 0; j < objects.length; j++) {
-							if (parts[i].equals(objects[j])) {
-								break;
-							}
-						}
-						if (j == objects.length) {
-							objectstring.append(parts[i] + "\n");
-							// objectList.setText(objectstring.toString());
-							continue;
-						}
-					}
-					if (i == 1) {
-						// Checks if action is already in the action string, if
-						// not then adds it
-						int k;
-						if (parts[i].equals("is")) {
-							break;
-						}
-						for (k = 0; k < affords.length; k++) {
-							if (parts[i].equals(affords[k])) {
-								break;
-							}
-						}
-						if (k == affords.length) {
-							affordstring.append(parts[i] + "\n");
-							// affordancesList.setText(affordstring.toString());
-							continue;
-						}
-					}
-				}
-				objectList.setText(objectstring.toString());
-				affordancesList.setText(affordstring.toString());
-				entertxt.setText("");
-				SelectTypeFrame frame1 = new SelectTypeFrame(objects, getTypes(), types_for_objects);
-				frame1.setLocationRelativeTo(null);
-				frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-				frame1.pack();
-				frame1.setVisible(true);
-				getPrologTypesString(objects, types_for_objects);
-
+//				String string = entertxt.getText().trim();
+//				String[] parts = string.split("\\s+");
+//				String[] objects = {};
+//				String[] types = { "human", "animal", "none" };
+//				String[] affords;
+//				String[] types_for_objects = {};
+//				if (parts.length < 2) {
+//					JOptionPane.showMessageDialog(MyFrame.this, "Incorrect Format: Enter as Object Action Object*");
+//					return;
+//				}
+//				MyFrame.analyze(string, MyFrame.world);
+//				storystring.append(string + "\n");
+//				for (int i = 0; i < parts.length; i++) {
+//					objects = objectstring.toString().split("\\s+");
+//					affords = affordstring.toString().split("\\s+");
+//					if (i != 1) {
+//						// Checks if existing object, if not, then adds to
+//						// object string
+//						int j;
+//						for (j = 0; j < objects.length; j++) {
+//							if (parts[i].equals(objects[j])) {
+//								break;
+//							}
+//						}
+//						if (j == objects.length) {
+//							objectstring.append(parts[i] + "\n");
+//							// objectList.setText(objectstring.toString());
+//							continue;
+//						}
+//					}
+//					if (i == 1) {
+//						// Checks if action is already in the action string, if
+//						// not then adds it
+//						int k;
+//						if (parts[i].equals("is")) {
+//							break;
+//						}
+//						for (k = 0; k < affords.length; k++) {
+//							if (parts[i].equals(affords[k])) {
+//								break;
+//							}
+//						}
+//						if (k == affords.length) {
+//							affordstring.append(parts[i] + "\n");
+//							// affordancesList.setText(affordstring.toString());
+//							continue;
+//						}
+//					}
+//				}
+//				objectList.setText(objectstring.toString());
+//				affordancesList.setText(affordstring.toString());
+//				entertxt.setText("");
+//				SelectTypeFrame frame1 = new SelectTypeFrame(objects, getTypes(), types_for_objects);
+//				frame1.setLocationRelativeTo(null);
+//				frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//				frame1.pack();
+//				frame1.setVisible(true);
+//				getPrologTypesString(objects, types_for_objects);
+//
+//				return;
+				PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+				String query = entertxt.getText();
+				String[] firstpart = query.split("\\(");
+				String[] queryparts = firstpart[1].split("\\)|,|\\.");
+				System.out.print(firstpart[0] + " " + queryparts[0] + " " + queryparts[1]);
+				System.out.println(pqm.verify(firstpart[0], queryparts));
+				JOptionPane.showMessageDialog(null,pqm.verify(firstpart[0], queryparts));
 				return;
 			}
 		});
@@ -190,7 +198,14 @@ public class MyFrame extends JFrame implements ActionListener {
 			entertxt.setText("");
 			break;
 		case "Query":
-			//
+			PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+			String query = entertxt.getText();
+			String[] firstpart = query.split("\\(");
+			String[] queryparts = firstpart[1].split("\\)|,|\\.");
+			System.out.print(firstpart[0] + " " + queryparts[0] + " " + queryparts[1]);
+			System.out.println(pqm.verify(firstpart[0], queryparts));
+			JOptionPane.showMessageDialog(null,pqm.verify(firstpart[0], queryparts));
+			break;
 			//
 			
 		case "Enter":
