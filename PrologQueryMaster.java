@@ -37,6 +37,8 @@ public class PrologQueryMaster {
 			if (rc == PrologCode.SUCCESS || rc == PrologCode.SUCCESS_LAST) {
 				return true;
 			}
+		} catch (IllegalArgumentException e) {
+			return false;
 		} catch (PrologException e) {
 			System.out.println(e.getStackTrace());
 		}
