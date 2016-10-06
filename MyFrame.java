@@ -194,6 +194,10 @@ public class MyFrame extends JFrame implements ActionListener {
 		// button enter
 		case "Add Type":
 			String type = entertxt.getText().trim();
+			if(type.equals("")){
+				JOptionPane.showMessageDialog(this, "Please enter a type");
+				break;
+			}
 			addType(type);
 			entertxt.setText("");
 			break;
@@ -204,7 +208,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			String[] queryparts = firstpart[1].split("\\)|,|\\.");
 			System.out.print(firstpart[0] + " " + queryparts[0] + " " + queryparts[1]);
 			System.out.println(pqm.verify(firstpart[0], queryparts));
-			JOptionPane.showMessageDialog(null,pqm.verify(firstpart[0], queryparts));
+			JOptionPane.showMessageDialog(this,pqm.verify(firstpart[0], queryparts));
 			break;
 			//
 			
