@@ -1,8 +1,12 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import gnu.prolog.io.OperatorSet;
+import gnu.prolog.io.ReadOptions;
+import gnu.prolog.io.WriteOptions;
 import gnu.prolog.term.AtomTerm;
 import gnu.prolog.term.AtomicTerm;
 import gnu.prolog.term.CompoundTerm;
@@ -10,6 +14,7 @@ import gnu.prolog.term.Term;
 import gnu.prolog.term.VariableTerm;
 import gnu.prolog.vm.Environment;
 import gnu.prolog.vm.Interpreter;
+import gnu.prolog.vm.Interpreter.Goal;
 import gnu.prolog.vm.PrologCode;
 import gnu.prolog.vm.PrologException;
 
@@ -45,7 +50,37 @@ public class PrologQueryMaster {
 		return false;
 	}
 	public String[][] query(String fnName, String[] argNames) {
-		//TODO: complete
+		CompoundTerm goalTerm = prep(fnName, argNames);
+		ArrayList<ArrayList<String>> output = 
+				new ArrayList<ArrayList<String>>();
+		try {
+			Goal goal = interpreter.prepareGoal(goalTerm);
+			while (true) {
+				int rc = interpreter.execute(goal);
+				switch (rc) {
+				case PrologCode.SUCCESS:
+				case PrologCode.SUCCESS_LAST:
+					ArrayList<String> row = new ArrayList<String>();
+					for (Term t : goalTerm.args) {
+						row.add(t.dereference().toString());
+					}
+					output.add(row);
+					break;
+				case PrologCode.FAIL:
+					interpreter.stop(goal);
+					break;
+				case PrologCode.HALT:
+					break;
+				}
+			}
+		} catch (IllegalArgumentException e) {
+			// for some reason, always reaches here at the end
+			return output.stream().map(
+					(u) -> u.toArray(new String[0]))
+					.toArray(String[][]::new);
+		} catch (PrologException e) {
+			System.out.println(e.getStackTrace());
+		}
 		return null;
 	}
 	private CompoundTerm prep(String fnName, String[] argNames) {
