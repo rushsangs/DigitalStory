@@ -281,7 +281,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						for (int i = 0; i < 3; ++i) {
 							objects1 = objectstring.toString().split("\\s+");
 							affords1 = affordstring.toString().split("\\s+");
-							if (i != 1) {
+							if (i != 1 && parts2.length !=2) {
 								// Checks if existing object, if not, then adds
 								// to object string
 								int k;

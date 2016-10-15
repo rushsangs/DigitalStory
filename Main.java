@@ -12,7 +12,8 @@ public class Main {
 		// TODO Auto-generated method stub
 		//initialize frame
 		//ArrayList<DigitalObject> objects= new ArrayList<DigitalObject>();
-		Files.createDirectory(Paths.get(PrologQueryMaster.DIR));
+		if(!Files.exists(Paths.get(PrologQueryMaster.DIR)))
+			Files.createDirectory(Paths.get(PrologQueryMaster.DIR));
 		DigitalStoryWorld world= new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
 		MyFrame frame = new MyFrame(world);
 		frame.setLocationRelativeTo(null);
