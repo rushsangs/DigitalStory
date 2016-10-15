@@ -65,7 +65,9 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JButton clear = new JButton("Clear");
 	private JButton getfile = new JButton("Get File");
 	private JFileChooser filechooser = new JFileChooser();
-
+	public String[] mylist = new String[]{"Prolog", "Question"};
+	private JComboBox<String> mybox = new JComboBox<String>(mylist);
+	
 	public MyFrame(DigitalStoryWorld world) {
 		this.initializeDB();
 		this.setTitle("Story World Generator");
@@ -91,6 +93,8 @@ public class MyFrame extends JFrame implements ActionListener {
 		enterpanel.add(enterlabel, BorderLayout.WEST);
 		enterpanel.add(entertxt, BorderLayout.CENTER);
 		box.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+		box.add(mybox);
+		mybox.addActionListener(this);
 		box.add(enter);
 		enterpanel.add(box, BorderLayout.EAST);
 		enter.addActionListener(this);
@@ -157,6 +161,7 @@ public class MyFrame extends JFrame implements ActionListener {
 //				getPrologTypesString(objects, types_for_objects);
 //
 //				return;
+			if(mybox.getSelectedItem().equals("Prolog")){
 				PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
 				String query = entertxt.getText();
 				String[] firstpart = query.split("\\(");
@@ -165,6 +170,10 @@ public class MyFrame extends JFrame implements ActionListener {
 				System.out.println(pqm.verify(firstpart[0], queryparts));
 				JOptionPane.showMessageDialog(null,pqm.verify(firstpart[0], queryparts));
 				return;
+			}else{
+				System.out.print("I GOT HERE");
+				return;
+			}
 			}
 		});
 		generatepanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
@@ -202,68 +211,173 @@ public class MyFrame extends JFrame implements ActionListener {
 			entertxt.setText("");
 			break;
 		case "Query":
-			PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-			String query = entertxt.getText();
-			String[] firstpart = query.split("\\(");
-			String[] queryparts = firstpart[1].split("\\)|,|\\.");
-			System.out.print(firstpart[0] + " " + queryparts[0] + " " + queryparts[1]);
-			System.out.println(pqm.verify(firstpart[0], queryparts));
-			JOptionPane.showMessageDialog(this,pqm.verify(firstpart[0], queryparts));
-			break;
+			if(mybox.getSelectedItem().equals("Prolog")){
+				PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+				String query = entertxt.getText();
+				String[] firstpart = query.split("\\(");
+				String[] queryparts = firstpart[1].split("\\)|,|\\.");
+				System.out.print(firstpart[0] + " " + queryparts[0] + " " + queryparts[1]);
+				System.out.println(pqm.verify(firstpart[0], queryparts));
+				JOptionPane.showMessageDialog(this,entertxt.getText() + pqm.verify(firstpart[0], queryparts));
+				entertxt.setText("");
+				break;
+			}
+			else if(mybox.getSelectedItem().equals("Question")){
+				System.out.println(entertxt.getText());
+				StringBuilder questionOAO = new StringBuilder(
+						QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(entertxt.getText())));
+				System.out.print("Query in OAO is:  " + questionOAO.toString() + "\n");
+				String[] oaoparts = questionOAO.toString().split(" ");
+				if(oaoparts.length == 2){
+					//case  WAS with AMOD
+					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+					String firstpart1 = "trait";
+					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+					entertxt.setText("");
+					break;
+				}
+				if( questionOAO.toString().toLowerCase().contains("who")){
+					for(int i = 0; i < oaoparts.length; i++){
+						if(oaoparts[i].toLowerCase().equals("who")){
+							oaoparts[i] = "X";
+							break;
+						}
+					}
+					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+					String firstpart1 = "action";
+					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+					entertxt.setText("");
+					break;
+				}
+				if( questionOAO.toString().toLowerCase().contains("what")){
+					for(int i = 0; i < oaoparts.length; i++){
+						if(oaoparts[i].toLowerCase().equals("what")){
+							oaoparts[i] = "X";
+							break;
+						}
+					}
+					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+					String firstpart1 = "action";
+					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+					entertxt.setText("");
+					break;
+				}else { //this falls through to DID DOES AND WAS for action
+					String firstpart1 ="action";
+					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+					entertxt.setText("");
+				}
+				break;
+			}
 			//
 			
 		case "Enter":
-			String string = entertxt.getText().trim();
-			String[] parts = string.split("\\s+");
-			String[] objects;
-			String[] affords;
-			if (parts.length < 2) {
-				JOptionPane.showMessageDialog(this, "Incorrect Format: Enter as Object Action Object*");
+//			String string = entertxt.getText().trim();
+//			String[] parts = string.split("\\s+");
+//			String[] objects;
+//			String[] affords;
+//			if (parts.length < 2) {
+//				JOptionPane.showMessageDialog(this, "Incorrect Format: Enter as Object Action Object*");
+//				break;
+//			}
+//			analyze(string, world);
+//			storystring.append(string + "\n");
+//			for (int i = 0; i < parts.length; i++) {
+//				objects = objectstring.toString().split("\\s+");
+//				affords = affordstring.toString().split("\\s+");
+//				if (i != 1) {
+//					// Checks if existing object, if not, then adds to object
+//					// string
+//					int j;
+//					for (j = 0; j < objects.length; j++) {
+//						if (parts[i].equals(objects[j])) {
+//							break;
+//						}
+//					}
+//					if (j == objects.length) {
+//						objectstring.append(parts[i] + "\n");
+//						// objectList.setText(objectstring.toString());
+//						continue;
+//					}
+//				}
+//				if (i == 1) {
+//					// Checks if action is already in the action string, if not
+//					// then adds it
+//					int k;
+//					if (parts[i].equals("is")) {
+//						break;
+//					}
+//					for (k = 0; k < affords.length; k++) {
+//						if (parts[i].equals(affords[k])) {
+//							break;
+//						}
+//					}
+//					if (k == affords.length) {
+//						affordstring.append(parts[i] + "\n");
+//						// affordancesList.setText(affordstring.toString());
+//						continue;
+//					}
+//				}
+//			}
+//			objectList.setText(objectstring.toString());
+//			affordancesList.setText(affordstring.toString());
+			if(mybox.getSelectedItem().equals("Prolog")){
+				PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+				String query = entertxt.getText();
+				String[] firstpart = query.split("\\(");
+				String[] queryparts = firstpart[1].split("\\)|,|\\.");
+				System.out.print(firstpart[0] + " " + queryparts[0] + " " + queryparts[1]);
+				System.out.println(pqm.verify(firstpart[0], queryparts));
+				JOptionPane.showMessageDialog(this,pqm.verify(firstpart[0], queryparts));
 				break;
 			}
-			analyze(string, world);
-			storystring.append(string + "\n");
-			for (int i = 0; i < parts.length; i++) {
-				objects = objectstring.toString().split("\\s+");
-				affords = affordstring.toString().split("\\s+");
-				if (i != 1) {
-					// Checks if existing object, if not, then adds to object
-					// string
-					int j;
-					for (j = 0; j < objects.length; j++) {
-						if (parts[i].equals(objects[j])) {
+			else if(mybox.getSelectedItem().equals("Question")){
+				System.out.println(entertxt.getText());
+				StringBuilder questionOAO = new StringBuilder(
+						QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(entertxt.getText())));
+				System.out.print("Query in OAO is:  " + questionOAO.toString() + "\n");
+				String[] oaoparts = questionOAO.toString().split(" ");
+				if(oaoparts.length == 2){
+					//case  WAS with AMOD
+					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+					String firstpart1 = "trait";
+					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+					entertxt.setText("");
+					break;
+				}
+				if( questionOAO.toString().toLowerCase().contains("who")){
+					for(int i = 0; i < oaoparts.length; i++){
+						if(oaoparts[i].toLowerCase().equals("who")){
+							oaoparts[i] = "X";
 							break;
 						}
 					}
-					if (j == objects.length) {
-						objectstring.append(parts[i] + "\n");
-						// objectList.setText(objectstring.toString());
-						continue;
-					}
+					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+					String firstpart1 = "action";
+					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+					entertxt.setText("");
+					break;
 				}
-				if (i == 1) {
-					// Checks if action is already in the action string, if not
-					// then adds it
-					int k;
-					if (parts[i].equals("is")) {
-						break;
-					}
-					for (k = 0; k < affords.length; k++) {
-						if (parts[i].equals(affords[k])) {
+				if( questionOAO.toString().toLowerCase().contains("what")){
+					for(int i = 0; i < oaoparts.length; i++){
+						if(oaoparts[i].toLowerCase().equals("what")){
+							oaoparts[i] = "X";
 							break;
 						}
 					}
-					if (k == affords.length) {
-						affordstring.append(parts[i] + "\n");
-						// affordancesList.setText(affordstring.toString());
-						continue;
-					}
+					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+					String firstpart1 = "action";
+					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+					entertxt.setText("");
+					break;
+				}else { //this falls through to DID DOES AND WAS for action
+					String firstpart1 ="action";
+					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+					entertxt.setText("");
 				}
-			}
-			objectList.setText(objectstring.toString());
-			affordancesList.setText(affordstring.toString());
-			entertxt.setText("");
-			break;
+				break;
+			}			
 		case "Clear":
 			world = new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
 			objectstring = new StringBuilder();
@@ -300,7 +414,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						for (int i = 0; i < 3; ++i) {
 							objects1 = objectstring.toString().split("\\s+");
 							affords1 = affordstring.toString().split("\\s+");
-							if (i != 1) {
+							if (i != 1 && parts2.length > 2) {
 								// Checks if existing object, if not, then adds
 								// to object string
 								int k;
