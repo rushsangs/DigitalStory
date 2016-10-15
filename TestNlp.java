@@ -19,7 +19,7 @@ public class TestNlp {
 
   /** Usage: java -cp "*" StanfordCoreNlpDemo [inputFile [outputTextFile [outputXmlFile]]] */
   public static void main(String[] args) throws IOException {
-    NLPConnector.analyze("Ned Stark met King Robert in Winterfell, and King Robert asked Ned to accompany him to Kings Landing. Ned took Sansa with him as he wanted Sansa to marry Robert's son Joffrey. Ned and Sansa went to Kings Landing. Cersei Lannister was unhappy about it because she wanted to rule Kings Landing but Ned would stop her from doing so.", "patrick_test.txt");
+    NLPConnector.analyze("Did Bob kill Alice? Was steve sleeping? Does Patrick eat cake? When did Jack climb the beanstalk? Was the giant sleeping? Who did bob kill?  What did patrick eat? Is Daniel human? Where did Neil meet Alice? Why did Bob marry Alice?", "patrick_test.txt");
     File file = new File("patrick_test.txt");
 	Scanner input = new Scanner(file);
 	String s="";
