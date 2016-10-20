@@ -212,28 +212,76 @@ public class MyFrame extends JFrame implements ActionListener {
 			break;
 		case "Query":
 			if(mybox.getSelectedItem().equals("Prolog")){
+				boolean isDone = false;
 				PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
 				String query = entertxt.getText();
 				String[] firstpart = query.split("\\(");
 				String[] queryparts = firstpart[1].split("\\)|,|\\.");
-				System.out.print(firstpart[0] + " " + queryparts[0] + " " + queryparts[1]);
-				System.out.println(pqm.verify(firstpart[0], queryparts));
-				JOptionPane.showMessageDialog(this,entertxt.getText() + pqm.verify(firstpart[0], queryparts));
-				entertxt.setText("");
+				System.out.println(firstpart[1].toString() + "******" + "\n");
+				for(int i = 0; i < queryparts.length; i++){ //check if case query else do verify
+					if(Character.isUpperCase(queryparts[i].codePointAt(0))){
+						String[][] resultset = pqm.query(firstpart[0], queryparts);
+						StringBuilder output = new StringBuilder();
+						for(int  j = 0; j < resultset.length; j ++){
+							for (int k = 0; k < resultset[j].length; k++){
+								if(k == (resultset[j].length-1)){
+									output.append(resultset[j][k] + "\n");									
+								}else {
+									output.append(resultset[j][k] + " ");
+								}								
+							}
+						}
+						JOptionPane.showMessageDialog(this, entertxt.getText() + "\n" + output.toString());
+						isDone = true;
+						entertxt.setText("");
+						break;
+					}
+				}
+				if(isDone == false){
+					System.out.print(firstpart[0] + " " + queryparts[0] + " " + queryparts[1]);
+					System.out.println(pqm.verify(firstpart[0], queryparts));
+					JOptionPane.showMessageDialog(this,entertxt.getText() + "\n" + pqm.verify(firstpart[0], queryparts));
+					entertxt.setText("");
+					break;
+				}
 				break;
 			}
 			else if(mybox.getSelectedItem().equals("Question")){
+				boolean isDone = false;
 				System.out.println(entertxt.getText());
 				StringBuilder questionOAO = new StringBuilder(
 						QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(entertxt.getText())));
 				System.out.print("Query in OAO is:  " + questionOAO.toString() + "\n");
 				String[] oaoparts = questionOAO.toString().split(" ");
 				if(oaoparts.length == 2){
+					for(int i = 0; i < oaoparts.length; i++){
+						if(Character.isUpperCase(oaoparts[i].codePointAt(0))){
+							PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+							String firstpart1 = "trait";
+							String[][] resultset = pqm.query(firstpart1, oaoparts);
+							StringBuilder output = new StringBuilder();
+							for(int  j = 0; j < resultset.length; j ++){
+								for (int k = 0; k < resultset[j].length; k++){
+									if(k == (resultset[j].length-1)){
+										output.append(resultset[j][k] + "\n");									
+									}else {
+										output.append(resultset[j][k] + " ");
+									}								
+								}
+							}
+							JOptionPane.showMessageDialog(this, entertxt.getText() + "\n" + output.toString());
+							isDone = true;
+							entertxt.setText("");
+							break;
+						}
+					}
+					if(isDone == false){
 					//case  WAS with AMOD
-					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-					String firstpart1 = "trait";
-					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
-					entertxt.setText("");
+						PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+						String firstpart1 = "trait";
+						JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+						entertxt.setText("");
+					}
 					break;
 				}
 				if( questionOAO.toString().toLowerCase().contains("who")){
@@ -414,11 +462,9 @@ public class MyFrame extends JFrame implements ActionListener {
 						for (int i = 0; i < 3; ++i) {
 							objects1 = objectstring.toString().split("\\s+");
 							affords1 = affordstring.toString().split("\\s+");
-<<<<<<< HEAD
+
 							if (i != 1 && parts2.length !=2) {
-=======
-							if (i != 1 && parts2.length > 2) {
->>>>>>> d15c2ce9a4add9c2221fd91d7d3fa6a369ed76a4
+
 								// Checks if existing object, if not, then adds
 								// to object string
 								int k;
