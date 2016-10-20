@@ -4,10 +4,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.lang.StringBuilder;
 
+import edu.stanford.nlp.dcoref.CorefChain;
+import edu.stanford.nlp.hcoref.CorefCoreAnnotations;
 import edu.stanford.nlp.io.EncodingPrintWriter.out;
 import edu.stanford.nlp.io.IOUtils;
 import edu.stanford.nlp.ling.CoreAnnotations;
@@ -31,6 +34,23 @@ public class NLPConnector {
 		pipeline.annotate(annotation);
 		String result = "";
 		List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
+		List<CorefChainNode> master_coref_list = new ArrayList<CorefChainNode>();
+		for (edu.stanford.nlp.hcoref.data.CorefChain cc : annotation.get(CorefCoreAnnotations.CorefChainAnnotation.class).values()) {
+	    	System.out.println(cc.toString());
+	    	Iterator<edu.stanford.nlp.hcoref.data.CorefChain.CorefMention> iter = cc.getMentionsInTextualOrder().iterator();
+	    	String root_word="";
+	    	while(iter.hasNext())
+	    	{
+	    		edu.stanford.nlp.hcoref.data.CorefChain.CorefMention cm = iter.next();
+	    		if(root_word.equals(""))
+	    			root_word = cm.mentionSpan;
+	    		if(root_word.indexOf(" ")>-1)
+	    			root_word = root_word.substring(root_word.lastIndexOf(" "));
+	    		System.out.println(cm.mentionSpan + " " + cm.sentNum);
+	    		master_coref_list.add(new CorefChainNode(cm.mentionSpan, root_word, cm.sentNum));
+	    	}
+	    	
+	    }
 		try {
 
 			Files.write(Paths.get(fileURI), "".getBytes());
@@ -38,6 +58,14 @@ public class NLPConnector {
 				CoreMap test_sentence = sentences.get(i);
 				String tmp = test_sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class)
 						.toString(SemanticGraph.OutputFormat.LIST);
+				for(CorefChainNode ccn: master_coref_list)
+				{
+					if(ccn.line_no -1 == i)
+					{
+						System.out.println(ccn.word + " replaced by " + ccn.root_word);
+						tmp = tmp.replaceAll(ccn.word, ccn.root_word);
+					}
+				}
 				Files.write(Paths.get(fileURI), tmp.getBytes(), StandardOpenOption.APPEND);
 				result += tmp;
 
@@ -62,12 +90,12 @@ public class NLPConnector {
 			nsub.addAll(getNsubIfPresent(sentence));
 			dobj.addAll(getDobjIfPresent(sentence));
 		}
+		
 
 		// look for common connections
 		for (String[] nsub_pair : nsub) {
 			String afforder = nsub_pair[0].trim();
 			String affordance = nsub_pair[1].trim();
-
 			int flag = 0;
 
 			for (String[] dobj_pair : dobj) {
@@ -75,7 +103,7 @@ public class NLPConnector {
 				String affordee = dobj_pair[1].trim();
 				if (affordance_dobj.equals(affordance)) {
 					// match found: sequence of afforder affordance affordee
-					result += afforder + " " + affordance + " " + affordee + "\n";
+					result += removeHyphen(afforder) + " " + removeHyphen(affordance) + " " + removeHyphen(affordee) + "\n";
 					flag = 1;
 				}
 
@@ -84,16 +112,16 @@ public class NLPConnector {
 					String conj2 = cc_result[1].trim();
 					if (afforder.equals(conj1) && affordance_dobj.equals(affordance)) {
 						// we have two statements with different afforders
-						result += conj2 + " " + affordance + " " + affordee + "\n";
+						result += removeHyphen(conj2) + " " + removeHyphen(affordance) + " " + removeHyphen(affordee) + "\n";
 
 					}
 					if (affordance.equals(conj1) && affordance_dobj.equals(conj2)) {
 						// we have two statements with the same affordance
-						result += afforder + " " + conj2 + " " + affordee + "\n";
+						result += removeHyphen(afforder) + " " + removeHyphen(conj2) + " " + removeHyphen(affordee) + "\n";
 					}
 					if (affordee.equals(conj1) && affordance_dobj.equals(affordance)) {
 						// we have two statements with different affordees
-						result += afforder + " " + affordance + " " + conj2 + "\n";
+						result += removeHyphen(afforder) + " " + removeHyphen(affordance) + " " + removeHyphen(conj2) + "\n";
 					}
 				}
 
@@ -233,5 +261,9 @@ public class NLPConnector {
 			return a;
 		return Math.min(a, b);
 
+	}
+	
+	private static String removeHyphen(String s){
+		return s.substring(0, s.lastIndexOf('-'));
 	}
 }
