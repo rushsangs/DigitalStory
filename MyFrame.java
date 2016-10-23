@@ -65,7 +65,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JButton clear = new JButton("Clear");
 	private JButton getfile = new JButton("Get File");
 	private JFileChooser filechooser = new JFileChooser();
-	public String[] mylist = new String[]{"Prolog", "Question"};
+	public String[] mylist = new String[]{"Prolog", "Question","Story"};
 	private JComboBox<String> mybox = new JComboBox<String>(mylist);
 	
 	public MyFrame(DigitalStoryWorld world) {
@@ -248,6 +248,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			}
 			else if(mybox.getSelectedItem().equals("Question")){
 				boolean isDone = false;
+				boolean isQuery = false;
 				System.out.println(entertxt.getText());
 				StringBuilder questionOAO = new StringBuilder(
 						QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(entertxt.getText())));
@@ -293,7 +294,19 @@ public class MyFrame extends JFrame implements ActionListener {
 					}
 					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
 					String firstpart1 = "action";
-					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+					System.out.println("case WHO oao to query: " + oaoparts[0] + " " + oaoparts[1] );
+					String[][] resultset = pqm.query(firstpart1, oaoparts);
+					StringBuilder output = new StringBuilder();
+					for(int  j = 0; j < resultset.length; j ++){
+						for (int k = 0; k < resultset[j].length; k++){
+							if(k == (resultset[j].length-1)){
+								output.append(resultset[j][k] + "\n");									
+							}else {
+								output.append(resultset[j][k] + " ");
+							}								
+						}
+					}
+					JOptionPane.showMessageDialog(this, entertxt.getText() + "\n" + output.toString());
 					entertxt.setText("");
 					break;
 				}
@@ -306,10 +319,52 @@ public class MyFrame extends JFrame implements ActionListener {
 					}
 					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
 					String firstpart1 = "action";
-					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+					System.out.println("case WHAT oao to query: " + oaoparts[0] + " " + oaoparts[1] + oaoparts[2] );
+					String[][] resultset = pqm.query(firstpart1, oaoparts);
+					StringBuilder output = new StringBuilder();
+					for( int j = 0; j < resultset.length; j++){
+						for(int k = 0; k < resultset[j].length; k++){
+							if(k == (resultset[j].length -1)){
+								output.append(resultset[j][k] + "\n");
+							}else {
+								output.append(resultset[j][k] + " ");
+							}
+						}
+					}
+					JOptionPane.showMessageDialog(this, entertxt.getText() + "\n" + output.toString());
 					entertxt.setText("");
 					break;
-				}else { //this falls through to DID DOES AND WAS for action
+				}
+				if( questionOAO.toString().toLowerCase().contains("what")){
+					for(int i = 0; i < oaoparts.length; i++){
+						if(oaoparts[i].toLowerCase().equals("what")){
+							oaoparts[i] = "X";
+							break;
+						}
+				}
+				PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+				String firstpart1 = "action";
+				System.out.println("case WHAT oao to query: " + oaoparts[0] + " " + oaoparts[1] + oaoparts[2] );
+				String[][] resultset = pqm.query(firstpart1, oaoparts);
+				StringBuilder output = new StringBuilder();
+				for( int j = 0; j < resultset.length; j++){
+					for(int k = 0; k < resultset[j].length; k++){
+						if(k == (resultset[j].length -1)){
+							output.append(resultset[j][k] + "\n");
+						}else {
+							output.append(resultset[j][k] + " ");
+						}
+					}
+				}
+				JOptionPane.showMessageDialog(this, entertxt.getText() + "\n" + output.toString());
+				entertxt.setText("");
+				break;
+				}
+				if( questionOAO.toString().toLowerCase().contains("why")){
+					//case using precondition
+					//TODO
+					break;
+				}else { //this falls through to DID DOES for action
 					String firstpart1 ="action";
 					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
 					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
