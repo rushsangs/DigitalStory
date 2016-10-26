@@ -12,16 +12,9 @@ public class Main {
 		// TODO Auto-generated method stub
 		//initialize frame
 		//ArrayList<DigitalObject> objects= new ArrayList<DigitalObject>();
-<<<<<<< HEAD
+
 		if(!Files.exists(Paths.get(PrologQueryMaster.DIR)))
 			Files.createDirectory(Paths.get(PrologQueryMaster.DIR));
-=======
-		try{
-			Files.createDirectory(Paths.get(PrologQueryMaster.DIR));
-		} catch(Exception e){
-			
-		}
->>>>>>> d15c2ce9a4add9c2221fd91d7d3fa6a369ed76a4
 		DigitalStoryWorld world= new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
 		MyFrame frame = new MyFrame(world);
 		frame.setLocationRelativeTo(null);
