@@ -155,19 +155,19 @@ public class MyFrame extends JFrame implements ActionListener {
 					}
 					if(oaoparts.length == 3){
 						for(int i = 0; i < storyobjects.length; i++){
-							if(oaoparts[0].equals(storyobjects[i])){
+							if(oaoparts[0].equals(storyobjects[i].toLowerCase())){
 								object1correct = true;
 								break;
 							}
 						}
 						for(int i = 0; i < storyactions.length; i++){
-							if(oaoparts[1].equals(storyactions[i])){
+							if(oaoparts[1].equals(storyactions[i].toLowerCase())){
 								actioncorrect = true;
 								break;
 							}
 						}
 						for(int i = 0; i < storyactions.length; i++){
-							if(oaoparts[2].equals(storyactions[i])){
+							if(oaoparts[2].equals(storyactions[i].toLowerCase())){
 								actioncorrect = true;
 								break;
 							}
@@ -199,7 +199,7 @@ public class MyFrame extends JFrame implements ActionListener {
 							objectstring.append(oaoparts[2] + "\n");
 							objectList.setText(objectstring.toString());
 							String[] types_for_objects1 = new String[1];
-							String[] objects1 = {oaoparts[0]};
+							String[] objects1 = {oaoparts[2]};
 							SelectTypeFrame frame1 = new SelectTypeFrame(objects1, getTypes(), types_for_objects1);
 							frame1.setLocationRelativeTo(null);
 							frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -342,9 +342,14 @@ public class MyFrame extends JFrame implements ActionListener {
 				String query = entertxt.getText();
 				String[] firstpart = query.split("\\(");
 				String[] queryparts = firstpart[1].split("\\)|,|\\.");
+				for(int i = 0 ; i < queryparts.length; i++){
+					queryparts[i] = queryparts[i].trim();
+				}
 				System.out.println(firstpart[1].toString() + "******" + "\n");
 				for(int i = 0; i < queryparts.length; i++){ //check if case query else do verify
 					if(Character.isUpperCase(queryparts[i].codePointAt(0))){
+						System.out.println("first part is: " + firstpart[0] + "\n");
+						System.out.println("query parts are: " + queryparts[0] + " " + queryparts[1] + " " + queryparts[2]);
 						String[][] resultset = pqm.query(firstpart[0], queryparts);
 						StringBuilder output = new StringBuilder();
 						for(int  j = 0; j < resultset.length; j ++){
@@ -557,19 +562,19 @@ public class MyFrame extends JFrame implements ActionListener {
 				}
 				if(oaoparts.length == 3){
 					for(int i = 0; i < storyobjects.length; i++){
-						if(oaoparts[0].equals(storyobjects[i])){
+						if(oaoparts[0].equals(storyobjects[i].toLowerCase())){
 							object1correct = true;
 							break;
 						}
 					}
 					for(int i = 0; i < storyactions.length; i++){
-						if(oaoparts[1].equals(storyactions[i])){
+						if(oaoparts[1].equals(storyactions[i].toLowerCase())){
 							actioncorrect = true;
 							break;
 						}
 					}
 					for(int i = 0; i < storyactions.length; i++){
-						if(oaoparts[2].equals(storyactions[i])){
+						if(oaoparts[2].equals(storyactions[i].toLowerCase())){
 							actioncorrect = true;
 							break;
 						}
