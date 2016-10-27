@@ -386,7 +386,8 @@ public class MyFrame extends JFrame implements ActionListener {
 				String[] oaoparts = questionOAO.toString().split(" ");
 				if(oaoparts.length == 2){
 					for(int i = 0; i < oaoparts.length; i++){
-						if(Character.isUpperCase(oaoparts[i].codePointAt(0))){
+						if(oaoparts[i].toLowerCase().contains("who")){
+							oaoparts[i] = "X";
 							PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
 							String firstpart1 = "trait";
 							String[][] resultset = pqm.query(firstpart1, oaoparts);
@@ -637,63 +638,63 @@ public class MyFrame extends JFrame implements ActionListener {
 				}
 				break;
 			}
-			if(mybox.getSelectedItem().equals("Prolog")){
-				PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-				String query = entertxt.getText();
-				String[] firstpart = query.split("\\(");
-				String[] queryparts = firstpart[1].split("\\)|,|\\.");
-				System.out.print(firstpart[0] + " " + queryparts[0] + " " + queryparts[1]);
-				System.out.println(pqm.verify(firstpart[0], queryparts));
-				JOptionPane.showMessageDialog(this,pqm.verify(firstpart[0], queryparts));
-				break;
-			}
-			else if(mybox.getSelectedItem().equals("Question")){
-				System.out.println(entertxt.getText());
-				StringBuilder questionOAO = new StringBuilder(
-						QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(entertxt.getText())));
-				System.out.print("Query in OAO is:  " + questionOAO.toString() + "\n");
-				String[] oaoparts = questionOAO.toString().split(" ");
-				if(oaoparts.length == 2){
-					//case  WAS with AMOD
-					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-					String firstpart1 = "trait";
-					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
-					entertxt.setText("");
-					break;
-				}
-				if( questionOAO.toString().toLowerCase().contains("who")){
-					for(int i = 0; i < oaoparts.length; i++){
-						if(oaoparts[i].toLowerCase().equals("who")){
-							oaoparts[i] = "X";
-							break;
-						}
-					}
-					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-					String firstpart1 = "action";
-					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
-					entertxt.setText("");
-					break;
-				}
-				if( questionOAO.toString().toLowerCase().contains("what")){
-					for(int i = 0; i < oaoparts.length; i++){
-						if(oaoparts[i].toLowerCase().equals("what")){
-							oaoparts[i] = "X";
-							break;
-						}
-					}
-					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-					String firstpart1 = "action";
-					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
-					entertxt.setText("");
-					break;
-				}else { //this falls through to DID DOES AND WAS for action
-					String firstpart1 ="action";
-					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
-					entertxt.setText("");
-				}
-				break;
-			}			
+//			if(mybox.getSelectedItem().equals("Prolog")){
+//				PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+//				String query = entertxt.getText();
+//				String[] firstpart = query.split("\\(");
+//				String[] queryparts = firstpart[1].split("\\)|,|\\.");
+//				System.out.print(firstpart[0] + " " + queryparts[0] + " " + queryparts[1]);
+//				System.out.println(pqm.verify(firstpart[0], queryparts));
+//				JOptionPane.showMessageDialog(this,pqm.verify(firstpart[0], queryparts));
+//				break;
+//			}
+//			else if(mybox.getSelectedItem().equals("Question")){
+//				System.out.println(entertxt.getText());
+//				StringBuilder questionOAO = new StringBuilder(
+//						QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(entertxt.getText())));
+//				System.out.print("Query in OAO is:  " + questionOAO.toString() + "\n");
+//				String[] oaoparts = questionOAO.toString().split(" ");
+//				if(oaoparts.length == 2){
+//					//case  WAS with AMOD
+//					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+//					String firstpart1 = "trait";
+//					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+//					entertxt.setText("");
+//					break;
+//				}
+//				if( questionOAO.toString().toLowerCase().contains("who")){
+//					for(int i = 0; i < oaoparts.length; i++){
+//						if(oaoparts[i].toLowerCase().equals("who")){
+//							oaoparts[i] = "X";
+//							break;
+//						}
+//					}
+//					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+//					String firstpart1 = "action";
+//					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+//					entertxt.setText("");
+//					break;
+//				}
+//				if( questionOAO.toString().toLowerCase().contains("what")){
+//					for(int i = 0; i < oaoparts.length; i++){
+//						if(oaoparts[i].toLowerCase().equals("what")){
+//							oaoparts[i] = "X";
+//							break;
+//						}
+//					}
+//					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+//					String firstpart1 = "action";
+//					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+//					entertxt.setText("");
+//					break;
+//				}else { //this falls through to DID DOES AND WAS for action
+//					String firstpart1 ="action";
+//					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+//					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+//					entertxt.setText("");
+//				}
+//				break;
+//			}			
 		case "Clear":
 			world = new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
 			objectstring = new StringBuilder();
