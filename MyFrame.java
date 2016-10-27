@@ -386,7 +386,8 @@ public class MyFrame extends JFrame implements ActionListener {
 				String[] oaoparts = questionOAO.toString().split(" ");
 				if(oaoparts.length == 2){
 					for(int i = 0; i < oaoparts.length; i++){
-						if(Character.isUpperCase(oaoparts[i].codePointAt(0))){
+						if(oaoparts[i].toLowerCase().contains("who")){
+							oaoparts[i] = "X";
 							PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
 							String firstpart1 = "trait";
 							String[][] resultset = pqm.query(firstpart1, oaoparts);
