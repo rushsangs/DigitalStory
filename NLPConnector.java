@@ -87,6 +87,7 @@ public class NLPConnector {
 
 		for (int i = 0; i < sentences.length; ++i) {
 			String sentence = sentences[i];
+			sentence = sentence.toLowerCase();
 			result += addAmodIfPresent(sentences[i]);
 			conjunctions.clear();
 			nsub.clear();

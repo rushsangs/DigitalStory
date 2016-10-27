@@ -21,7 +21,7 @@ import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 
 public class QANLPConnector {
-	public static String analyze(String storytext, String fileURI) {
+	public static String analyze(String storytext) {
 		Properties props = new Properties();
 		props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
 		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
