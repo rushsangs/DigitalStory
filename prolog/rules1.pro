@@ -14,3 +14,11 @@ action(A, have, B) :- action(A, took, B).
 
 trait(A, huge) :- trait(A, enormous).
 trait(A, B) :- action(A, was, B), \+ type(B, human).
+
+action(A, chopped, B):- action(A, chops, B).
+action(A, chops, B):- action(A, chopped, B).
+action(A, chop, B):- action(A, chops, B).
+
+action(A, throws, B):- action(A, throw, B).
+action(A, throws, B):- action(A, threw, B).
+action(A, threw, B):- action(A, throws, B).

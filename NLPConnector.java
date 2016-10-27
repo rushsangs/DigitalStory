@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -212,20 +213,26 @@ public class NLPConnector {
 
 	public static String convertOAOToProlog(String oaotext, String outputFile) {
 		final String ACTION = "action(%s, %s, %s).\n";
-		StringBuilder result = new StringBuilder();
+		final String TRAIT = "trait(%s, %s).\n";
+		StringBuilder result_action = new StringBuilder();
+		StringBuilder result_trait = new StringBuilder();
 		for (String oao : oaotext.split("\\n")) {
 			String[] args = oao.split(" ");
 			for (int i = 0; i < args.length; i++) {
 				args[i] = args[i].toLowerCase();
 			}
-			result.append(String.format(ACTION, args[0], args[1], args[2]));
+			if(args[1].equalsIgnoreCase("is"))
+				result_trait.append(String.format(TRAIT, args[0], args[2]));
+			else
+				result_action.append(String.format(ACTION, args[0], args[1], args[2]));
 		}
 		try {
-			Files.write(Paths.get(outputFile), result.toString().getBytes());
+			Files.write(Paths.get(outputFile), result_action.toString().getBytes());
+			Files.write(Paths.get(outputFile), result_trait.toString().getBytes(), StandardOpenOption.APPEND);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return result.toString();
+		return result_action.toString();
 	}
 
 	private static String addAmodIfPresent(String NLPCode) {
@@ -237,7 +244,7 @@ public class NLPConnector {
 				s = s.substring(s.indexOf("amod("));
 				String afforder = s.substring(5, s.indexOf(","));
 				String attribute = s.substring(s.indexOf(",") + 1, s.indexOf(")"));
-				result += afforder.substring(0, afforder.lastIndexOf('-')) + " is "
+				result += afforder.substring(0, afforder.lastIndexOf('-')) + " is"
 						+ attribute.substring(0, attribute.lastIndexOf('-')) + "\n";
 
 			}
