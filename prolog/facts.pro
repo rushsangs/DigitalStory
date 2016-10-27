@@ -21,15 +21,26 @@ action(giant, came, down).
 action(mother, took, axe).
 action(mother, chopped, beanstalk).
 action(mother, chopped, down).
-action(nobody, saw, jack).
-trait(beans, magic).
+action(nobody, saw, jack).action(A, see, B) :- action(A, saw, B).
+action(A, sees, B) :- action(A, saw, B).
+
+action(A, meet, B) :- action(A, met, B).
+action(A, meets, B) :- action(A, met, B).
+
+action(A, know, B) :- action(A, met, B).
+action(A, knows, B) :- action(A, met, B).
+action(A, know, B) :- action(A, X, B), type(A, human).
+action(A, knows, B) :- action(A, X, B), type(A, human).
+
+action(A, has, B) :- action(A, took, B).
+action(A, have, B) :- action(A, took, B).trait(beans, magic).
 trait(morning, next).
 trait(beanstalk, giant).
 trait(castle, beautiful).
 trait(giant, enormous).
 trait(harp, golden).
-trait(eggs, golden).
-type(they,).
+trait(eggs, golden).trait(A, huge) :- trait(A, enormous).
+trait(A, B) :- action(A, was, B), \+ type(B, human).type(they,).
 type(poor,).
 type(cow,).
 type(mot,).
