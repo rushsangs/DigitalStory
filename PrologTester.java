@@ -3,12 +3,29 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.List;
 import java.util.Scanner;
 
 public class PrologTester {
 	public static void main(String[] args) {
-		queryTest();
-		//PrologQueryMaster.guessPreconditions();
+		//queryTest();
+		List<String> actions = null;
+		try {
+			actions = Files.readAllLines(Paths.get(PrologQueryMaster.ACTION_F));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		boolean[][] arr = PrologQueryMaster.guessPreconditions();
+		for (int i = 0; i<actions.size(); i++) {
+			for (int j = 0; j<actions.size(); j++) {
+				if (arr[i][j]) {
+					System.out.print("(" + i + ") " + actions.get(i));
+					System.out.print(" --> ");
+					System.out.println("(" + j + ") " + actions.get(j));
+					
+				}
+			}
+		}
 	}
 	
 	public static void queryTest() {

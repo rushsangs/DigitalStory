@@ -31,6 +31,7 @@ public class PrologQueryMaster {
 	public static final String TRAIT_F = "prolog/traitf.pro";
 	public static final String TRAIT_R = "prolog/traitr.pro";
 	public static final String TYPE_F = "prolog/typef.pro";
+	public static final String TMP = "prolog/tmp.pro";
 	
 	private Environment env;
 	private Interpreter interpreter;
@@ -130,29 +131,33 @@ public class PrologQueryMaster {
 	
 	
 	public static boolean[][] guessPreconditions() {
-		final String TMP_FILE = "prolog/tmp.pro";
-		ArrayList<Integer> preconditions = new ArrayList<Integer>();
-		ArrayList<Integer> postconditions = new ArrayList<Integer>();
-		
+		boolean[][] ret = null;
 		try {
-			List<String> facts = Files.readAllLines(Paths.get(FACTS_FILE));
-			Map<Boolean, List<String>> isAction = facts
-					.stream().collect(Collectors.groupingBy(
-							(String s) -> s.split("\\(")[0].equals("action")));
-			List<String> actions = isAction.get(true);
-			List<String> otherStmts = isAction.get(false);
-			otherStmts.addAll(Files.readAllLines(Paths.get(ACTION_R1)));
-			otherStmts.addAll(Files.readAllLines(Paths.get(ACTION_R2)));
-			
-			for (String s : otherStmts) {
-				System.out.println(s);
+			List<String> actions = Files.readAllLines(Paths.get(ACTION_F));
+			List<String> otherStmts = new ArrayList<String>();
+			for (String file : new String[]
+					{ACTION_R1, ACTION_R2, // include precondition rules
+					 TRAIT_F, TRAIT_R,
+					 TYPE_F}
+			) {
+				otherStmts.addAll(Files.readAllLines(Paths.get(file)));
+			}
+			ret = new boolean[actions.size()][actions.size()];
+			for (int i = 0 ; i<actions.size(); i++) {
+				for (int j = i+1; j<actions.size(); j++) {
+					Files.write(Paths.get(TMP), actions.get(i).getBytes());
+					Files.write(Paths.get(TMP), otherStmts, 
+							StandardOpenOption.APPEND);
+					PrologQueryMaster pqm = new PrologQueryMaster(TMP);
+					// split action into fnName and argNames
+					String[] arr = actions.get(j).split("[\\(\\)]");
+					ret[i][j] = pqm.verify(arr[0], arr[1].split(","));
+				}
 			}
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
-		
-		
-		return null;
+		return ret;
 	}
 	
 	
