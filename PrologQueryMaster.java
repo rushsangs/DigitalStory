@@ -86,6 +86,7 @@ public class PrologQueryMaster {
 	private CompoundTerm prep(String fnName, String[] argNames) {
 		Term[] args = new Term[argNames.length];
 		for (int i = 0; i<args.length; i++) {
+			argNames[i] = argNames[i].trim();
 			if (Character.isLowerCase(argNames[i].charAt(0))) {
 				args[i] = AtomTerm.get(argNames[i]);
 			} else if (argNames[i].equals("_")) {
