@@ -8,7 +8,12 @@ import java.util.Scanner;
 
 public class PrologTester {
 	public static void main(String[] args) {
-		//queryTest();
+		//queryTest(false);
+		queryTest(true);
+		//preconditionTest();
+	}
+	
+	public static void preconditionTest() {
 		List<String> actions = null;
 		try {
 			actions = Files.readAllLines(Paths.get(PrologQueryMaster.ACTION_F));
@@ -28,18 +33,21 @@ public class PrologTester {
 		}
 	}
 	
-	public static void queryTest() {
+	public static void queryTest(boolean isQueryNotVerify) {
 		PrologQueryMaster.updateFacts();
 		PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
 		Scanner sc = new Scanner(System.in);
 		while (sc.hasNext()) {
-//			 System.out.println(pqm.verify(sc.nextLine(), sc.nextLine().split(" ")));
-			String[][] aa = pqm.query(sc.nextLine(), sc.nextLine().split(" "));
-			for ( int i = 0; aa != null && i < aa.length ; i++){
-				for (int j = 0 ; j < aa[i].length; j++){
-					System.out.print(aa[i][j]+" ");
+			if (isQueryNotVerify) {
+				String[][] aa = pqm.query(sc.nextLine(), sc.nextLine().split(" "));
+				for ( int i = 0; aa != null && i < aa.length ; i++){
+					for (int j = 0 ; j < aa[i].length; j++){
+						System.out.print(aa[i][j]+" ");
+					}
+					System.out.println();
 				}
-				System.out.println();
+			} else {
+			 	System.out.println(pqm.verify(sc.nextLine(), sc.nextLine().split(" ")));
 			}
 		}
 	}
