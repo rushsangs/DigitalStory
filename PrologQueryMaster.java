@@ -30,7 +30,7 @@ public class PrologQueryMaster {
 	
 	public PrologQueryMaster(String fileName) {
 		env = new Environment();
-		env.ensureLoaded(AtomTerm.get(PrologQueryMaster.class.getResource(fileName).getFile()));
+		env.ensureLoaded(AtomTerm.get(fileName));
 		interpreter = env.createInterpreter();
 		env.runInitialization(interpreter);
 	}
