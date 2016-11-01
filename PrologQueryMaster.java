@@ -1,8 +1,12 @@
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import gnu.prolog.io.OperatorSet;
 import gnu.prolog.io.ReadOptions;
@@ -21,16 +25,43 @@ import gnu.prolog.vm.PrologException;
 public class PrologQueryMaster {
 	public static final String DIR = "prolog";
 	public static final String FACTS_FILE = "prolog/facts.pro";
-	public static final String RULES1_FILE = "prolog/rules1.pro";
-	public static final String RULES2_FILE = "prolog/rules2.pro";
-	private static final String TMP_FILE = "prolog/tmp.pro";
+	public static final String ACTION_F = "prolog/actionf.pro";
+	public static final String ACTION_R1 = "prolog/actionr1.pro";
+	public static final String ACTION_R2 = "prolog/actionr2.pro";
+	public static final String TRAIT_F = "prolog/traitf.pro";
+	public static final String TRAIT_R = "prolog/traitr.pro";
+	public static final String TYPE_F = "prolog/typef.pro";
+	public static final String TMP = "prolog/tmp.pro";
 	
 	private Environment env;
 	private Interpreter interpreter;
 	
+	public static void updateFacts() {
+		try {
+			boolean isFirstWrite = true;
+			for (String file : new String[]
+					{ACTION_F, ACTION_R1,
+					 TRAIT_F, TRAIT_R,
+					 TYPE_F}
+			) {
+				if (isFirstWrite) {
+					Files.write(Paths.get(FACTS_FILE), 
+							Files.readAllBytes(Paths.get(file)));
+					isFirstWrite = false;
+				} else {
+					Files.write(Paths.get(FACTS_FILE), 
+							Files.readAllBytes(Paths.get(file)), 
+							StandardOpenOption.APPEND);
+				}	
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public PrologQueryMaster(String fileName) {
 		env = new Environment();
-		env.ensureLoaded(AtomTerm.get(fileName));
+		env.ensureLoaded(AtomTerm.get(PrologQueryMaster.class.getResource(fileName).getFile()));
 		interpreter = env.createInterpreter();
 		env.runInitialization(interpreter);
 	}
@@ -99,20 +130,34 @@ public class PrologQueryMaster {
 	}
 	
 	
-	public static int[][] guessPreconditions() {
-		ArrayList<Integer> preconditions = new ArrayList<Integer>();
-		ArrayList<Integer> postconditions = new ArrayList<Integer>();
+	public static boolean[][] guessPreconditions() {
+		boolean[][] ret = null;
 		try {
-			Files.write(Paths.get(TMP_FILE), 
-					Files.readAllBytes(Paths.get(RULES1_FILE)));
+			List<String> actions = Files.readAllLines(Paths.get(ACTION_F));
+			List<String> otherStmts = new ArrayList<String>();
+			for (String file : new String[]
+					{ACTION_R1, ACTION_R2, // include precondition rules
+					 TRAIT_F, TRAIT_R,
+					 TYPE_F}
+			) {
+				otherStmts.addAll(Files.readAllLines(Paths.get(file)));
+			}
+			ret = new boolean[actions.size()][actions.size()];
+			for (int i = 0 ; i<actions.size(); i++) {
+				for (int j = i+1; j<actions.size(); j++) {
+					Files.write(Paths.get(TMP), actions.get(i).getBytes());
+					Files.write(Paths.get(TMP), otherStmts, 
+							StandardOpenOption.APPEND);
+					PrologQueryMaster pqm = new PrologQueryMaster(TMP);
+					// split action into fnName and argNames
+					String[] arr = actions.get(j).split("[\\(\\)]");
+					ret[i][j] = pqm.verify(arr[0], arr[1].split(","));
+				}
+			}
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
-		
-		
-		return new int[][]{
-			preconditions.stream().mapToInt(i -> i).toArray(),
-			postconditions.stream().mapToInt(i -> i).toArray()};
+		return ret;
 	}
 	
 	

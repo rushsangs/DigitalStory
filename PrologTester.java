@@ -3,36 +3,52 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.List;
 import java.util.Scanner;
 
 public class PrologTester {
 	public static void main(String[] args) {
-		final String tmp = "tmp.pro";
+		//queryTest(false);
+		queryTest(true);
+		//preconditionTest();
+	}
+	
+	public static void preconditionTest() {
+		List<String> actions = null;
 		try {
-			Files.write(Paths.get(tmp), 
-					Files.readAllBytes(Paths.get(
-							PrologQueryMaster.FACTS_FILE)));
-			Files.write(Paths.get(tmp), 
-					Files.readAllBytes(Paths.get(
-							PrologQueryMaster.RULES1_FILE)), 
-					StandardOpenOption.APPEND);
-			
+			actions = Files.readAllLines(Paths.get(PrologQueryMaster.ACTION_F));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		PrologQueryMaster pqm = new PrologQueryMaster(tmp);
-		Scanner sc = new Scanner(System.in);
-		while (sc.hasNext()) {
-			// System.out.println(pqm.verify(sc.nextLine(), sc.nextLine().split(" ")));
-			String[][] aa = pqm.query(sc.nextLine(), sc.nextLine().split(" "));
-			for ( int i = 0; aa != null && i < aa.length ; i++){
-				for (int j = 0 ; j < aa[i].length; j++){
-					System.out.print(aa[i][j]+" ");
+		boolean[][] arr = PrologQueryMaster.guessPreconditions();
+		for (int i = 0; i<actions.size(); i++) {
+			for (int j = 0; j<actions.size(); j++) {
+				if (arr[i][j]) {
+					System.out.print("(" + i + ") " + actions.get(i));
+					System.out.print(" --> ");
+					System.out.println("(" + j + ") " + actions.get(j));
+					
 				}
-				System.out.println();
 			}
 		}
-		
+	}
+	
+	public static void queryTest(boolean isQueryNotVerify) {
+		PrologQueryMaster.updateFacts();
+		PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+		Scanner sc = new Scanner(System.in);
+		while (sc.hasNext()) {
+			if (isQueryNotVerify) {
+				String[][] aa = pqm.query(sc.nextLine(), sc.nextLine().split(" "));
+				for ( int i = 0; aa != null && i < aa.length ; i++){
+					for (int j = 0 ; j < aa[i].length; j++){
+						System.out.print(aa[i][j]+" ");
+					}
+					System.out.println();
+				}
+			} else {
+			 	System.out.println(pqm.verify(sc.nextLine(), sc.nextLine().split(" ")));
+			}
+		}
 	}
 }
