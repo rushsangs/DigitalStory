@@ -555,7 +555,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						frame1.pack();
 						frame1.setVisible(true);
 						try {
-							Files.write(Paths.get(PrologQueryMaster.FACTS_FILE), 
+							Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
 									getPrologTypesString(objects1, types_for_objects1).getBytes(), 
 									StandardOpenOption.APPEND);
 						} catch (IOException e1) {
@@ -578,6 +578,25 @@ public class MyFrame extends JFrame implements ActionListener {
 						if((oaoparts[0]).equals(storyobjects[i].toLowerCase())){
 							object1correct = true;
 							break;
+						}
+					}
+					if(object1correct == false){
+						//newOAO.append(" " + "new object " + oaoparts[0] + " added \n");
+						objectstring.append(oaoparts[0] + "\n");
+						objectList.setText(objectstring.toString());
+						String[] types_for_objects1 = new String[1];
+						String[] objects1 = {oaoparts[0]};
+						SelectTypeFrame frame1 = new SelectTypeFrame(objects1, getTypes(), types_for_objects1);
+						frame1.setLocationRelativeTo(null);
+						frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						frame1.pack();
+						frame1.setVisible(true);
+						try {
+							Files.write(Paths.get(PrologQueryMaster.TRAIT_F), 
+									getPrologTypesString(objects1, types_for_objects1).getBytes(), 
+									StandardOpenOption.APPEND);
+						} catch (IOException e1) {
+							e1.printStackTrace();
 						}
 					}
 					for(int i = 0; i < storyactions.length; i++){
@@ -604,7 +623,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						frame1.pack();
 						frame1.setVisible(true);
 						try {
-							Files.write(Paths.get(PrologQueryMaster.FACTS_FILE), 
+							Files.write(Paths.get(PrologQueryMaster.TRAIT_F), 
 									getPrologTypesString(objects1, types_for_objects1).getBytes(), 
 									StandardOpenOption.APPEND);
 						} catch (IOException e1) {
@@ -626,7 +645,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						frame1.pack();
 						frame1.setVisible(true);
 						try {
-							Files.write(Paths.get(PrologQueryMaster.FACTS_FILE), 
+							Files.write(Paths.get(PrologQueryMaster.TRAIT_F), 
 									getPrologTypesString(objects1, types_for_objects1).getBytes(), 
 									StandardOpenOption.APPEND);
 						} catch (IOException e1) {
@@ -729,7 +748,7 @@ public class MyFrame extends JFrame implements ActionListener {
 					System.out.println("OAO facts are : \n" + storystring2.toString());
 					// ???????
 					NLPConnector.convertOAOToProlog(storystring2.toString(), PrologQueryMaster.FACTS_FILE);
-					this.storytxt.setText(storystring2.toString().replace("null",""));
+					this.storytxt.setText(storystring2.toString().replace("_",""));
 					String[] parts1 = storystring2.toString().split("\\n+");
 					String[] objects1 = {};
 					String[] affords1;
