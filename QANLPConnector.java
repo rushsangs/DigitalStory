@@ -77,6 +77,7 @@ public class QANLPConnector {
 
 	public static String convertNLPToOAO(String nlptext) {
 		String result = "";
+		System.out.println(nlptext);
 		// split per root tag
 		String[] sentences = nlptext.split("root");
 		List<String[]> conjunctions = new ArrayList<String[]>();

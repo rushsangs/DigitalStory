@@ -19,7 +19,7 @@ public class TestNlp {
 
   /** Usage: java -cp "*" StanfordCoreNlpDemo [inputFile [outputTextFile [outputXmlFile]]] */
   public static void main(String[] args) throws IOException {
-    NLPConnector.analyze("Did Bob kill Alice? Was steve sleeping? Does Patrick eat cake? When did Jack climb the beanstalk? Was the giant sleeping? Who did bob kill?  What did patrick eat? Is Daniel human? Where did Neil meet Alice? Why did Bob marry Alice?", "patrick_test.txt");
+    NLPConnector.analyze("Who is enormous? ", "patrick_test.txt");
     File file = new File("patrick_test.txt");
 	Scanner input = new Scanner(file);
 	String s="";
