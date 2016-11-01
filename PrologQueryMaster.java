@@ -61,7 +61,7 @@ public class PrologQueryMaster {
 	
 	public PrologQueryMaster(String fileName) {
 		env = new Environment();
-		env.ensureLoaded(AtomTerm.get(PrologQueryMaster.class.getResource(fileName).getFile()));
+		env.ensureLoaded(AtomTerm.get(fileName));
 		interpreter = env.createInterpreter();
 		env.runInitialization(interpreter);
 	}
@@ -96,22 +96,29 @@ public class PrologQueryMaster {
 						row.add(t.dereference().toString());
 					}
 					output.add(row);
+					if (rc==PrologCode.SUCCESS_LAST) {
+						return output.stream().map(
+							(u) -> u.toArray(new String[0]))
+							.toArray(String[][]::new);
+					}
 					break;
 				case PrologCode.FAIL:
 					interpreter.stop(goal);
 					break;
 				case PrologCode.HALT:
+					System.out.println("HALT");
 					break;
 				}
 			}
 		} catch (IllegalArgumentException e) {
 			// for some reason, always reaches here at the end
+			//e.printStackTrace();
 			return output.stream().map(
 					(u) -> u.toArray(new String[0]))
 					.toArray(String[][]::new);
 		} catch (PrologException e) {
 			System.out.println(e.getStackTrace());
-		}
+		} 
 		return null;
 	}
 	private CompoundTerm prep(String fnName, String[] argNames) {
