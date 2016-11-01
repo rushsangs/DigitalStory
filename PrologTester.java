@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class PrologTester {
 	public static void main(String[] args) {
 		//queryTest(false);
-		queryTest(true);
+		queryTest(false);
 		//preconditionTest();
 	}
 	

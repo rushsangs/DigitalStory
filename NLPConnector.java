@@ -145,7 +145,7 @@ public class NLPConnector {
 					String affordee = compoundprt_pair[1].trim();
 					if (affordance_compoundprt.equals(affordance)) {
 						// match found: sequence of afforder affordance affordee
-						result += removeHyphen(afforder) + " " + removeHyphen(affordance) + "-" + removeHyphen(affordee) + " null"
+						result += removeHyphen(afforder) + " " + removeHyphen(affordance) + "-" + removeHyphen(affordee) + " _"
 								+ "\n";
 						flag = 1;
 					}
@@ -161,13 +161,13 @@ public class NLPConnector {
 						}
 						if (affordance.equals(conj1) && affordance_compoundprt.equals(conj2)) {
 							// we have two statements with the same affordance
-							result += removeHyphen(afforder) + " " + removeHyphen(conj2) + "-" + removeHyphen(affordee) + " null"
+							result += removeHyphen(afforder) + " " + removeHyphen(conj2) + "-" + removeHyphen(affordee) + " _"
 									+ "\n";
 						}
 						if (affordee.equals(conj1) && affordance_compoundprt.equals(affordance)) {
 							// we have two statements with different affordees
 							result += removeHyphen(afforder) + " " + removeHyphen(affordance) + "-"
-									+ removeHyphen(conj2) + " null\n";
+									+ removeHyphen(conj2) + " _\n";
 						}
 					}
 
