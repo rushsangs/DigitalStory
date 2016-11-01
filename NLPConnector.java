@@ -227,8 +227,8 @@ public class NLPConnector {
 				result_action.append(String.format(ACTION, args[0], args[1], args[2]));
 		}
 		try {
-			Files.write(Paths.get(outputFile), result_action.toString().getBytes());
-			Files.write(Paths.get(outputFile), result_trait.toString().getBytes(), StandardOpenOption.APPEND);
+			Files.write(Paths.get(PrologQueryMaster.ACTION_F), result_action.toString().getBytes());
+			Files.write(Paths.get(PrologQueryMaster.TRAIT_F), result_trait.toString().getBytes());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
