@@ -13,8 +13,14 @@ public class Main {
 		//initialize frame
 		//ArrayList<DigitalObject> objects= new ArrayList<DigitalObject>();
 
-		if(!Files.exists(Paths.get(PrologQueryMaster.DIR)))
+		//create prolog/ directory and files
+		if (!Files.exists(Paths.get(PrologQueryMaster.DIR))) {
 			Files.createDirectory(Paths.get(PrologQueryMaster.DIR));
+		}
+		for (String fileName : PrologQueryMaster.ALL_FILES_TO_CREATE) {
+			Files.write(Paths.get(fileName), "".getBytes());
+		}
+		
 		DigitalStoryWorld world= new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
 		MyFrame frame = new MyFrame(world);
 		frame.setLocationRelativeTo(null);

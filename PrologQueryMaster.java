@@ -24,14 +24,21 @@ import gnu.prolog.vm.PrologException;
 
 public class PrologQueryMaster {
 	public static final String DIR = "prolog";
-	public static final String FACTS_FILE = "prolog/facts.pro";
 	public static final String ACTION_F = "prolog/actionf.pro";
 	public static final String ACTION_R1 = "prolog/actionr1.pro";
 	public static final String ACTION_R2 = "prolog/actionr2.pro";
 	public static final String TRAIT_F = "prolog/traitf.pro";
 	public static final String TRAIT_R = "prolog/traitr.pro";
 	public static final String TYPE_F = "prolog/typef.pro";
+	
+	//processing files
+	public static final String FACTS_FILE = "prolog/facts.pro";
 	public static final String TMP = "prolog/tmp.pro";
+	
+	public static final String[] ALL_FILES_TO_CREATE = {
+			ACTION_F, ACTION_R1, ACTION_R2, 
+			TRAIT_F, TRAIT_R, TYPE_F
+			};
 	
 	private Environment env;
 	private Interpreter interpreter;
