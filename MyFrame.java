@@ -524,12 +524,12 @@ public class MyFrame extends JFrame implements ActionListener {
 				StringBuilder newOAO = new StringBuilder(
 						QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(entertxt.getText())));
 				System.out.print("Input in OAO is:  " + newOAO.toString() + "\n");
-				String[] oaoparts = newOAO.toString().split(" ");
+				String[] oaoparts = newOAO.toString().split("\\s+");
 				for(int i = 0; i < oaoparts.length; i++){
 					oaoparts[i] = oaoparts[i].toLowerCase();
 				}
-				String[] storyobjects = objectstring.toString().split("\n");
-				String[] storyactions = affordstring.toString().split("\n");
+				String[] storyobjects = objectstring.toString().split("\\s+");
+				String[] storyactions = affordstring.toString().split("\\s+");
 				if(oaoparts.length == 2){
 					for(int i = 0; i < storyobjects.length; i++){
 						if((oaoparts[0]).equals(storyobjects[i].toLowerCase())){
