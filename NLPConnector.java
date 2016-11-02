@@ -55,7 +55,7 @@ public class NLPConnector {
 		}
 		try {
 
-			Files.write(Paths.get(fileURI), "".getBytes());
+			Files.write(Paths.get(fileURI), "".getBytes(), StandardOpenOption.APPEND);
 			for (int i = 0; i < sentences.size(); ++i) {
 				CoreMap test_sentence = sentences.get(i);
 				String tmp = test_sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class)
@@ -227,8 +227,8 @@ public class NLPConnector {
 				result_action.append(String.format(ACTION, args[0], args[1], args[2]));
 		}
 		try {
-			Files.write(Paths.get(PrologQueryMaster.ACTION_F), result_action.toString().getBytes());
-			Files.write(Paths.get(PrologQueryMaster.TRAIT_F), result_trait.toString().getBytes());
+			Files.write(Paths.get(PrologQueryMaster.ACTION_F), result_action.toString().getBytes(), StandardOpenOption.APPEND);
+			Files.write(Paths.get(PrologQueryMaster.TRAIT_F), result_trait.toString().getBytes(), StandardOpenOption.APPEND);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
