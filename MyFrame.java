@@ -823,8 +823,8 @@ public class MyFrame extends JFrame implements ActionListener {
 			}
 			MyQuestions.ask(world, storystring.toString());
 			printOutWorld(world);
-			GraphVisualizer gv = new GraphVisualizer(DbHelper.getAllNodes(), DbHelper.getAllEdges());
-			gv.visualize();
+			//GraphVisualizer gv = new GraphVisualizer(DbHelper.getAllNodes(), DbHelper.getAllEdges());
+			//gv.visualize();
 		}
 	}
 
