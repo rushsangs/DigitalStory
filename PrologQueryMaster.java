@@ -30,6 +30,7 @@ public class PrologQueryMaster {
 	public static final String TRAIT_F = "prolog/traitf.pro";
 	public static final String TRAIT_R = "prolog/traitr.pro";
 	public static final String TYPE_F = "prolog/typef.pro";
+	public static final String ERROR_R = "prolog/errorr.pro";
 	
 	//processing files
 	public static final String FACTS_FILE = "prolog/facts.pro";
@@ -37,7 +38,9 @@ public class PrologQueryMaster {
 	
 	public static final String[] ALL_FILES_TO_CREATE = {
 			ACTION_F, ACTION_R1, ACTION_R2, 
-			TRAIT_F, TRAIT_R, TYPE_F
+			TRAIT_F, TRAIT_R, 
+			TYPE_F,
+			ERROR_R
 			};
 	
 	private Environment env;
@@ -49,7 +52,8 @@ public class PrologQueryMaster {
 			for (String file : new String[]
 					{ACTION_F, ACTION_R1,
 					 TRAIT_F, TRAIT_R,
-					 TYPE_F}
+					 TYPE_F,
+					 ERROR_R}
 			) {
 				if (isFirstWrite) {
 					Files.write(Paths.get(FACTS_FILE), 
