@@ -178,7 +178,7 @@ public class NLPConnector {
 					String affordee = cop_pair[1].trim();
 					if (affordee.equals(affordance)) {
 						// match found: sequence of afforder affordance affordee
-						result += removeHyphen(afforder) + " " + removeHyphen(affordance_cop) + " "
+						result += removeHyphen(afforder) + " is "
 								+ removeHyphen(affordee) + "\n";
 						flag = 1;
 					}
@@ -188,18 +188,18 @@ public class NLPConnector {
 						String conj2 = cc_result[1].trim();
 						if (afforder.equals(conj1) && affordee.equals(affordance)) {
 							// we have two statements with different afforders
-							result += removeHyphen(conj2) + " " + removeHyphen(affordance_cop) + " "
+							result += removeHyphen(conj2) +" is "
 									+ removeHyphen(affordee) + "\n";
 
 						}
 						if (affordance.equals(conj1) && affordee.equals(conj2)) {
 							// we have two statements with the same affordance
-							result += removeHyphen(afforder) + " " + removeHyphen(conj2) + " " + removeHyphen(affordee)
+							result += removeHyphen(afforder) + " is " + removeHyphen(affordee)
 									+ "\n";
 						}
 						if (affordee.equals(conj1) && affordee.equals(affordance)) {
 							// we have two statements with different affordees
-							result += removeHyphen(afforder) + " " + removeHyphen(affordance_cop) + " "
+							result += removeHyphen(afforder) + " is "
 									+ removeHyphen(conj2) + "\n";
 						}
 					}
