@@ -37,10 +37,9 @@ public class PrologQueryMaster {
 	public static final String TMP = "prolog/tmp.pro";
 	
 	public static final String[] ALL_FILES_TO_CREATE = {
-			ACTION_F, ACTION_R1, ACTION_R2, 
-			TRAIT_F, TRAIT_R, 
-			TYPE_F,
-			ERROR_R
+			ACTION_F, 
+			TRAIT_F,
+			TYPE_F
 			};
 	
 	private Environment env;
