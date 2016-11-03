@@ -77,6 +77,55 @@ public class NLPConnector {
 		}
 		return result;
 	}
+	//this one below is for Questioning, and doesn't write to a file
+	public static String analyze(String storytext) {
+		Properties props = new Properties();
+		props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
+		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+
+		// Initialize an Annotation with some text to be annotated. The text is
+		// the argument to the constructor.
+		Annotation annotation = new Annotation(storytext);
+
+		// run all the selected Annotators on this text
+		pipeline.annotate(annotation);
+		String result = "";
+		List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
+		List<CorefChainNode> master_coref_list = new ArrayList<CorefChainNode>();
+		for (edu.stanford.nlp.hcoref.data.CorefChain cc : annotation
+				.get(CorefCoreAnnotations.CorefChainAnnotation.class).values()) {
+			System.out.println(cc.toString());
+			Iterator<edu.stanford.nlp.hcoref.data.CorefChain.CorefMention> iter = cc.getMentionsInTextualOrder()
+					.iterator();
+			String root_word = "";
+			while (iter.hasNext()) {
+				edu.stanford.nlp.hcoref.data.CorefChain.CorefMention cm = iter.next();
+				if (root_word.equals(""))
+					root_word = cm.mentionSpan;
+				if (root_word.indexOf(" ") > -1)
+					root_word = root_word.substring(root_word.lastIndexOf(" "));
+				System.out.println(cm.mentionSpan + " " + cm.sentNum);
+				master_coref_list.add(new CorefChainNode(cm.mentionSpan, root_word, cm.sentNum));
+			}
+
+		}
+		
+			for (int i = 0; i < sentences.size(); ++i) {
+				CoreMap test_sentence = sentences.get(i);
+				String tmp = test_sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class)
+						.toString(SemanticGraph.OutputFormat.LIST);
+				for (CorefChainNode ccn : master_coref_list) {
+					if (ccn.line_no - 1 == i) {
+						System.out.println(ccn.word + " replaced by " + ccn.root_word);
+						tmp = tmp.replaceAll(ccn.word, ccn.root_word);
+					}
+				}
+				result += tmp;
+
+			}
+		
+		return result;
+	}
 
 	public static String convertNLPToOAO(String nlptext) {
 		String result = "";
