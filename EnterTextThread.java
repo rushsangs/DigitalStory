@@ -16,6 +16,8 @@ public class EnterTextThread implements Runnable{
 		while( basecase == false){
 			String storystring = MyFrame.getEntertxt();
 			if(storystring.indexOf(".") == -1){
+				storystring = MyFrame.getEntertxt();
+				System.out.println(storystring);
 				continue;
 			}
 			else{
@@ -23,11 +25,12 @@ public class EnterTextThread implements Runnable{
 				root = new SentenceThread(substring);
 				root.run();
 				lastdelimiter = storystring.indexOf(".") + 1;
-				
+				System.out.println("inside else");
 				basecase = true;
 			}
 		}
 		while(!running){
+			System.out.println("inside while");
 			String storystring = MyFrame.getEntertxt();
 			if(storystring.indexOf(".",lastdelimiter) == -1){
 				continue;

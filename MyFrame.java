@@ -27,6 +27,7 @@ import edu.stanford.nlp.io.EncodingPrintWriter.out;
 import java.sql.*;
 
 public class MyFrame extends JFrame implements ActionListener {
+	public EnterTextThread start;
 	static StringBuilder storystring = new StringBuilder();
 	static StringBuilder objectstring = new StringBuilder();
 	static StringBuilder affordstring = new StringBuilder();
@@ -51,7 +52,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JLabel storylabel = new JLabel("Input Story");
 	private JScrollPane storypane;
 	private JTextArea storytxt = new JTextArea(15, 15);
-	private JTextArea twostorytxt = new JTextArea(15,15);
+	private static JTextArea twostorytxt = new JTextArea(15,15);
 	private JPanel twostorypanel = new JPanel();
 	private JScrollPane twostorypane;
 	// Bottom panel
@@ -71,7 +72,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	public String[] mylist = new String[]{"Prolog", "Question","Story"};
 	private JComboBox<String> mybox = new JComboBox<String>(mylist);
 	
-	public MyFrame(DigitalStoryWorld world) {
+	public MyFrame(DigitalStoryWorld world, EnterTextThread enterthread) {
 		this.initializeDB();
 		this.setTitle("Story World Generator");
 		this.world = world;
@@ -108,6 +109,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		entertxt.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//start.run();
 //				if(mybox.getSelectedItem().equals("Story")){
 //					boolean object1correct = false;
 //					boolean actioncorrect = false;
@@ -331,6 +333,8 @@ public class MyFrame extends JFrame implements ActionListener {
 		this.add(affordpanel, BorderLayout.EAST);
 		this.add(storytxtpanel, BorderLayout.CENTER);
 		this.add(bottom, BorderLayout.SOUTH);
+		this.start = enterthread;
+		//start.run();
 	}
 
 	@Override
@@ -852,7 +856,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		}
 	}
 	public static String getEntertxt(){
-		return entertxt.getText();
+		return twostorytxt.getText();
 	}
 	public static boolean checkNewObject(String Object){
 		String[] objects1 = objectstring.toString().split("\\s+");

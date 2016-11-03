@@ -20,13 +20,14 @@ public class Main {
 		for (String fileName : PrologQueryMaster.ALL_FILES_TO_CREATE) {
 			Files.write(Paths.get(fileName), "".getBytes());
 		}
-		
+		EnterTextThread enterthread = new EnterTextThread();
 		DigitalStoryWorld world= new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
-		MyFrame frame = new MyFrame(world);
+		MyFrame frame = new MyFrame(world, enterthread);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
+		enterthread.run();
 //		String[] types = {"human","animal"};
 //		String[] characters = {"bob","alice","wolf"};
 //		String[] results = new String[characters.length];
