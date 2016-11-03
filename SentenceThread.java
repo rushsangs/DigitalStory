@@ -41,6 +41,7 @@ public class SentenceThread implements Runnable{
 				continue;
 			}
 		}
+		MyFrame.updateStorytxt(newOAO.toString().toLowerCase());
 		//TODO CALL PATRICK FUNCTION FOR POSSIBLE ERROR
 		this.stop();
 		while(!running){

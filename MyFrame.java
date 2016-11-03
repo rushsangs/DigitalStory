@@ -51,7 +51,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JPanel labelpanel = new JPanel();
 	private JLabel storylabel = new JLabel("Input Story");
 	private JScrollPane storypane;
-	private JTextArea storytxt = new JTextArea(15, 15);
+	private static JTextArea storytxt = new JTextArea(15, 15);
 	private static JTextArea twostorytxt = new JTextArea(15,15);
 	private JPanel twostorypanel = new JPanel();
 	private JScrollPane twostorypane;
@@ -854,6 +854,10 @@ public class MyFrame extends JFrame implements ActionListener {
 			//GraphVisualizer gv = new GraphVisualizer(DbHelper.getAllNodes(), DbHelper.getAllEdges());
 			//gv.visualize();
 		}
+	}
+	public static void updateStorytxt(String newOAO){
+		MyFrame.storystring.append(newOAO);
+		MyFrame.storytxt.setText(storystring.toString());
 	}
 	public static String getEntertxt(){
 		return twostorytxt.getText();
