@@ -27,9 +27,9 @@ import edu.stanford.nlp.io.EncodingPrintWriter.out;
 import java.sql.*;
 
 public class MyFrame extends JFrame implements ActionListener {
-	StringBuilder storystring = new StringBuilder();
-	StringBuilder objectstring = new StringBuilder();
-	StringBuilder affordstring = new StringBuilder();
+	static StringBuilder storystring = new StringBuilder();
+	static StringBuilder objectstring = new StringBuilder();
+	static StringBuilder affordstring = new StringBuilder();
 	ArrayList<DigitalObject> objects2;
 	static DigitalStoryWorld world;
 	public static Connection con;
@@ -39,12 +39,12 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JPanel objectpanel = new JPanel();
 	private JLabel object = new JLabel("Smart Objects");
 	private JScrollPane objectpane;
-	private JTextArea objectList = new JTextArea(10, 10);
+	private static JTextArea objectList = new JTextArea(10, 10);
 	// Action panel, right side
 	private JPanel affordpanel = new JPanel();
 	private JScrollPane affordpane;
 	private JLabel affordances = new JLabel("Affordances");
-	private JTextArea affordancesList = new JTextArea(10, 10);
+	private static JTextArea affordancesList = new JTextArea(10, 10);
 	// Story panel, center
 	private JPanel storytxtpanel = new JPanel();
 	private JPanel labelpanel = new JPanel();
@@ -60,7 +60,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JLabel enterlabel = new JLabel("Text Here");
 	private JButton enter = new JButton("Enter");
 	private JPanel box = new JPanel();
-	private JTextField entertxt = new JTextField(50);
+	private static JTextField entertxt = new JTextField(50);
 	private JPanel generatepanel = new JPanel();
 	private JButton addtype = new JButton("Add Type");
 	private JButton query = new JButton("Query");
@@ -851,7 +851,29 @@ public class MyFrame extends JFrame implements ActionListener {
 			//gv.visualize();
 		}
 	}
-
+	public static String getEntertxt(){
+		return entertxt.getText();
+	}
+	public static boolean checkNewObject(String Object){
+		String[] objects1 = objectstring.toString().split("\\s+");
+		for(int i = 0; i < objects1.length; i++){
+			return false;
+		}
+		objectstring.append(Object + "\n");
+		objectList.setText(objectstring.toString());
+		return true;
+	}
+	public static boolean checkNewAffordance(String Action){
+		String[] affords1 = affordstring.toString().split("\\s+");
+		for(int i = 0; i < affords1.length; i++){
+			if(Action.equals(affords1[i])){
+				return false;
+			}
+		}
+		affordstring.append(Action + "\n");
+		affordancesList.setText(affordstring.toString());
+		return true;
+	}
 	public String removeIsFromString(String storysection) {
 		String[] lines = storysection.split("\\n");
 		String newString = "";
@@ -1149,7 +1171,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	 * Creates prolog type statements and returns the string Prolog type
 	 * statements are of the form: type(Character, Type).
 	 */
-	public String getPrologTypesString(String[] characters, String[] types) {
+	public static String getPrologTypesString(String[] characters, String[] types) {
 		String result = "";
 		for (int i = 0; i < characters.length; ++i) {
 			result += "type(" + characters[i].toLowerCase() + "," + types[i].toLowerCase() + ").\n";
@@ -1176,7 +1198,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 	}
-	public String[] getTypes(){
+	public static String[] getTypes(){
 		int numOfRows = 0;
 		int i = 0;
 		String[] types = null;
