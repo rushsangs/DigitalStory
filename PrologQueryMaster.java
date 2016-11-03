@@ -177,6 +177,24 @@ public class PrologQueryMaster {
 		return ret;
 	}
 	
+	public static String getError(String fnName, String[] argNames) {
+		try {
+			String[] fns = {"action", "trait"};
+			Files.write(Paths.get(TMP), "".getBytes());
+			for (String[] files : new String[][]{
+				{""},
+				{""}
+			}) {
+				Files.write(Paths.get(TMP), fnName + "(" + , options)
+				for (String[] )
+				Files.write(Paths.get(TMP), Files.readAllBytes(Paths.get(fileName)), StandardOpenOption.APPEND);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	
 
 }

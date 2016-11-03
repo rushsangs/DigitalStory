@@ -22,6 +22,8 @@ import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 
 public class NLPConnector {
+	public final static String ACTION = "action(%s, %s, %s).\n";
+	public final static String TRAIT = "trait(%s, %s).\n";
 	public static String analyze(String storytext, String fileURI) {
 		Properties props = new Properties();
 		props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
@@ -212,8 +214,6 @@ public class NLPConnector {
 	}
 
 	public static String convertOAOToProlog(String oaotext, String outputFile) {
-		final String ACTION = "action(%s, %s, %s).\n";
-		final String TRAIT = "trait(%s, %s).\n";
 		StringBuilder result_action = new StringBuilder();
 		StringBuilder result_trait = new StringBuilder();
 		for (String oao : oaotext.split("\\n")) {
