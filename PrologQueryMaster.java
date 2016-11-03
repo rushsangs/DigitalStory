@@ -177,18 +177,49 @@ public class PrologQueryMaster {
 		return ret;
 	}
 	
-	public static String getError(String fnName, String[] argNames) {
+	public static String[] getError(String fnName, String[] argNames) {
 		try {
-			String[] fns = {"action", "trait"};
+			String[] fns = {"action", "trait", "type", "error"};
+			String[][] files = {
+				{ACTION_F, ACTION_R1},
+				{TRAIT_F, TRAIT_R},
+				{TYPE_F},
+				{ERROR_R}
+			};
+			final int NUM_MSG_ARGS = 2;
 			Files.write(Paths.get(TMP), "".getBytes());
-			for (String[] files : new String[][]{
-				{""},
-				{""}
-			}) {
-				Files.write(Paths.get(TMP), fnName + "(" + , options)
-				for (String[] )
-				Files.write(Paths.get(TMP), Files.readAllBytes(Paths.get(fileName)), StandardOpenOption.APPEND);
+			for (int i = 0; i<fns.length; i++) {
+				if (fnName.equals(fns[i])) {
+					String stmt;
+					if (fnName.equals("action")) {
+						stmt = String.format(NLPConnector.ACTION, argNames[0], argNames[1], argNames[2]);
+					} else if (fnName.equals("trait")) {
+						stmt = String.format(NLPConnector.TRAIT, argNames[0], argNames[1]);
+					} else {
+						stmt = "";
+					}
+					Files.write(Paths.get(TMP), stmt.getBytes(), StandardOpenOption.APPEND);
+				}
+
+				for (String file : files[i]) {
+					Files.write(Paths.get(TMP), Files.readAllBytes(Paths.get(file)), StandardOpenOption.APPEND);
+				}
 			}
+			String[] errorArgNames = new String[argNames.length+NUM_MSG_ARGS+1];
+			errorArgNames[0] = "_";
+			errorArgNames[1] = "_";
+			errorArgNames[2] = fnName;
+			for (int i = 0; i<argNames.length; i++) {
+				errorArgNames[i+NUM_MSG_ARGS+1] = argNames[i];
+			}
+			PrologQueryMaster pqm = new PrologQueryMaster(TMP);
+			String[][] rs = pqm.query("error", errorArgNames);
+			String[] ret = new String[rs.length];
+			for (int i = 0; i<rs.length; i++) {
+				ret[i] = String.format(rs[i][0].substring(1, rs[i][0].length()-1).replace("\\x20\\", " "), 
+						(Object[])rs[i][1].substring(1, rs[i][1].length()-1).split(","));
+			}
+			return ret;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
