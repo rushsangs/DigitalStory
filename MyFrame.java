@@ -533,7 +533,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				boolean object2correct = false;
 				System.out.println(entertxt.getText());
 				StringBuilder newOAO = new StringBuilder(
-						QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(entertxt.getText())));
+						NLPConnector.convertNLPToOAO(NLPConnector.analyze(entertxt.getText())));
 				System.out.print("Input in OAO is:  " + newOAO.toString() + "\n");
 				String[] oaoparts = newOAO.toString().split("\\s+");
 				for(int i = 0; i < oaoparts.length; i++){

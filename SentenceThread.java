@@ -21,7 +21,7 @@ public class SentenceThread implements Runnable{
 		boolean actioncorrect = false;
 		boolean object2correct = false;
 		StringBuilder newOAO = new StringBuilder(
-				QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(this.sentence)));
+				NLPConnector.convertNLPToOAO(NLPConnector.analyze(this.sentence)));
 		System.out.print("Input in OAO is:  " + newOAO.toString() + "\n");
 		String[] oaoparts = newOAO.toString().split("\\s+");
 		for(int i = 0; i < oaoparts.length; i++){
@@ -41,7 +41,7 @@ public class SentenceThread implements Runnable{
 				continue;
 			}
 		}
-		MyFrame.updateStorytxt(newOAO.toString().toLowerCase());
+		MyFrame.updateStorytxt(newOAO.toString());
 		//TODO CALL PATRICK FUNCTION FOR POSSIBLE ERROR
 		this.stop();
 		while(!running){
