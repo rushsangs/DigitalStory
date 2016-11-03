@@ -29,9 +29,10 @@ public class EnterTextThread implements Runnable{
 				basecase = true;
 			}
 		}
-		while(!running){
+		while(running){
 			System.out.println("inside while");
 			String storystring = MyFrame.getEntertxt();
+			System.out.println(storystring);
 			if(storystring.indexOf(".",lastdelimiter) == -1){
 				continue;
 			}
@@ -53,7 +54,7 @@ public class EnterTextThread implements Runnable{
 			temp = temp.next;
 		}
 		temp = new SentenceThread(string);
-		temp.run();
+		//temp.run();
 		return;
 	}
 }

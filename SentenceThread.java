@@ -28,16 +28,16 @@ public class SentenceThread implements Runnable{
 			oaoparts[i] = oaoparts[i].toLowerCase();
 		}
 		for(int i = 0; i < oaoparts.length;i++){
+			if(i == 0){
+				object1correct = MyFrame.checkNewObject(oaoparts[0]);
+				continue;
+			}
 			if(i == 1){
-				object1correct = MyFrame.checkNewObject(oaoparts[i]);
+				actioncorrect = MyFrame.checkNewAffordance(oaoparts[1]);
 				continue;
 			}
-			if(i == 2){
-				actioncorrect = MyFrame.checkNewAffordance(oaoparts[i]);
-				continue;
-			}
-			if( i == 3){
-				object2correct = MyFrame.checkNewObject(oaoparts[i]);
+			if( i == 2){
+				object2correct = MyFrame.checkNewObject(oaoparts[2]);
 				continue;
 			}
 		}

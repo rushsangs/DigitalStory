@@ -861,7 +861,9 @@ public class MyFrame extends JFrame implements ActionListener {
 	public static boolean checkNewObject(String Object){
 		String[] objects1 = objectstring.toString().split("\\s+");
 		for(int i = 0; i < objects1.length; i++){
-			return false;
+			if(Object.equals(objects1[i])){
+				return false;
+			}
 		}
 		objectstring.append(Object + "\n");
 		objectList.setText(objectstring.toString());
