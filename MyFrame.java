@@ -50,8 +50,8 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JPanel labelpanel = new JPanel();
 	private JLabel storylabel = new JLabel("Input Story");
 	private JScrollPane storypane;
-	private JTextArea storytxt = new JTextArea(20, 20);
-	private JTextArea twostorytxt = new JTextArea(20,20);
+	private JTextArea storytxt = new JTextArea(15, 15);
+	private JTextArea twostorytxt = new JTextArea(15,15);
 	private JPanel twostorypanel = new JPanel();
 	private JScrollPane twostorypane;
 	// Bottom panel
@@ -538,6 +538,9 @@ public class MyFrame extends JFrame implements ActionListener {
 				String[] storyobjects = objectstring.toString().split("\\s+");
 				String[] storyactions = affordstring.toString().split("\\s+");
 				if(oaoparts.length == 2){
+					if(oaoparts[0].equals("_")){
+						break;
+					}
 					for(int i = 0; i < storyobjects.length; i++){
 						if((oaoparts[0]).equals(storyobjects[i].toLowerCase())){
 							object1correct = true;
@@ -545,6 +548,9 @@ public class MyFrame extends JFrame implements ActionListener {
 						}
 					}
 					for(int i = 0; i < storyactions.length; i++){
+						if(oaoparts[1].equals("_")){
+							break;
+						}
 						if((oaoparts[1]).equals(storyactions[i].toLowerCase())){
 							actioncorrect = true;
 							break;
@@ -582,6 +588,9 @@ public class MyFrame extends JFrame implements ActionListener {
 				}
 				if(oaoparts.length == 3){
 					for(int i = 0; i < storyobjects.length; i++){
+						if(oaoparts[0].equals("_")){
+							break;
+						}					
 						if((oaoparts[0]).equals(storyobjects[i].toLowerCase())){
 							object1correct = true;
 							break;
@@ -599,7 +608,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						frame1.pack();
 						frame1.setVisible(true);
 						try {
-							Files.write(Paths.get(PrologQueryMaster.TRAIT_F), 
+							Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
 									getPrologTypesString(objects1, types_for_objects1).getBytes(), 
 									StandardOpenOption.APPEND);
 						} catch (IOException e1) {
@@ -607,12 +616,18 @@ public class MyFrame extends JFrame implements ActionListener {
 						}
 					}
 					for(int i = 0; i < storyactions.length; i++){
+						if(oaoparts[1].equals("_")){
+							break;
+						}
 						if((oaoparts[1]).equals(storyactions[i].toLowerCase())){
 							actioncorrect = true;
 							break;
 						}
 					}
 					for(int i = 0; i < storyobjects.length; i++){
+						if(oaoparts[2].equals("_")){
+							break;
+						}
 						if((oaoparts[2]).equals(storyobjects[i].toLowerCase())){
 							object2correct = true;
 							break;
@@ -630,7 +645,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						frame1.pack();
 						frame1.setVisible(true);
 						try {
-							Files.write(Paths.get(PrologQueryMaster.TRAIT_F), 
+							Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
 									getPrologTypesString(objects1, types_for_objects1).getBytes(), 
 									StandardOpenOption.APPEND);
 						} catch (IOException e1) {
@@ -652,7 +667,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						frame1.pack();
 						frame1.setVisible(true);
 						try {
-							Files.write(Paths.get(PrologQueryMaster.TRAIT_F), 
+							Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
 									getPrologTypesString(objects1, types_for_objects1).getBytes(), 
 									StandardOpenOption.APPEND);
 						} catch (IOException e1) {
@@ -767,7 +782,9 @@ public class MyFrame extends JFrame implements ActionListener {
 						for (int i = 0; i < 3; ++i) {
 							objects1 = objectstring.toString().split("\\s+");
 							affords1 = affordstring.toString().split("\\s+");
-
+							if(parts2[i].equals("_")){
+								continue;
+							}
 							if (i != 1 && parts2.length !=2) {
 
 								// Checks if existing object, if not, then adds
@@ -814,7 +831,7 @@ public class MyFrame extends JFrame implements ActionListener {
 					frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					frame1.pack();
 					frame1.setVisible(true);
-					Files.write(Paths.get(PrologQueryMaster.FACTS_FILE), 
+					Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
 							getPrologTypesString(objects1, types_for_objects1).getBytes(), 
 							StandardOpenOption.APPEND);
 				}
