@@ -50,7 +50,10 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JPanel labelpanel = new JPanel();
 	private JLabel storylabel = new JLabel("Input Story");
 	private JScrollPane storypane;
-	private JTextArea storytxt = new JTextArea(25, 25);
+	private JTextArea storytxt = new JTextArea(20, 20);
+	private JTextArea twostorytxt = new JTextArea(20,20);
+	private JPanel twostorypanel = new JPanel();
+	private JScrollPane twostorypane;
 	// Bottom panel
 	private JPanel bottom = new JPanel();
 	private JPanel enterpanel = new JPanel();
@@ -88,7 +91,11 @@ public class MyFrame extends JFrame implements ActionListener {
 		labelpanel.add(storylabel, BorderLayout.CENTER);
 		storytxtpanel.add(labelpanel, BorderLayout.NORTH);
 		storypane = new JScrollPane(storytxt);
-		storytxtpanel.add(storypane, BorderLayout.CENTER);
+		twostorypane = new JScrollPane(twostorytxt);
+		twostorypanel.setLayout(new GridLayout(2,1));
+		twostorypanel.add(storypane);
+		twostorypanel.add(twostorypane);
+		storytxtpanel.add(twostorypanel, BorderLayout.CENTER);
 		enterpanel.setLayout(new BorderLayout(10, 10));
 		enterpanel.add(enterlabel, BorderLayout.WEST);
 		enterpanel.add(entertxt, BorderLayout.CENTER);
