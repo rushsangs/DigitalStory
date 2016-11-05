@@ -54,8 +54,8 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JPanel labelpanel = new JPanel();
 	private JLabel storylabel = new JLabel("Input Story");
 	private JScrollPane storypane;
-	private static JTextArea storytxt = new JTextArea(15, 15);
-	private static JTextArea twostorytxt = new JTextArea(15, 15);
+	public static JTextArea storytxt = new JTextArea(15, 15);
+	public static JTextArea twostorytxt = new JTextArea(15, 15);
 	private JPanel twostorypanel = new JPanel();
 	private JScrollPane twostorypane;
 	// Bottom panel
