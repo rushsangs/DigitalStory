@@ -28,8 +28,9 @@ public class SentenceThread extends Thread implements Runnable{
 		for(int i = 0; i < oaoparts.length;i++){
 			if(i == 0){
 				object1correct = MyFrame.checkNewObject(oaoparts[0]);
-				if(object1correct == false ){
-					MyFrame.typethread.objects.add(oaoparts[0]);
+				if(object1correct == true ){
+					MyFrame.newobjects.add(oaoparts[0]);
+					System.out.println("new object added:" + oaoparts[0]);
 				}
 				continue;
 			}
@@ -39,8 +40,9 @@ public class SentenceThread extends Thread implements Runnable{
 			}
 			if( i == 2){
 				object2correct = MyFrame.checkNewObject(oaoparts[2]);
-				if(object2correct == false ){
-					MyFrame.typethread.objects.add(oaoparts[2]);
+				if(object2correct == true ){
+					MyFrame.newobjects.add(oaoparts[2]);
+					System.out.println("new object added:" + oaoparts[2]);
 				}
 				continue;
 			}

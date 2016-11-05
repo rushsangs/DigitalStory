@@ -22,9 +22,9 @@ public class Main {
 		}
 		StoryProblemHandler problemthread = new StoryProblemHandler();
 		EnterTextThread enterthread = new EnterTextThread();
-		HandleNewTypes typethread = new HandleNewTypes();
+		//HandleNewTypes typethread = new HandleNewTypes();
 		DigitalStoryWorld world= new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
-		MyFrame frame = new MyFrame(world, problemthread, enterthread, typethread);
+		MyFrame frame = new MyFrame(world, problemthread, enterthread);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
@@ -33,8 +33,7 @@ public class Main {
 		pt.start();
 		Thread et = new Thread(enterthread);
 		et.start();
-		Thread tt = new Thread(typethread);
-		tt.start();
+		//typethread.start();
 //		String[] types = {"human","animal"};
 //		String[] characters = {"bob","alice","wolf"};
 //		String[] results = new String[characters.length];

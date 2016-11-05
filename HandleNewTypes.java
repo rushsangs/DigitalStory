@@ -6,22 +6,24 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-public class HandleNewTypes implements Runnable{
+public class HandleNewTypes extends Thread implements Runnable{
 
 	public ArrayList<String> objects;
 	public boolean running;
 	public HandleNewTypes(){
 		objects = new ArrayList<String>();
-		this.stop();
+		running = false;
 	}
 	@Override
 	public void run() {
+		System.out.println("started running");
 		while(true){
-			while(running){
+			System.out.println(objects.size());
 				if(objects.isEmpty()){
-					this.stop();
-					break;
-				}else{
+					Thread.yield();
+					continue;
+				}else if (running == true){
+					System.out.println("in here");
 					String[] types_for_objects1 = new String[1];
 					String[] objects1 = (String[]) objects.toArray();
 					SelectTypeFrame frame1 = new SelectTypeFrame(objects1, MyFrame.getTypes(), types_for_objects1);
@@ -37,16 +39,12 @@ public class HandleNewTypes implements Runnable{
 						e1.printStackTrace();
 					}
 					objects.clear();
-					this.stop();
+					running = false;
+					Thread.yield();
 				}
-			}
+				running = false;
 		}
 		
-	}
-	public void stop(){
-		this.running = false;
-	}
-	public void resume(){
-		this.running = true;
+		
 	}
 }

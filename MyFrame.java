@@ -28,6 +28,7 @@ import edu.stanford.nlp.io.EncodingPrintWriter.out;
 import java.sql.*;
 
 public class MyFrame extends JFrame implements ActionListener {
+	public static List<String> newobjects;
 	public static StoryProblemHandler problemthread;
 	public static HandleNewTypes typethread;
 	public static EnterTextThread start;
@@ -77,14 +78,15 @@ public class MyFrame extends JFrame implements ActionListener {
 	public String[] mylist = new String[] { "Prolog", "Question", "Story" };
 	private JComboBox<String> mybox = new JComboBox<String>(mylist);
 	
-	public MyFrame(DigitalStoryWorld world, StoryProblemHandler problemthread, EnterTextThread enterthread, HandleNewTypes typethread) {
+	public MyFrame(DigitalStoryWorld world, StoryProblemHandler problemthread, EnterTextThread enterthread) {
 
 		this.initializeDB();
 		this.setTitle("Story World Generator");
 		this.world = world;
 		problems = new ArrayList<StoryProblemObject>();
 		this.problemthread = problemthread;
-		this.typethread = typethread;
+		//this.typethread = typethread;
+		newobjects = new ArrayList<String>();
 		this.start = enterthread;
 		objectpanel.setLayout(new BorderLayout(10, 10));
 		objectList.setEditable(false);
@@ -372,7 +374,23 @@ public class MyFrame extends JFrame implements ActionListener {
 		switch (e.getActionCommand()) {
 		// button enter
 		case "Handle Types":
-			this.typethread.resume();
+			//MyFrame.typethread.running = true;
+			String[] types_for_objects2 = new String[MyFrame.newobjects.toArray().length];
+			String[] objects2 = new String[MyFrame.newobjects.toArray().length];
+			objects2 = MyFrame.newobjects.toArray(objects2);
+			SelectTypeFrame frame2 = new SelectTypeFrame(objects2, getTypes(), types_for_objects2);
+			frame2.setLocationRelativeTo(null);
+			frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			frame2.pack();
+			frame2.setVisible(true);
+			try {
+				Files.write(Paths.get(PrologQueryMaster.TYPE_F),
+						getPrologTypesString(objects2, types_for_objects2).getBytes(),
+						StandardOpenOption.APPEND);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			MyFrame.newobjects.clear();
 			break;
 		case "Add Type":
 			String type = entertxt.getText().trim();
@@ -935,7 +953,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		}
 		objectstring.append(Object + "\n");
 		objectList.setText(objectstring.toString());
-		return false;
+		return true;
 	}
 
 	public static boolean checkNewAffordance(String Action) {
@@ -949,7 +967,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		}
 		affordstring.append(Action + "\n");
 		affordancesList.setText(affordstring.toString());
-		return false;
+		return true;
 	}
 
 	public String removeIsFromString(String storysection) {
