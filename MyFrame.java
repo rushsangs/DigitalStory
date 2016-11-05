@@ -370,7 +370,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		switch (e.getActionCommand()) {
 		// button enter
 		case "Handle Types":
-			this.handleNewTypes();
+			this.typethread.resume();
 			break;
 		case "Add Type":
 			String type = entertxt.getText().trim();
