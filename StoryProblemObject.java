@@ -1,16 +1,15 @@
 
 public class StoryProblemObject {
-	public String[] oao;
-	public String[] gettypes;
-	public boolean type;
-	public boolean error;
-	StoryProblemObject next;
+	public String oaoText;
+	public String type;
+	public String originalNLPText;
+	public String errorMessage;
 	
-	public StoryProblemObject(String OAO,String[] gettypes, boolean type, boolean error){
-		this.oao = OAO.toString().split("\\s+");
-		this.gettypes = gettypes;
+	public StoryProblemObject(String oaoText, String type, String originalNLPText, String errorMessage) {
+		super();
+		this.oaoText = oaoText;
 		this.type = type;
-		this.error = error;
-		next = null;
+		this.originalNLPText = originalNLPText;
+		this.errorMessage = errorMessage;
 	}
 }
