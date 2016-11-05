@@ -229,7 +229,8 @@ public class PrologQueryMaster {
 	}
 	
 	public static StoryProblemObject[] getError(int index, 
-			HashMap<Integer, String[]> sentences) {
+			HashMap<Integer, String[]> sentences, 
+			String[] oaoText, String nLText) {
 		try {
 			String fnName = null;
 			String[] argNames = null;
@@ -247,8 +248,8 @@ public class PrologQueryMaster {
 			// set up replacement for ACTION_F and TRAIT_F
 			ArrayList<String> actionf = new ArrayList<String>();
 			ArrayList<String> traitf = new ArrayList<String>();
-			for (int i = 0; i<=index; i++) {
-				String line = sentences.get(index)[0];
+			for (int i : sentences.keySet()) {
+				String line = sentences.get(i)[0];
 				String proline = NLPConnector.convertOAOToProlog(line, null);
 				String currFnName = line.split("[\\(\\)]")[0];
 				if (currFnName.equals("action")) {
@@ -256,36 +257,38 @@ public class PrologQueryMaster {
 				} else if (currFnName.equals("trait")) {
 					traitf.add(proline);
 				}
-				if (i==index) {
-					fnName = currFnName;
-					argNames = line.split("[\\(\\)]")[1].split(",");
-					for (int j = 0; j<argNames.length; j++) {
-						argNames[j] = argNames[j].trim();
-					}
-				}
 			}
-			
-			for (int i = 0; i<fns.length; i++) {
-				if (fnName.equals(fns[i])) {
-					String stmt;
-					if (fnName.equals("action")) {
-						stmt = String.format(NLPConnector.ACTION, argNames[0], argNames[1], argNames[2]);
-					} else if (fnName.equals("trait")) {
-						stmt = String.format(NLPConnector.TRAIT, argNames[0], argNames[1]);
-					} else {
-						stmt = "";
-					}
-					Files.write(Paths.get(TMP), stmt.getBytes(), StandardOpenOption.APPEND);
+			for (String s : oaoText) {
+				// parse oaoText (new fact to add)
+				fnName = s.split("[\\(\\)]")[0];
+				fnName = fnName.trim();
+				argNames = s.split("[\\(\\)]")[1].split(",");
+				for (int j = 0; j<argNames.length; j++) {
+					argNames[j] = argNames[j].trim();
 				}
-				for (String file : files[i]) {
-					if (file.equals(ACTION_F)) {
-						// use replacement of ACTION_F instead
-						Files.write(Paths.get(TMP), actionf, StandardOpenOption.APPEND);
-					} else if (file.equals(TRAIT_F)) {
-						// use replacement of TRAIT_F instead
-						Files.write(Paths.get(TMP), actionf, StandardOpenOption.APPEND);
-					} else {
-						Files.write(Paths.get(TMP), Files.readAllBytes(Paths.get(file)), StandardOpenOption.APPEND);
+				
+				for (int i = 0; i<fns.length; i++) {
+					if (fnName.equals(fns[i])) {
+						String stmt;
+						if (fnName.equals("action")) {
+							stmt = String.format(NLPConnector.ACTION, argNames[0], argNames[1], argNames[2]);
+						} else if (fnName.equals("trait")) {
+							stmt = String.format(NLPConnector.TRAIT, argNames[0], argNames[1]);
+						} else {
+							stmt = "";
+						}
+						Files.write(Paths.get(TMP), stmt.getBytes(), StandardOpenOption.APPEND);
+					}
+					for (String file : files[i]) {
+						if (file.equals(ACTION_F)) {
+							// use replacement of ACTION_F instead
+							Files.write(Paths.get(TMP), actionf, StandardOpenOption.APPEND);
+						} else if (file.equals(TRAIT_F)) {
+							// use replacement of TRAIT_F instead
+							Files.write(Paths.get(TMP), actionf, StandardOpenOption.APPEND);
+						} else {
+							Files.write(Paths.get(TMP), Files.readAllBytes(Paths.get(file)), StandardOpenOption.APPEND);
+						}
 					}
 				}
 			}
@@ -302,7 +305,7 @@ public class PrologQueryMaster {
 			StoryProblemObject[] ret = new StoryProblemObject[rs.length];
 			for (int i = 0; i<rs.length; i++) {
 				ret[i] = new StoryProblemObject(
-						sentences.get(index)[0], // oaoText
+						new String[]{sentences.get(index)[0]}, // oaoText
 						sentences.get(index)[1], // nLText
 						String.format(rs[i][0].substring(1, rs[i][0].length()-1).replace("\\x20\\", " "), 
 						(Object[])rs[i][1].substring(1, rs[i][1].length()-1).split(",")));

@@ -3,42 +3,57 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class StoryProblemHandler implements Runnable {
+	private class Sentence {
+		int index;
+		String[] oaoText;
+		String nLText;
+		
+		public Sentence(int index, String[] oaoText, String nLText) {
+			this.index = index;
+			this.oaoText = oaoText;
+			this.nLText = nLText;
+		}
+	}
 	public int lastIndex;
-	public LinkedHashMap<Integer, String[]> updatedSentencesList;
+	public LinkedHashMap<Integer, Sentence> updatedSentencesList;
 	
-	public HashMap<Integer, String[]> sentences;
+	public HashMap<Integer, String[]> oaoList;
 	
 	public ArrayList<StoryProblemObject[]> problemsList;
 	
 	public StoryProblemHandler() {
 		lastIndex = -1;
-		updatedSentencesList = new LinkedHashMap<Integer, String[]>();
+		updatedSentencesList = new LinkedHashMap<Integer, Sentence>();
 		
 		problemsList = new ArrayList<StoryProblemObject[]>();
-		sentences = new HashMap<Integer, String[]>();
+		oaoList = new HashMap<Integer, String[]>();
 	}
 	
 	public void appendSentence (String oaoText, String nLText) {
 		lastIndex++;
-		updatedSentencesList.put(lastIndex, new String[]{oaoText, nLText});
+		updateSentence(lastIndex, oaoText, nLText);
 	}
 	
 	public void updateSentence(int index, String oaoText, String nLText) {
-		updatedSentencesList.put(index, new String[]{oaoText, nLText});
+		updatedSentencesList.put(index, 
+				new Sentence(index, oaoText.split("\\n"), nLText));
 	}
 	
-	public boolean detectProblems() {
-		return detectProblems(problemsList.size()-1);
-	}
-	public boolean detectProblems(int index) {
-		StoryProblemObject[] pset = PrologQueryMaster.getError(index, sentences);
+	private boolean updateProblems(int index, String[] oaoText, String nLText) {
+		StoryProblemObject[] pset = PrologQueryMaster.getError(index, oaoList, oaoText, nLText);
 		if (pset.length>0) {
 			problemsList.set(index, pset);
 			return true;
 		} else {
+			// the sentence is correct
 			problemsList.set(index, null);
+			oaoList.put(index, oaoText);
 			return false;
 		}
+	}
+	
+	public StoryProblemObject[] detectProblems(int index) {
+		return problemsList.get(index);
 	}
 
 	@Override
@@ -46,10 +61,11 @@ public class StoryProblemHandler implements Runnable {
 		while (true) {
 			if (!updatedSentencesList.isEmpty()) {
 				int nextIndex = updatedSentencesList.keySet().iterator().next();
-				sentences.put(nextIndex, updatedSentencesList.get(nextIndex));
+				Sentence updatedSentence = updatedSentencesList.get(nextIndex);
+				oaoList.put(nextIndex, updatedSentence.oaoText);
 				updatedSentencesList.remove(nextIndex);
 				
-				detectProblems(nextIndex);
+				updateProblems(nextIndex, updatedSentence.oaoText, updatedSentence.nLText);
 			}
 		}
 	}
