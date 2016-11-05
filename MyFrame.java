@@ -28,8 +28,9 @@ import edu.stanford.nlp.io.EncodingPrintWriter.out;
 import java.sql.*;
 
 public class MyFrame extends JFrame implements ActionListener {
+	public static StoryProblemHandler problemthread;
 	public static HandleNewTypes typethread;
-	public EnterTextThread start;
+	public static EnterTextThread start;
 	public List<StoryProblemObject> problems;
 	static StringBuilder storystring = new StringBuilder();
 	static StringBuilder objectstring = new StringBuilder();
@@ -76,12 +77,13 @@ public class MyFrame extends JFrame implements ActionListener {
 	public String[] mylist = new String[] { "Prolog", "Question", "Story" };
 	private JComboBox<String> mybox = new JComboBox<String>(mylist);
 	
-	public MyFrame(DigitalStoryWorld world, EnterTextThread enterthread, HandleNewTypes typethread) {
+	public MyFrame(DigitalStoryWorld world, StoryProblemHandler problemthread, EnterTextThread enterthread, HandleNewTypes typethread) {
 
 		this.initializeDB();
 		this.setTitle("Story World Generator");
 		this.world = world;
 		problems = new ArrayList<StoryProblemObject>();
+		this.problemthread = problemthread;
 		this.typethread = typethread;
 		this.start = enterthread;
 		objectpanel.setLayout(new BorderLayout(10, 10));

@@ -20,14 +20,17 @@ public class Main {
 		for (String fileName : PrologQueryMaster.ALL_FILES_TO_CREATE) {
 			Files.write(Paths.get(fileName), "".getBytes());
 		}
+		StoryProblemHandler problemthread = new StoryProblemHandler();
 		EnterTextThread enterthread = new EnterTextThread();
 		HandleNewTypes typethread = new HandleNewTypes();
 		DigitalStoryWorld world= new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
-		MyFrame frame = new MyFrame(world, enterthread, typethread);
+		MyFrame frame = new MyFrame(world, problemthread, enterthread, typethread);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
+		Thread pt = new Thread(problemthread);
+		pt.start();
 		Thread et = new Thread(enterthread);
 		et.start();
 		Thread tt = new Thread(typethread);
