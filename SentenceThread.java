@@ -8,9 +8,13 @@ import javax.swing.JOptionPane;
 
 public class SentenceThread extends Thread implements Runnable{
 	public String sentence;
+	public boolean isUpdate;
+	public int index;
 	public SentenceThread next;
-	public SentenceThread(String sentence){
+	public SentenceThread(String sentence, boolean isUpdate, int index){
+		this.isUpdate = isUpdate;
 		this.sentence = sentence;
+		this.index = index;
 		this.next = null;
 	}
 	@Override
@@ -21,6 +25,18 @@ public class SentenceThread extends Thread implements Runnable{
 		StringBuilder newOAO = new StringBuilder(
 				NLPConnector.convertNLPToOAO(NLPConnector.analyze(this.sentence)));
 		System.out.print("Input in OAO is:  " + newOAO.toString() + "\n");
+		if(newOAO.toString().equals("")){
+			//case invalid OAO
+			if(isUpdate == false){
+				MyFrame.problemthread.appendSentence(newOAO.toString(), this.sentence);
+				MyFrame.updateStorytxt("Invalid OAO " + index + "\n");
+			}
+			else{
+				MyFrame.problemthread.updateSentence(this.index, newOAO.toString(), this.sentence);
+				MyFrame.updateStorytxt("Invalid OAO" + index + "\n");
+			}
+			return;
+		}
 		String[] oaoparts = newOAO.toString().split("\\s+");
 		for(int i = 0; i < oaoparts.length; i++){
 			oaoparts[i] = oaoparts[i].toLowerCase();
@@ -47,9 +63,15 @@ public class SentenceThread extends Thread implements Runnable{
 				continue;
 			}
 		}
-		
-		MyFrame.updateStorytxt(newOAO.toString());
-//		this.stop();
+		if(isUpdate == false){
+			MyFrame.problemthread.appendSentence(newOAO.toString(), this.sentence);
+			MyFrame.updateStorytxt(newOAO.toString());
+		}
+		else{
+			MyFrame.problemthread.updateSentence(this.index, newOAO.toString(), this.sentence);
+			MyFrame.updateOAOtxt(newOAO.toString(), this.index);
+		}
+
 		return;
 		//this.notifyAll();
 		//TODO CALL PATRICK FUNCTION FOR POSSIBLE ERROR

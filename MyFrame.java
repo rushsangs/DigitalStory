@@ -930,7 +930,21 @@ public class MyFrame extends JFrame implements ActionListener {
 			// gv.visualize();
 		}
 	}
-
+	public static void updateOAOtxt(String newOAO, int index){
+		String[] oaoparts = MyFrame.storystring.toString().split("\n");
+		oaoparts[index] = newOAO;
+		StringBuilder newstorystring = new StringBuilder();
+		for(int i = 0; i < oaoparts.length; i++){
+			if(i == index){
+				newstorystring.append(oaoparts[i]);
+				continue;
+			}
+			newstorystring.append(oaoparts[i] + "\n");
+		}
+		MyFrame.storystring = newstorystring;
+		MyFrame.storytxt.setText(storystring.toString());
+		return;
+	}
 	public static void updateStorytxt(String newOAO) {
 
 		MyFrame.storystring.append(newOAO);
