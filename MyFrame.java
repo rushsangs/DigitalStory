@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.JButton;
@@ -27,7 +28,9 @@ import edu.stanford.nlp.io.EncodingPrintWriter.out;
 import java.sql.*;
 
 public class MyFrame extends JFrame implements ActionListener {
+	public static HandleNewTypes typethread;
 	public EnterTextThread start;
+	public List<StoryProblemObject> problems;
 	static StringBuilder storystring = new StringBuilder();
 	static StringBuilder objectstring = new StringBuilder();
 	static StringBuilder affordstring = new StringBuilder();
@@ -63,6 +66,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JPanel box = new JPanel();
 	private static JTextField entertxt = new JTextField(50);
 	private JPanel generatepanel = new JPanel();
+	private JButton HandleTypes = new JButton("Handle Types");
 	private JButton addtype = new JButton("Add Type");
 	private JButton query = new JButton("Query");
 	private JButton generate = new JButton("Generate Graph");
@@ -72,10 +76,13 @@ public class MyFrame extends JFrame implements ActionListener {
 	public String[] mylist = new String[]{"Prolog", "Question","Story"};
 	private JComboBox<String> mybox = new JComboBox<String>(mylist);
 	
-	public MyFrame(DigitalStoryWorld world, EnterTextThread enterthread) {
+	public MyFrame(DigitalStoryWorld world, EnterTextThread enterthread, HandleNewTypes typethread) {
 		this.initializeDB();
 		this.setTitle("Story World Generator");
 		this.world = world;
+		problems = new ArrayList<StoryProblemObject>();
+		this.typethread = typethread;
+		this.start = enterthread;
 		objectpanel.setLayout(new BorderLayout(10, 10));
 		objectList.setEditable(false);
 		objectpanel.add(object, BorderLayout.NORTH);
@@ -315,6 +322,8 @@ public class MyFrame extends JFrame implements ActionListener {
 			}
 		});
 		generatepanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+		generatepanel.add(HandleTypes);
+		HandleTypes.addActionListener(this);
 		generatepanel.add(query);
 		generatepanel.add(addtype);
 		addtype.addActionListener(this);
@@ -333,14 +342,15 @@ public class MyFrame extends JFrame implements ActionListener {
 		this.add(affordpanel, BorderLayout.EAST);
 		this.add(storytxtpanel, BorderLayout.CENTER);
 		this.add(bottom, BorderLayout.SOUTH);
-		this.start = enterthread;
-		//start.run();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		// button enter
+		case "Handle Types":
+			this.handleNewTypes();
+			break;
 		case "Add Type":
 			String type = entertxt.getText().trim();
 			if(type.equals("")){
@@ -855,6 +865,9 @@ public class MyFrame extends JFrame implements ActionListener {
 			//gv.visualize();
 		}
 	}
+	public static void handleNewTypes(){
+		typethread.resume();
+	}
 	public static void updateStorytxt(String newOAO){
 		MyFrame.storystring.append(newOAO);
 		MyFrame.storytxt.setText(storystring.toString());
@@ -866,23 +879,23 @@ public class MyFrame extends JFrame implements ActionListener {
 		String[] objects1 = objectstring.toString().split("\\s+");
 		for(int i = 0; i < objects1.length; i++){
 			if(Object.equals(objects1[i])){
-				return false;
+				return true;
 			}
 		}
 		objectstring.append(Object + "\n");
 		objectList.setText(objectstring.toString());
-		return true;
+		return false;
 	}
 	public static boolean checkNewAffordance(String Action){
 		String[] affords1 = affordstring.toString().split("\\s+");
 		for(int i = 0; i < affords1.length; i++){
 			if(Action.equals(affords1[i])){
-				return false;
+				return true;
 			}
 		}
 		affordstring.append(Action + "\n");
 		affordancesList.setText(affordstring.toString());
-		return true;
+		return false;
 	}
 	public String removeIsFromString(String storysection) {
 		String[] lines = storysection.split("\\n");

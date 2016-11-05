@@ -21,13 +21,17 @@ public class Main {
 			Files.write(Paths.get(fileName), "".getBytes());
 		}
 		EnterTextThread enterthread = new EnterTextThread();
+		HandleNewTypes typethread = new HandleNewTypes();
 		DigitalStoryWorld world= new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
-		MyFrame frame = new MyFrame(world, enterthread);
+		MyFrame frame = new MyFrame(world, enterthread, typethread);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-		enterthread.run();
+		Thread et = new Thread(enterthread);
+		et.start();
+		Thread tt = new Thread(typethread);
+		tt.start();
 //		String[] types = {"human","animal"};
 //		String[] characters = {"bob","alice","wolf"};
 //		String[] results = new String[characters.length];
