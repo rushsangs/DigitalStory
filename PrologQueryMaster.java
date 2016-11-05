@@ -3,6 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -227,7 +228,8 @@ public class PrologQueryMaster {
 		return null;
 	}
 	
-	public static StoryProblemObject[] getError(int index) {
+	public static StoryProblemObject[] getError(int index, 
+			HashMap<Integer, String[]> sentences) {
 		try {
 			String fnName = null;
 			String[] argNames = null;
@@ -245,13 +247,8 @@ public class PrologQueryMaster {
 			// set up replacement for ACTION_F and TRAIT_F
 			ArrayList<String> actionf = new ArrayList<String>();
 			ArrayList<String> traitf = new ArrayList<String>();
-			String oaoText = ""; // TODO: temp
-			String[] oaoList = oaoText.split("\\n");
-			for (int i = 0; i<=index; i++) { // TODO: check if line number is indexed starting at 1 or 0
-				String line = oaoList[i].trim();
-				if (line.length()==0) {
-					continue;
-				}
+			for (int i = 0; i<=index; i++) {
+				String line = sentences.get(index)[0];
 				String proline = NLPConnector.convertOAOToProlog(line, null);
 				String currFnName = line.split("[\\(\\)]")[0];
 				if (currFnName.equals("action")) {
@@ -305,8 +302,8 @@ public class PrologQueryMaster {
 			StoryProblemObject[] ret = new StoryProblemObject[rs.length];
 			for (int i = 0; i<rs.length; i++) {
 				ret[i] = new StoryProblemObject(
-						null, //TODO 
-						null, //TODO
+						sentences.get(index)[0], // oaoText
+						sentences.get(index)[1], // nLText
 						String.format(rs[i][0].substring(1, rs[i][0].length()-1).replace("\\x20\\", " "), 
 						(Object[])rs[i][1].substring(1, rs[i][1].length()-1).split(",")));
 			}
