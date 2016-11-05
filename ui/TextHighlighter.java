@@ -10,10 +10,10 @@ import javax.swing.text.Highlighter.HighlightPainter;
 
 public class TextHighlighter {
 	
-	public static void highlightText(JTextArea textArea, int start, int end){
+	public static void highlightText(JTextArea textArea, Color color, int start, int end){
 		Highlighter highlighter = textArea.getHighlighter();
 	      HighlightPainter painter = 
-	             new DefaultHighlighter.DefaultHighlightPainter(Color.pink);
+	             new DefaultHighlighter.DefaultHighlightPainter(color);
 	      try {
 			highlighter.addHighlight(start, end, painter );
 		} catch (BadLocationException e) {

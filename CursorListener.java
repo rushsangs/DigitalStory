@@ -19,7 +19,7 @@ public class CursorListener implements Runnable {
 		String sentences[] = storytext.split(".?!");
 		int cursorLocation = textArea.getCaretPosition();
 		int cursorCurrentSentence = storytext.substring(0,cursorLocation).split(".?!").length;
-		StoryProblemObject obj = getProblemIfPresent(sentences[cursorCurrentSentence]);
+		StoryProblemObject obj = getProblemIfPresent(cursorCurrentSentence);
 		if(obj == null)
 		{
 			//no problem, do nothing
@@ -34,20 +34,16 @@ public class CursorListener implements Runnable {
 		{
 			//yes problem DISPLAY PROBlEM TODO
 			problemSentenceNo = cursorCurrentSentence;
+			
 		}
 	}
 	
 	/**
-	 * 
+	 * TODO Patrick: implement this
 	 * @param originalNLPSentence Original NLP Sentence to look for in problems
 	 * @return returns a Problem if there is Problem for the string, else null 
 	 */
-	public StoryProblemObject getProblemIfPresent(String originalNLPSentence){
-		for(StoryProblemObject p : problems){
-			if(p.originalNLPText.equals(originalNLPSentence)){
-				return p;
-			}
-		}
+	public StoryProblemObject getProblemIfPresent(int sentenceIndex) {
 		return null;
 	}
 
