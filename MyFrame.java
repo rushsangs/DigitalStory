@@ -55,7 +55,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JLabel storylabel = new JLabel("Input Story");
 	private JScrollPane storypane;
 	private static JTextArea storytxt = new JTextArea(15, 15);
-	private static JTextArea twostorytxt = new JTextArea(15,15);
+	private static JTextArea twostorytxt = new JTextArea(15, 15);
 	private JPanel twostorypanel = new JPanel();
 	private JScrollPane twostorypane;
 	// Bottom panel
@@ -73,10 +73,11 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JButton clear = new JButton("Clear");
 	private JButton getfile = new JButton("Get File");
 	private JFileChooser filechooser = new JFileChooser();
-	public String[] mylist = new String[]{"Prolog", "Question","Story"};
+	public String[] mylist = new String[] { "Prolog", "Question", "Story" };
 	private JComboBox<String> mybox = new JComboBox<String>(mylist);
 	
 	public MyFrame(DigitalStoryWorld world, EnterTextThread enterthread, HandleNewTypes typethread) {
+
 		this.initializeDB();
 		this.setTitle("Story World Generator");
 		this.world = world;
@@ -100,7 +101,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		storytxtpanel.add(labelpanel, BorderLayout.NORTH);
 		storypane = new JScrollPane(storytxt);
 		twostorypane = new JScrollPane(twostorytxt);
-		twostorypanel.setLayout(new GridLayout(2,1));
+		twostorypanel.setLayout(new GridLayout(2, 1));
 		twostorypanel.add(storypane);
 		twostorypanel.add(twostorypane);
 		storytxtpanel.add(twostorypanel, BorderLayout.CENTER);
@@ -116,209 +117,227 @@ public class MyFrame extends JFrame implements ActionListener {
 		entertxt.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//start.run();
-//				if(mybox.getSelectedItem().equals("Story")){
-//					boolean object1correct = false;
-//					boolean actioncorrect = false;
-//					boolean object2correct = false;
-//					System.out.println(entertxt.getText());
-//					StringBuilder newOAO = new StringBuilder(
-//							QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(entertxt.getText())));
-//					System.out.print("Input in OAO is:  " + newOAO.toString() + "\n");
-//					String[] oaoparts = newOAO.toString().split(" ");
-//					for(int i = 0; i < oaoparts.length; i++){
-//						oaoparts[i] = oaoparts[i].toLowerCase();
-//					}
-//					String[] storyobjects = objectstring.toString().split("\n");
-//					String[] storyactions = affordstring.toString().split("\n");
-//					if(oaoparts.length == 2){
-//						for(int i = 0; i < storyobjects.length; i++){
-//							if((oaoparts[0]).equals(storyobjects[i].toLowerCase())){
-//								object1correct = true;
-//								break;
-//							}
-//						}
-//						for(int i = 0; i < storyactions.length; i++){
-//							if((oaoparts[1]).equals(storyactions[i].toLowerCase())){
-//								actioncorrect = true;
-//								break;
-//							}
-//						}
-//						if(object1correct == false){
-//							//newOAO.append(" " + "new object added");
-//							objectstring.append(oaoparts[0] + "\n");
-//							objectList.setText(objectstring.toString());
-//							String[] types_for_objects1 = new String[1];
-//							String[] objects1 = {oaoparts[0]};
-//							SelectTypeFrame frame1 = new SelectTypeFrame(objects1, getTypes(), types_for_objects1);
-//							frame1.setLocationRelativeTo(null);
-//							frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//							frame1.pack();
-//							frame1.setVisible(true);
-//							try {
-//								Files.write(Paths.get(PrologQueryMaster.FACTS_FILE), 
-//										getPrologTypesString(objects1, types_for_objects1).getBytes(), 
-//										StandardOpenOption.APPEND);
-//							} catch (IOException e1) {
-//								e1.printStackTrace();
-//							}
-//						}
-//						if(actioncorrect == false){
-//							//newOAO.append(" " + "new affordance added for " + oaoparts[1]);
-//							affordstring.append(oaoparts[1] + "\n");
-//							affordancesList.setText(affordstring.toString());
-//							NLPConnector.convertOAOToProlog(newOAO.toString(), PrologQueryMaster.FACTS_FILE);
-//						}
-//						storystring.append(newOAO.toString());
-//						entertxt.setText("");
-//						storytxt.setText(storystring.toString());
-//					}
-//					if(oaoparts.length == 3){
-//						for(int i = 0; i < storyobjects.length; i++){
-//							if((oaoparts[0]).equals(storyobjects[i].toLowerCase())){
-//								object1correct = true;
-//								break;
-//							}
-//						}
-//						for(int i = 0; i < storyactions.length; i++){
-//							System.out.println(storyactions[i]);
-//							if((oaoparts[1]).equals(storyactions[i].toLowerCase())){
-//								actioncorrect = true;
-//								break;
-//							}
-//						}
-//						for(int i = 0; i < storyobjects.length; i++){
-//							System.out.println(storyobjects[i]);
-//							if((oaoparts[2]).equals(storyobjects[i].toLowerCase())){
-//								actioncorrect = true;
-//								break;
-//							}
-//						}
-//						if(object1correct == false){
-//							//newOAO.append(" " + "new object added");
-//							objectstring.append(oaoparts[0] + "\n");
-//							objectList.setText(objectstring.toString());
-//							String[] types_for_objects1 = new String[1];
-//							String[] objects1 = {oaoparts[0]};
-//							SelectTypeFrame frame1 = new SelectTypeFrame(objects1, getTypes(), types_for_objects1);
-//							frame1.setLocationRelativeTo(null);
-//							frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//							frame1.pack();
-//							frame1.setVisible(true);
-//							try {
-//								Files.write(Paths.get(PrologQueryMaster.FACTS_FILE), 
-//										getPrologTypesString(objects1, types_for_objects1).getBytes(), 
-//										StandardOpenOption.APPEND);
-//							} catch (IOException e1) {
-//								e1.printStackTrace();
-//							}
-//						}
-//						if(object2correct == false){
-//							objectstring.append(oaoparts[2] + "\n");
-//							objectList.setText(objectstring.toString());
-//							String[] types_for_objects1 = new String[1];
-//							String[] objects1 = {oaoparts[2]};
-//							SelectTypeFrame frame1 = new SelectTypeFrame(objects1, getTypes(), types_for_objects1);
-//							frame1.setLocationRelativeTo(null);
-//							frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//							frame1.pack();
-//							frame1.setVisible(true);
-//							try {
-//								Files.write(Paths.get(PrologQueryMaster.FACTS_FILE), 
-//										getPrologTypesString(objects1, types_for_objects1).getBytes(), 
-//										StandardOpenOption.APPEND);
-//							} catch (IOException e1) {
-//								e1.printStackTrace();
-//							}
-//						}
-//						if(actioncorrect == false){
-//							//newOAO.append(" " + "new affordance added for " + oaoparts[1]);
-//							affordstring.append(oaoparts[1] + "\n");
-//							affordancesList.setText(affordstring.toString());
-//							NLPConnector.convertOAOToProlog(newOAO.toString(), PrologQueryMaster.FACTS_FILE);
-//						}
-//						storystring.append(newOAO.toString());
-//						entertxt.setText("");
-//						storytxt.setText(storystring.toString());
-//					}else{
-//						entertxt.setText("");
-//						JOptionPane.showMessageDialog(MyFrame.this,"Input was not able to be converted into a proper format. \n Please modify your setence.");
-//					}
-//				}
-//				String string = entertxt.getText().trim();
-//				String[] parts = string.split("\\s+");
-//				String[] objects = {};
-//				String[] types = { "human", "animal", "none" };
-//				String[] affords;
-//				String[] types_for_objects = {};
-//				if (parts.length < 2) {
-//					JOptionPane.showMessageDialog(MyFrame.this, "Incorrect Format: Enter as Object Action Object*");
-//					return;
-//				}
-//				MyFrame.analyze(string, MyFrame.world);
-//				storystring.append(string + "\n");
-//				for (int i = 0; i < parts.length; i++) {
-//					objects = objectstring.toString().split("\\s+");
-//					affords = affordstring.toString().split("\\s+");
-//					if (i != 1) {
-//						// Checks if existing object, if not, then adds to
-//						// object string
-//						int j;
-//						for (j = 0; j < objects.length; j++) {
-//							if (parts[i].equals(objects[j])) {
-//								break;
-//							}
-//						}
-//						if (j == objects.length) {
-//							objectstring.append(parts[i] + "\n");
-//							// objectList.setText(objectstring.toString());
-//							continue;
-//						}
-//					}
-//					if (i == 1) {
-//						// Checks if action is already in the action string, if
-//						// not then adds it
-//						int k;
-//						if (parts[i].equals("is")) {
-//							break;
-//						}
-//						for (k = 0; k < affords.length; k++) {
-//							if (parts[i].equals(affords[k])) {
-//								break;
-//							}
-//						}
-//						if (k == affords.length) {
-//							affordstring.append(parts[i] + "\n");
-//							// affordancesList.setText(affordstring.toString());
-//							continue;
-//						}
-//					}
-//				}
-//				objectList.setText(objectstring.toString());
-//				affordancesList.setText(affordstring.toString());
-//				entertxt.setText("");
-//				SelectTypeFrame frame1 = new SelectTypeFrame(objects, getTypes(), types_for_objects);
-//				frame1.setLocationRelativeTo(null);
-//				frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//				frame1.pack();
-//				frame1.setVisible(true);
-//				getPrologTypesString(objects, types_for_objects);
-//
-//				return;
-//			if(mybox.getSelectedItem().equals("Prolog")){
-//				PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-//				String query = entertxt.getText();
-//				String[] firstpart = query.split("\\(");
-//				String[] queryparts = firstpart[1].split("\\)|,|\\.");
-//				System.out.print(firstpart[0] + " " + queryparts[0] + " " + queryparts[1]);
-//				System.out.println(pqm.verify(firstpart[0], queryparts));
-//				JOptionPane.showMessageDialog(null,pqm.verify(firstpart[0], queryparts));
-//				return;
-//			}else{
-//				System.out.print("I GOT HERE");
-//				return;
-//			}
-//			}
+				// start.run();
+				// if(mybox.getSelectedItem().equals("Story")){
+				// boolean object1correct = false;
+				// boolean actioncorrect = false;
+				// boolean object2correct = false;
+				// System.out.println(entertxt.getText());
+				// StringBuilder newOAO = new StringBuilder(
+				// QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(entertxt.getText())));
+				// System.out.print("Input in OAO is: " + newOAO.toString() +
+				// "\n");
+				// String[] oaoparts = newOAO.toString().split(" ");
+				// for(int i = 0; i < oaoparts.length; i++){
+				// oaoparts[i] = oaoparts[i].toLowerCase();
+				// }
+				// String[] storyobjects = objectstring.toString().split("\n");
+				// String[] storyactions = affordstring.toString().split("\n");
+				// if(oaoparts.length == 2){
+				// for(int i = 0; i < storyobjects.length; i++){
+				// if((oaoparts[0]).equals(storyobjects[i].toLowerCase())){
+				// object1correct = true;
+				// break;
+				// }
+				// }
+				// for(int i = 0; i < storyactions.length; i++){
+				// if((oaoparts[1]).equals(storyactions[i].toLowerCase())){
+				// actioncorrect = true;
+				// break;
+				// }
+				// }
+				// if(object1correct == false){
+				// //newOAO.append(" " + "new object added");
+				// objectstring.append(oaoparts[0] + "\n");
+				// objectList.setText(objectstring.toString());
+				// String[] types_for_objects1 = new String[1];
+				// String[] objects1 = {oaoparts[0]};
+				// SelectTypeFrame frame1 = new SelectTypeFrame(objects1,
+				// getTypes(), types_for_objects1);
+				// frame1.setLocationRelativeTo(null);
+				// frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				// frame1.pack();
+				// frame1.setVisible(true);
+				// try {
+				// Files.write(Paths.get(PrologQueryMaster.FACTS_FILE),
+				// getPrologTypesString(objects1,
+				// types_for_objects1).getBytes(),
+				// StandardOpenOption.APPEND);
+				// } catch (IOException e1) {
+				// e1.printStackTrace();
+				// }
+				// }
+				// if(actioncorrect == false){
+				// //newOAO.append(" " + "new affordance added for " +
+				// oaoparts[1]);
+				// affordstring.append(oaoparts[1] + "\n");
+				// affordancesList.setText(affordstring.toString());
+				// NLPConnector.convertOAOToProlog(newOAO.toString(),
+				// PrologQueryMaster.FACTS_FILE);
+				// }
+				// storystring.append(newOAO.toString());
+				// entertxt.setText("");
+				// storytxt.setText(storystring.toString());
+				// }
+				// if(oaoparts.length == 3){
+				// for(int i = 0; i < storyobjects.length; i++){
+				// if((oaoparts[0]).equals(storyobjects[i].toLowerCase())){
+				// object1correct = true;
+				// break;
+				// }
+				// }
+				// for(int i = 0; i < storyactions.length; i++){
+				// System.out.println(storyactions[i]);
+				// if((oaoparts[1]).equals(storyactions[i].toLowerCase())){
+				// actioncorrect = true;
+				// break;
+				// }
+				// }
+				// for(int i = 0; i < storyobjects.length; i++){
+				// System.out.println(storyobjects[i]);
+				// if((oaoparts[2]).equals(storyobjects[i].toLowerCase())){
+				// actioncorrect = true;
+				// break;
+				// }
+				// }
+				// if(object1correct == false){
+				// //newOAO.append(" " + "new object added");
+				// objectstring.append(oaoparts[0] + "\n");
+				// objectList.setText(objectstring.toString());
+				// String[] types_for_objects1 = new String[1];
+				// String[] objects1 = {oaoparts[0]};
+				// SelectTypeFrame frame1 = new SelectTypeFrame(objects1,
+				// getTypes(), types_for_objects1);
+				// frame1.setLocationRelativeTo(null);
+				// frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				// frame1.pack();
+				// frame1.setVisible(true);
+				// try {
+				// Files.write(Paths.get(PrologQueryMaster.FACTS_FILE),
+				// getPrologTypesString(objects1,
+				// types_for_objects1).getBytes(),
+				// StandardOpenOption.APPEND);
+				// } catch (IOException e1) {
+				// e1.printStackTrace();
+				// }
+				// }
+				// if(object2correct == false){
+				// objectstring.append(oaoparts[2] + "\n");
+				// objectList.setText(objectstring.toString());
+				// String[] types_for_objects1 = new String[1];
+				// String[] objects1 = {oaoparts[2]};
+				// SelectTypeFrame frame1 = new SelectTypeFrame(objects1,
+				// getTypes(), types_for_objects1);
+				// frame1.setLocationRelativeTo(null);
+				// frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				// frame1.pack();
+				// frame1.setVisible(true);
+				// try {
+				// Files.write(Paths.get(PrologQueryMaster.FACTS_FILE),
+				// getPrologTypesString(objects1,
+				// types_for_objects1).getBytes(),
+				// StandardOpenOption.APPEND);
+				// } catch (IOException e1) {
+				// e1.printStackTrace();
+				// }
+				// }
+				// if(actioncorrect == false){
+				// //newOAO.append(" " + "new affordance added for " +
+				// oaoparts[1]);
+				// affordstring.append(oaoparts[1] + "\n");
+				// affordancesList.setText(affordstring.toString());
+				// NLPConnector.convertOAOToProlog(newOAO.toString(),
+				// PrologQueryMaster.FACTS_FILE);
+				// }
+				// storystring.append(newOAO.toString());
+				// entertxt.setText("");
+				// storytxt.setText(storystring.toString());
+				// }else{
+				// entertxt.setText("");
+				// JOptionPane.showMessageDialog(MyFrame.this,"Input was not
+				// able to be converted into a proper format. \n Please modify
+				// your setence.");
+				// }
+				// }
+				// String string = entertxt.getText().trim();
+				// String[] parts = string.split("\\s+");
+				// String[] objects = {};
+				// String[] types = { "human", "animal", "none" };
+				// String[] affords;
+				// String[] types_for_objects = {};
+				// if (parts.length < 2) {
+				// JOptionPane.showMessageDialog(MyFrame.this, "Incorrect
+				// Format: Enter as Object Action Object*");
+				// return;
+				// }
+				// MyFrame.analyze(string, MyFrame.world);
+				// storystring.append(string + "\n");
+				// for (int i = 0; i < parts.length; i++) {
+				// objects = objectstring.toString().split("\\s+");
+				// affords = affordstring.toString().split("\\s+");
+				// if (i != 1) {
+				// // Checks if existing object, if not, then adds to
+				// // object string
+				// int j;
+				// for (j = 0; j < objects.length; j++) {
+				// if (parts[i].equals(objects[j])) {
+				// break;
+				// }
+				// }
+				// if (j == objects.length) {
+				// objectstring.append(parts[i] + "\n");
+				// // objectList.setText(objectstring.toString());
+				// continue;
+				// }
+				// }
+				// if (i == 1) {
+				// // Checks if action is already in the action string, if
+				// // not then adds it
+				// int k;
+				// if (parts[i].equals("is")) {
+				// break;
+				// }
+				// for (k = 0; k < affords.length; k++) {
+				// if (parts[i].equals(affords[k])) {
+				// break;
+				// }
+				// }
+				// if (k == affords.length) {
+				// affordstring.append(parts[i] + "\n");
+				// // affordancesList.setText(affordstring.toString());
+				// continue;
+				// }
+				// }
+				// }
+				// objectList.setText(objectstring.toString());
+				// affordancesList.setText(affordstring.toString());
+				// entertxt.setText("");
+				// SelectTypeFrame frame1 = new SelectTypeFrame(objects,
+				// getTypes(), types_for_objects);
+				// frame1.setLocationRelativeTo(null);
+				// frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				// frame1.pack();
+				// frame1.setVisible(true);
+				// getPrologTypesString(objects, types_for_objects);
+				//
+				// return;
+				// if(mybox.getSelectedItem().equals("Prolog")){
+				// PrologQueryMaster pqm = new
+				// PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+				// String query = entertxt.getText();
+				// String[] firstpart = query.split("\\(");
+				// String[] queryparts = firstpart[1].split("\\)|,|\\.");
+				// System.out.print(firstpart[0] + " " + queryparts[0] + " " +
+				// queryparts[1]);
+				// System.out.println(pqm.verify(firstpart[0], queryparts));
+				// JOptionPane.showMessageDialog(null,pqm.verify(firstpart[0],
+				// queryparts));
+				// return;
+				// }else{
+				// System.out.print("I GOT HERE");
+				// return;
+				// }
+				// }
 			}
 		});
 		generatepanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
@@ -342,6 +361,8 @@ public class MyFrame extends JFrame implements ActionListener {
 		this.add(affordpanel, BorderLayout.EAST);
 		this.add(storytxtpanel, BorderLayout.CENTER);
 		this.add(bottom, BorderLayout.SOUTH);
+		this.start = enterthread;
+
 	}
 
 	@Override
@@ -353,7 +374,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			break;
 		case "Add Type":
 			String type = entertxt.getText().trim();
-			if(type.equals("")){
+			if (type.equals("")) {
 				JOptionPane.showMessageDialog(this, "Please enter a type");
 				break;
 			}
@@ -361,30 +382,33 @@ public class MyFrame extends JFrame implements ActionListener {
 			entertxt.setText("");
 			break;
 		case "Query":
-			if(mybox.getSelectedItem().equals("Prolog")){
+			if (mybox.getSelectedItem().equals("Prolog")) {
 				boolean isDone = false;
 				PrologQueryMaster.updateFacts();
 				PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
 				String query = entertxt.getText();
 				String[] firstpart = query.split("\\(");
 				String[] queryparts = firstpart[1].split("\\)|,|\\.");
-				for(int i = 0 ; i < queryparts.length; i++){
+				for (int i = 0; i < queryparts.length; i++) {
 					queryparts[i] = queryparts[i].trim();
 				}
 				System.out.println(firstpart[1].toString() + "******" + "\n");
-				for(int i = 0; i < queryparts.length; i++){ //check if case query else do verify
-					if(Character.isUpperCase(queryparts[i].codePointAt(0))){
+				for (int i = 0; i < queryparts.length; i++) { // check if case
+																// query else do
+																// verify
+					if (Character.isUpperCase(queryparts[i].codePointAt(0))) {
 						System.out.println("first part is: " + firstpart[0] + "\n");
-						System.out.println("query parts are: " + queryparts[0] + " " + queryparts[1] + " " + queryparts[2]);
+						System.out.println(
+								"query parts are: " + queryparts[0] + " " + queryparts[1] + " " + queryparts[2]);
 						String[][] resultset = pqm.query(firstpart[0], queryparts);
 						StringBuilder output = new StringBuilder();
-						for(int  j = 0; j < resultset.length; j ++){
-							for (int k = 0; k < resultset[j].length; k++){
-								if(k == (resultset[j].length-1)){
-									output.append(resultset[j][k] + "\n");									
-								}else {
+						for (int j = 0; j < resultset.length; j++) {
+							for (int k = 0; k < resultset[j].length; k++) {
+								if (k == (resultset[j].length - 1)) {
+									output.append(resultset[j][k] + "\n");
+								} else {
 									output.append(resultset[j][k] + " ");
-								}								
+								}
 							}
 						}
 						JOptionPane.showMessageDialog(this, entertxt.getText() + "\n" + output.toString());
@@ -393,38 +417,38 @@ public class MyFrame extends JFrame implements ActionListener {
 						break;
 					}
 				}
-				if(isDone == false){
+				if (isDone == false) {
 					System.out.print(firstpart[0] + " " + queryparts[0] + " " + queryparts[1]);
 					System.out.println(pqm.verify(firstpart[0], queryparts));
-					JOptionPane.showMessageDialog(this,entertxt.getText() + "\n" + pqm.verify(firstpart[0], queryparts));
+					JOptionPane.showMessageDialog(this,
+							entertxt.getText() + "\n" + pqm.verify(firstpart[0], queryparts));
 					entertxt.setText("");
 					break;
 				}
 				break;
-			}
-			else if(mybox.getSelectedItem().equals("Question")){
+			} else if (mybox.getSelectedItem().equals("Question")) {
 				boolean isDone = false;
 				System.out.println(entertxt.getText());
 				StringBuilder questionOAO = new StringBuilder(
 						QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(entertxt.getText())));
 				System.out.print("Query in OAO is:  " + questionOAO.toString() + "\n");
 				String[] oaoparts = questionOAO.toString().split(" ");
-				if(oaoparts.length == 2){
-					for(int i = 0; i < oaoparts.length; i++){
-						if(oaoparts[i].toLowerCase().contains("who")){
+				if (oaoparts.length == 2) {
+					for (int i = 0; i < oaoparts.length; i++) {
+						if (oaoparts[i].toLowerCase().contains("who")) {
 							oaoparts[i] = "X";
 							PrologQueryMaster.updateFacts();
 							PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
 							String firstpart1 = "trait";
 							String[][] resultset = pqm.query(firstpart1, oaoparts);
 							StringBuilder output = new StringBuilder();
-							for(int  j = 0; j < resultset.length; j ++){
-								for (int k = 0; k < resultset[j].length; k++){
-									if(k == (resultset[j].length-1)){
-										output.append(resultset[j][k] + "\n");									
-									}else {
+							for (int j = 0; j < resultset.length; j++) {
+								for (int k = 0; k < resultset[j].length; k++) {
+									if (k == (resultset[j].length - 1)) {
+										output.append(resultset[j][k] + "\n");
+									} else {
 										output.append(resultset[j][k] + " ");
-									}								
+									}
 								}
 							}
 							JOptionPane.showMessageDialog(this, entertxt.getText() + "\n" + output.toString());
@@ -433,8 +457,8 @@ public class MyFrame extends JFrame implements ActionListener {
 							break;
 						}
 					}
-					if(isDone == false){
-					//case  WAS with AMOD
+					if (isDone == false) {
+						// case WAS with AMOD
 						PrologQueryMaster.updateFacts();
 						PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
 						String firstpart1 = "trait";
@@ -443,9 +467,9 @@ public class MyFrame extends JFrame implements ActionListener {
 					}
 					break;
 				}
-				if( questionOAO.toString().toLowerCase().contains("who")){
-					for(int i = 0; i < oaoparts.length; i++){
-						if(oaoparts[i].toLowerCase().equals("who")){
+				if (questionOAO.toString().toLowerCase().contains("who")) {
+					for (int i = 0; i < oaoparts.length; i++) {
+						if (oaoparts[i].toLowerCase().equals("who")) {
 							oaoparts[i] = "X";
 							break;
 						}
@@ -453,40 +477,14 @@ public class MyFrame extends JFrame implements ActionListener {
 					PrologQueryMaster.updateFacts();
 					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
 					String firstpart1 = "action";
-					System.out.println("case WHO oao to query: " + oaoparts[0] + " " + oaoparts[1] + " " + oaoparts[2] );
+					System.out.println("case WHO oao to query: " + oaoparts[0] + " " + oaoparts[1] + " " + oaoparts[2]);
 					String[][] resultset = pqm.query(firstpart1, oaoparts);
 					StringBuilder output = new StringBuilder();
-					for(int  j = 0; j < resultset.length; j ++){
-						for (int k = 0; k < resultset[j].length; k++){
-							if(k == (resultset[j].length-1)){
-								output.append(resultset[j][k] + "\n");									
-							}else {
-								output.append(resultset[j][k] + " ");
-							}								
-						}
-					}
-					JOptionPane.showMessageDialog(this, entertxt.getText() + "\n" + output.toString());
-					entertxt.setText("");
-					break;
-				}
-				if( questionOAO.toString().toLowerCase().contains("what")){
-					for(int i = 0; i < oaoparts.length; i++){
-						if(oaoparts[i].toLowerCase().equals("what")){
-							oaoparts[i] = "X";
-							break;
-						}
-					}
-					PrologQueryMaster.updateFacts();
-					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-					String firstpart1 = "action";
-					System.out.println("case WHAT oao to query: " + oaoparts[0] + " " + oaoparts[1] + " " + oaoparts[2] );
-					String[][] resultset = pqm.query(firstpart1, oaoparts);
-					StringBuilder output = new StringBuilder();
-					for( int j = 0; j < resultset.length; j++){
-						for(int k = 0; k < resultset[j].length; k++){
-							if(k == (resultset[j].length -1)){
+					for (int j = 0; j < resultset.length; j++) {
+						for (int k = 0; k < resultset[j].length; k++) {
+							if (k == (resultset[j].length - 1)) {
 								output.append(resultset[j][k] + "\n");
-							}else {
+							} else {
 								output.append(resultset[j][k] + " ");
 							}
 						}
@@ -495,38 +493,66 @@ public class MyFrame extends JFrame implements ActionListener {
 					entertxt.setText("");
 					break;
 				}
-				if( questionOAO.toString().toLowerCase().contains("what")){
-					for(int i = 0; i < oaoparts.length; i++){
-						if(oaoparts[i].toLowerCase().equals("what")){
+				if (questionOAO.toString().toLowerCase().contains("what")) {
+					for (int i = 0; i < oaoparts.length; i++) {
+						if (oaoparts[i].toLowerCase().equals("what")) {
 							oaoparts[i] = "X";
 							break;
 						}
-				}
-				PrologQueryMaster.updateFacts();
-				PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-				String firstpart1 = "action";
-				System.out.println("case WHAT oao to query: " + oaoparts[0] + " " + oaoparts[1] + " " +  oaoparts[2] );
-				String[][] resultset = pqm.query(firstpart1, oaoparts);
-				StringBuilder output = new StringBuilder();
-				for( int j = 0; j < resultset.length; j++){
-					for(int k = 0; k < resultset[j].length; k++){
-						if(k == (resultset[j].length -1)){
-							output.append(resultset[j][k] + "\n");
-						}else {
-							output.append(resultset[j][k] + " ");
+					}
+					PrologQueryMaster.updateFacts();
+					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+					String firstpart1 = "action";
+					System.out
+							.println("case WHAT oao to query: " + oaoparts[0] + " " + oaoparts[1] + " " + oaoparts[2]);
+					String[][] resultset = pqm.query(firstpart1, oaoparts);
+					StringBuilder output = new StringBuilder();
+					for (int j = 0; j < resultset.length; j++) {
+						for (int k = 0; k < resultset[j].length; k++) {
+							if (k == (resultset[j].length - 1)) {
+								output.append(resultset[j][k] + "\n");
+							} else {
+								output.append(resultset[j][k] + " ");
+							}
 						}
 					}
-				}
-				JOptionPane.showMessageDialog(this, entertxt.getText() + "\n" + output.toString());
-				entertxt.setText("");
-				break;
-				}
-				if( questionOAO.toString().toLowerCase().contains("why")){
-					//case using precondition
-					//TODO
+					JOptionPane.showMessageDialog(this, entertxt.getText() + "\n" + output.toString());
+					entertxt.setText("");
 					break;
-				}else { //this falls through to DID DOES for action
-					String firstpart1 ="action";
+				}
+				if (questionOAO.toString().toLowerCase().contains("what")) {
+					for (int i = 0; i < oaoparts.length; i++) {
+						if (oaoparts[i].toLowerCase().equals("what")) {
+							oaoparts[i] = "X";
+							break;
+						}
+					}
+					PrologQueryMaster.updateFacts();
+					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+					String firstpart1 = "action";
+					System.out
+							.println("case WHAT oao to query: " + oaoparts[0] + " " + oaoparts[1] + " " + oaoparts[2]);
+					String[][] resultset = pqm.query(firstpart1, oaoparts);
+					StringBuilder output = new StringBuilder();
+					for (int j = 0; j < resultset.length; j++) {
+						for (int k = 0; k < resultset[j].length; k++) {
+							if (k == (resultset[j].length - 1)) {
+								output.append(resultset[j][k] + "\n");
+							} else {
+								output.append(resultset[j][k] + " ");
+							}
+						}
+					}
+					JOptionPane.showMessageDialog(this, entertxt.getText() + "\n" + output.toString());
+					entertxt.setText("");
+					break;
+				}
+				if (questionOAO.toString().toLowerCase().contains("why")) {
+					// case using precondition
+					// TODO
+					break;
+				} else { // this falls through to DID DOES for action
+					String firstpart1 = "action";
 					PrologQueryMaster.updateFacts();
 					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
 					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
@@ -535,9 +561,9 @@ public class MyFrame extends JFrame implements ActionListener {
 				break;
 			}
 			//
-			
+
 		case "Enter":
-			if(mybox.getSelectedItem().equals("Story")){
+			if (mybox.getSelectedItem().equals("Story")) {
 				boolean object1correct = false;
 				boolean actioncorrect = false;
 				boolean object2correct = false;
@@ -546,51 +572,53 @@ public class MyFrame extends JFrame implements ActionListener {
 						NLPConnector.convertNLPToOAO(NLPConnector.analyze(entertxt.getText())));
 				System.out.print("Input in OAO is:  " + newOAO.toString() + "\n");
 				String[] oaoparts = newOAO.toString().split("\\s+");
-				for(int i = 0; i < oaoparts.length; i++){
+				for (int i = 0; i < oaoparts.length; i++) {
 					oaoparts[i] = oaoparts[i].toLowerCase();
 				}
 				String[] storyobjects = objectstring.toString().split("\\s+");
 				String[] storyactions = affordstring.toString().split("\\s+");
-				if(oaoparts.length == 2){
-					if(oaoparts[0].equals("_")){
+				if (oaoparts.length == 2) {
+					if (oaoparts[0].equals("_")) {
 						break;
 					}
-					for(int i = 0; i < storyobjects.length; i++){
-						if((oaoparts[0]).equals(storyobjects[i].toLowerCase())){
+					for (int i = 0; i < storyobjects.length; i++) {
+						if ((oaoparts[0]).equals(storyobjects[i].toLowerCase())) {
 							object1correct = true;
 							break;
 						}
 					}
-					for(int i = 0; i < storyactions.length; i++){
-						if(oaoparts[1].equals("_")){
+					for (int i = 0; i < storyactions.length; i++) {
+						if (oaoparts[1].equals("_")) {
 							break;
 						}
-						if((oaoparts[1]).equals(storyactions[i].toLowerCase())){
+						if ((oaoparts[1]).equals(storyactions[i].toLowerCase())) {
 							actioncorrect = true;
 							break;
 						}
 					}
-					if(object1correct == false){
-						//newOAO.append(" " + "new object " + oaoparts[0] + " added \n");
+					if (object1correct == false) {
+						// newOAO.append(" " + "new object " + oaoparts[0] + "
+						// added \n");
 						objectstring.append(oaoparts[0] + "\n");
 						objectList.setText(objectstring.toString());
 						String[] types_for_objects1 = new String[1];
-						String[] objects1 = {oaoparts[0]};
+						String[] objects1 = { oaoparts[0] };
 						SelectTypeFrame frame1 = new SelectTypeFrame(objects1, getTypes(), types_for_objects1);
 						frame1.setLocationRelativeTo(null);
 						frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 						frame1.pack();
 						frame1.setVisible(true);
 						try {
-							Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
-									getPrologTypesString(objects1, types_for_objects1).getBytes(), 
+							Files.write(Paths.get(PrologQueryMaster.TYPE_F),
+									getPrologTypesString(objects1, types_for_objects1).getBytes(),
 									StandardOpenOption.APPEND);
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
 					}
-					if(actioncorrect == false){
-						//newOAO.append(" " + "new affordance " + oaoparts[1] + " added \n");
+					if (actioncorrect == false) {
+						// newOAO.append(" " + "new affordance " + oaoparts[1] +
+						// " added \n");
 						affordstring.append(oaoparts[1] + "\n");
 						affordancesList.setText(affordstring.toString());
 						NLPConnector.convertOAOToProlog(newOAO.toString(), PrologQueryMaster.FACTS_FILE);
@@ -600,96 +628,100 @@ public class MyFrame extends JFrame implements ActionListener {
 					storytxt.setText(storystring.toString());
 					break;
 				}
-				if(oaoparts.length == 3){
-					for(int i = 0; i < storyobjects.length; i++){
-						if(oaoparts[0].equals("_")){
+				if (oaoparts.length == 3) {
+					for (int i = 0; i < storyobjects.length; i++) {
+						if (oaoparts[0].equals("_")) {
 							break;
-						}					
-						if((oaoparts[0]).equals(storyobjects[i].toLowerCase())){
+						}
+						if ((oaoparts[0]).equals(storyobjects[i].toLowerCase())) {
 							object1correct = true;
 							break;
 						}
 					}
-					if(object1correct == false){
-						//newOAO.append(" " + "new object " + oaoparts[0] + " added \n");
+					if (object1correct == false) {
+						// newOAO.append(" " + "new object " + oaoparts[0] + "
+						// added \n");
 						objectstring.append(oaoparts[0] + "\n");
 						objectList.setText(objectstring.toString());
 						String[] types_for_objects1 = new String[1];
-						String[] objects1 = {oaoparts[0]};
+						String[] objects1 = { oaoparts[0] };
 						SelectTypeFrame frame1 = new SelectTypeFrame(objects1, getTypes(), types_for_objects1);
 						frame1.setLocationRelativeTo(null);
 						frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 						frame1.pack();
 						frame1.setVisible(true);
 						try {
-							Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
-									getPrologTypesString(objects1, types_for_objects1).getBytes(), 
+							Files.write(Paths.get(PrologQueryMaster.TYPE_F),
+									getPrologTypesString(objects1, types_for_objects1).getBytes(),
 									StandardOpenOption.APPEND);
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
 					}
-					for(int i = 0; i < storyactions.length; i++){
-						if(oaoparts[1].equals("_")){
+					for (int i = 0; i < storyactions.length; i++) {
+						if (oaoparts[1].equals("_")) {
 							break;
 						}
-						if((oaoparts[1]).equals(storyactions[i].toLowerCase())){
+						if ((oaoparts[1]).equals(storyactions[i].toLowerCase())) {
 							actioncorrect = true;
 							break;
 						}
 					}
-					for(int i = 0; i < storyobjects.length; i++){
-						if(oaoparts[2].equals("_")){
+					for (int i = 0; i < storyobjects.length; i++) {
+						if (oaoparts[2].equals("_")) {
 							break;
 						}
-						if((oaoparts[2]).equals(storyobjects[i].toLowerCase())){
+						if ((oaoparts[2]).equals(storyobjects[i].toLowerCase())) {
 							object2correct = true;
 							break;
 						}
 					}
-					if(object1correct == false){
-						//newOAO.append(" " + "new object " + oaoparts[0] + " added \n");
+					if (object1correct == false) {
+						// newOAO.append(" " + "new object " + oaoparts[0] + "
+						// added \n");
 						objectstring.append(oaoparts[0] + "\n");
 						objectList.setText(objectstring.toString());
 						String[] types_for_objects1 = new String[1];
-						String[] objects1 = {oaoparts[0]};
+						String[] objects1 = { oaoparts[0] };
 						SelectTypeFrame frame1 = new SelectTypeFrame(objects1, getTypes(), types_for_objects1);
 						frame1.setLocationRelativeTo(null);
 						frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 						frame1.pack();
 						frame1.setVisible(true);
 						try {
-							Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
-									getPrologTypesString(objects1, types_for_objects1).getBytes(), 
+							Files.write(Paths.get(PrologQueryMaster.TYPE_F),
+									getPrologTypesString(objects1, types_for_objects1).getBytes(),
 									StandardOpenOption.APPEND);
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
 					}
-					if(object2correct == false){
-						//newOAO.append(" " + "new object " + oaoparts[2] + " added \n");
-						if(oaoparts[0].trim().equals(oaoparts[2].trim())){
+					if (object2correct == false) {
+						// newOAO.append(" " + "new object " + oaoparts[2] + "
+						// added \n");
+						if (oaoparts[0].trim().equals(oaoparts[2].trim())) {
 							break;
 						}
 						objectstring.append(oaoparts[2] + "\n");
 						objectList.setText(objectstring.toString());
 						String[] types_for_objects1 = new String[1];
-						String[] objects1 = {oaoparts[2]};
+						String[] objects1 = { oaoparts[2] };
 						SelectTypeFrame frame1 = new SelectTypeFrame(objects1, getTypes(), types_for_objects1);
 						frame1.setLocationRelativeTo(null);
 						frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 						frame1.pack();
 						frame1.setVisible(true);
 						try {
-							Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
-									getPrologTypesString(objects1, types_for_objects1).getBytes(), 
+							Files.write(Paths.get(PrologQueryMaster.TYPE_F),
+									getPrologTypesString(objects1, types_for_objects1).getBytes(),
 									StandardOpenOption.APPEND);
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
 					}
-					if(actioncorrect == false){
-						//newOAO.append(" " + "new affordance " + oaoparts[1] + " added \n");
+					if (actioncorrect == false) {
+						// newOAO.append(" " + "new affordance " + oaoparts[1] +
+						// " added \n");
 						affordstring.append(oaoparts[1] + "\n");
 						affordancesList.setText(affordstring.toString());
 						NLPConnector.convertOAOToProlog(newOAO.toString(), PrologQueryMaster.FACTS_FILE);
@@ -698,78 +730,91 @@ public class MyFrame extends JFrame implements ActionListener {
 					entertxt.setText("");
 					storytxt.setText(storystring.toString());
 					break;
-				}else{
+				} else {
 					entertxt.setText("");
-					JOptionPane.showMessageDialog(MyFrame.this,"Input was not able to be converted into a proper format. \n Please modify your setence.");
+					JOptionPane.showMessageDialog(MyFrame.this,
+							"Input was not able to be converted into a proper format. \n Please modify your setence.");
 				}
 				break;
 			}
-//			if(mybox.getSelectedItem().equals("Prolog")){
-//				PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-//				String query = entertxt.getText();
-//				String[] firstpart = query.split("\\(");
-//				String[] queryparts = firstpart[1].split("\\)|,|\\.");
-//				System.out.print(firstpart[0] + " " + queryparts[0] + " " + queryparts[1]);
-//				System.out.println(pqm.verify(firstpart[0], queryparts));
-//				JOptionPane.showMessageDialog(this,pqm.verify(firstpart[0], queryparts));
-//				break;
-//			}
-//			else if(mybox.getSelectedItem().equals("Question")){
-//				System.out.println(entertxt.getText());
-//				StringBuilder questionOAO = new StringBuilder(
-//						QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(entertxt.getText())));
-//				System.out.print("Query in OAO is:  " + questionOAO.toString() + "\n");
-//				String[] oaoparts = questionOAO.toString().split(" ");
-//				if(oaoparts.length == 2){
-//					//case  WAS with AMOD
-//					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-//					String firstpart1 = "trait";
-//					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
-//					entertxt.setText("");
-//					break;
-//				}
-//				if( questionOAO.toString().toLowerCase().contains("who")){
-//					for(int i = 0; i < oaoparts.length; i++){
-//						if(oaoparts[i].toLowerCase().equals("who")){
-//							oaoparts[i] = "X";
-//							break;
-//						}
-//					}
-//					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-//					String firstpart1 = "action";
-//					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
-//					entertxt.setText("");
-//					break;
-//				}
-//				if( questionOAO.toString().toLowerCase().contains("what")){
-//					for(int i = 0; i < oaoparts.length; i++){
-//						if(oaoparts[i].toLowerCase().equals("what")){
-//							oaoparts[i] = "X";
-//							break;
-//						}
-//					}
-//					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-//					String firstpart1 = "action";
-//					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
-//					entertxt.setText("");
-//					break;
-//				}else { //this falls through to DID DOES AND WAS for action
-//					String firstpart1 ="action";
-//					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-//					JOptionPane.showMessageDialog(this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
-//					entertxt.setText("");
-//				}
-//				break;
-//			}			
+			// if(mybox.getSelectedItem().equals("Prolog")){
+			// PrologQueryMaster pqm = new
+			// PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+			// String query = entertxt.getText();
+			// String[] firstpart = query.split("\\(");
+			// String[] queryparts = firstpart[1].split("\\)|,|\\.");
+			// System.out.print(firstpart[0] + " " + queryparts[0] + " " +
+			// queryparts[1]);
+			// System.out.println(pqm.verify(firstpart[0], queryparts));
+			// JOptionPane.showMessageDialog(this,pqm.verify(firstpart[0],
+			// queryparts));
+			// break;
+			// }
+			// else if(mybox.getSelectedItem().equals("Question")){
+			// System.out.println(entertxt.getText());
+			// StringBuilder questionOAO = new StringBuilder(
+			// QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(entertxt.getText())));
+			// System.out.print("Query in OAO is: " + questionOAO.toString() +
+			// "\n");
+			// String[] oaoparts = questionOAO.toString().split(" ");
+			// if(oaoparts.length == 2){
+			// //case WAS with AMOD
+			// PrologQueryMaster pqm = new
+			// PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+			// String firstpart1 = "trait";
+			// JOptionPane.showMessageDialog(this, entertxt.getText() +
+			// pqm.verify(firstpart1, oaoparts));
+			// entertxt.setText("");
+			// break;
+			// }
+			// if( questionOAO.toString().toLowerCase().contains("who")){
+			// for(int i = 0; i < oaoparts.length; i++){
+			// if(oaoparts[i].toLowerCase().equals("who")){
+			// oaoparts[i] = "X";
+			// break;
+			// }
+			// }
+			// PrologQueryMaster pqm = new
+			// PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+			// String firstpart1 = "action";
+			// JOptionPane.showMessageDialog(this, entertxt.getText() +
+			// pqm.verify(firstpart1, oaoparts));
+			// entertxt.setText("");
+			// break;
+			// }
+			// if( questionOAO.toString().toLowerCase().contains("what")){
+			// for(int i = 0; i < oaoparts.length; i++){
+			// if(oaoparts[i].toLowerCase().equals("what")){
+			// oaoparts[i] = "X";
+			// break;
+			// }
+			// }
+			// PrologQueryMaster pqm = new
+			// PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+			// String firstpart1 = "action";
+			// JOptionPane.showMessageDialog(this, entertxt.getText() +
+			// pqm.verify(firstpart1, oaoparts));
+			// entertxt.setText("");
+			// break;
+			// }else { //this falls through to DID DOES AND WAS for action
+			// String firstpart1 ="action";
+			// PrologQueryMaster pqm = new
+			// PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
+			// JOptionPane.showMessageDialog(this, entertxt.getText() +
+			// pqm.verify(firstpart1, oaoparts));
+			// entertxt.setText("");
+			// }
+			// break;
+			// }
 		case "Clear":
 			world = new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
 			objectstring = new StringBuilder();
 			affordstring = new StringBuilder();
 			storystring = new StringBuilder();
 			objectList.setText("");
-			affordancesList.setText("");	
+			affordancesList.setText("");
 			break;
-		case "Get File": 
+		case "Get File":
 			try {
 				if (filechooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = filechooser.getSelectedFile();
@@ -784,7 +829,7 @@ public class MyFrame extends JFrame implements ActionListener {
 					System.out.println("OAO facts are : \n" + storystring2.toString());
 					// ???????
 					NLPConnector.convertOAOToProlog(storystring2.toString(), PrologQueryMaster.FACTS_FILE);
-					this.storytxt.setText(storystring2.toString().replace("_",""));
+					this.storytxt.setText(storystring2.toString().replace("_", ""));
 					String[] parts1 = storystring2.toString().split("\\n+");
 					String[] objects1 = {};
 					String[] affords1;
@@ -796,10 +841,10 @@ public class MyFrame extends JFrame implements ActionListener {
 						for (int i = 0; i < 3; ++i) {
 							objects1 = objectstring.toString().split("\\s+");
 							affords1 = affordstring.toString().split("\\s+");
-							if(parts2[i].equals("_")){
+							if (parts2[i].equals("_")) {
 								continue;
 							}
-							if (i != 1 && parts2.length !=2) {
+							if (i != 1 && parts2.length != 2) {
 
 								// Checks if existing object, if not, then adds
 								// to object string
@@ -845,9 +890,8 @@ public class MyFrame extends JFrame implements ActionListener {
 					frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					frame1.pack();
 					frame1.setVisible(true);
-					Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
-							getPrologTypesString(objects1, types_for_objects1).getBytes(), 
-							StandardOpenOption.APPEND);
+					Files.write(Paths.get(PrologQueryMaster.TYPE_F),
+							getPrologTypesString(objects1, types_for_objects1).getBytes(), StandardOpenOption.APPEND);
 				}
 			} catch (Exception e1) {
 				e1.printStackTrace();
@@ -861,42 +905,51 @@ public class MyFrame extends JFrame implements ActionListener {
 			}
 			MyQuestions.ask(world, storystring.toString());
 			printOutWorld(world);
-			//GraphVisualizer gv = new GraphVisualizer(DbHelper.getAllNodes(), DbHelper.getAllEdges());
-			//gv.visualize();
+			// GraphVisualizer gv = new GraphVisualizer(DbHelper.getAllNodes(),
+			// DbHelper.getAllEdges());
+			// gv.visualize();
 		}
 	}
-	public static void handleNewTypes(){
-		typethread.resume();
-	}
-	public static void updateStorytxt(String newOAO){
+
+	public static void updateStorytxt(String newOAO) {
+
 		MyFrame.storystring.append(newOAO);
+		// USE HIGHLIGHTER
+		// ui.TextHighlighter.highlightText(storytxt, 0, newOAO.length());
 		MyFrame.storytxt.setText(storystring.toString());
 	}
-	public static String getEntertxt(){
+
+	public static String getEntertxt() {
 		return twostorytxt.getText();
 	}
-	public static boolean checkNewObject(String Object){
+
+	public static boolean checkNewObject(String Object) {
 		String[] objects1 = objectstring.toString().split("\\s+");
-		for(int i = 0; i < objects1.length; i++){
-			if(Object.equals(objects1[i])){
-				return true;
+
+		for (int i = 0; i < objects1.length; i++) {
+			if (Object.equals(objects1[i])) {
+				return false;
 			}
 		}
 		objectstring.append(Object + "\n");
 		objectList.setText(objectstring.toString());
 		return false;
 	}
-	public static boolean checkNewAffordance(String Action){
+
+	public static boolean checkNewAffordance(String Action) {
 		String[] affords1 = affordstring.toString().split("\\s+");
-		for(int i = 0; i < affords1.length; i++){
-			if(Action.equals(affords1[i])){
-				return true;
+
+		for (int i = 0; i < affords1.length; i++) {
+			if (Action.equals(affords1[i])) {
+				return false;
+
 			}
 		}
 		affordstring.append(Action + "\n");
 		affordancesList.setText(affordstring.toString());
 		return false;
 	}
+
 	public String removeIsFromString(String storysection) {
 		String[] lines = storysection.split("\\n");
 		String newString = "";
@@ -1202,12 +1255,12 @@ public class MyFrame extends JFrame implements ActionListener {
 		out.println("Prolog type statements are: \n" + result);
 		return result;
 	}
-	public void addType(String type){
+
+	public void addType(String type) {
 		try {
-			resultset = stmt.executeQuery("SELECT Name " +
-										  "FROM Types");
-			while(resultset.next()) {
-				if(type.equals(resultset.getString(1))){
+			resultset = stmt.executeQuery("SELECT Name " + "FROM Types");
+			while (resultset.next()) {
+				if (type.equals(resultset.getString(1))) {
 					System.out.print("type already exists");
 					return;
 				}
@@ -1216,34 +1269,33 @@ public class MyFrame extends JFrame implements ActionListener {
 			stmt.execute(sql);
 			System.out.print("Type " + type + "inserted");
 			return;
-		
-		}catch (SQLException e) {
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	public static String[] getTypes(){
+
+	public static String[] getTypes() {
 		int numOfRows = 0;
 		int i = 0;
 		String[] types = null;
-		try{
-			resultset = stmt.executeQuery("SELECT Name " +
-										  "FROM Types");
-			
-			while(resultset.next()){
-				//types[i] = resultset.getString(1);
+		try {
+			resultset = stmt.executeQuery("SELECT Name " + "FROM Types");
+
+			while (resultset.next()) {
+				// types[i] = resultset.getString(1);
 				numOfRows++;
 			}
 			types = new String[numOfRows];
 			System.out.println(numOfRows);
-			resultset = stmt.executeQuery("SELECT Name " +
-					  "FROM Types");
+			resultset = stmt.executeQuery("SELECT Name " + "FROM Types");
 
-			while(resultset.next()){
+			while (resultset.next()) {
 				types[i] = resultset.getString(1);
 				i++;
 			}
 			return types;
-		}catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return types;

@@ -1,16 +1,14 @@
+import java.util.ArrayList;
 
 public class StoryProblemObject {
-	public String[] oao;
-	public String[] gettypes;
-	public boolean type;
-	public boolean error;
-	StoryProblemObject next;
 	
-	public StoryProblemObject(String OAO,String[] gettypes, boolean type, boolean error){
-		this.oao = OAO.toString().split("\\s+");
-		this.gettypes = gettypes;
-		this.type = type;
-		this.error = error;
-		next = null;
+	public String oaoText;
+	public String originalNLPText;
+	public String errorMessage;
+	
+	public StoryProblemObject(String oaoText, String originalNLPText, String errorMessage) {
+		this.oaoText = oaoText;
+		this.originalNLPText = originalNLPText;
+		this.errorMessage = errorMessage;
 	}
 }

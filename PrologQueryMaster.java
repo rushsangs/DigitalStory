@@ -181,13 +181,14 @@ public class PrologQueryMaster {
 		try {
 			String[] fns = {"action", "trait", "type", "error"};
 			String[][] files = {
-				{ACTION_F, ACTION_R1},
-				{TRAIT_F, TRAIT_R},
-				{TYPE_F},
-				{ERROR_R}
-			};
+					{ACTION_F, ACTION_R1},
+					{TRAIT_F, TRAIT_R},
+					{TYPE_F},
+					{ERROR_R}
+				};
 			final int NUM_MSG_ARGS = 2;
 			Files.write(Paths.get(TMP), "".getBytes());
+			
 			for (int i = 0; i<fns.length; i++) {
 				if (fnName.equals(fns[i])) {
 					String stmt;
@@ -200,11 +201,11 @@ public class PrologQueryMaster {
 					}
 					Files.write(Paths.get(TMP), stmt.getBytes(), StandardOpenOption.APPEND);
 				}
-
 				for (String file : files[i]) {
 					Files.write(Paths.get(TMP), Files.readAllBytes(Paths.get(file)), StandardOpenOption.APPEND);
 				}
 			}
+			
 			String[] errorArgNames = new String[argNames.length+NUM_MSG_ARGS+1];
 			errorArgNames[0] = "_";
 			errorArgNames[1] = "_";
@@ -218,6 +219,96 @@ public class PrologQueryMaster {
 			for (int i = 0; i<rs.length; i++) {
 				ret[i] = String.format(rs[i][0].substring(1, rs[i][0].length()-1).replace("\\x20\\", " "), 
 						(Object[])rs[i][1].substring(1, rs[i][1].length()-1).split(","));
+			}
+			return ret;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static StoryProblemObject[] getError(int index) {
+		try {
+			String fnName = null;
+			String[] argNames = null;
+			String[] fns = {"action", "trait", "type", "error"};
+			// NOTE: don't actually use ACTION_F or TRAIT_F
+			String[][] files = {
+					{ACTION_F, ACTION_R1},
+					{TRAIT_F, TRAIT_R},
+					{TYPE_F},
+					{ERROR_R}
+				};
+			final int NUM_MSG_ARGS = 2;
+			Files.write(Paths.get(TMP), "".getBytes());
+			
+			// set up replacement for ACTION_F and TRAIT_F
+			ArrayList<String> actionf = new ArrayList<String>();
+			ArrayList<String> traitf = new ArrayList<String>();
+			String oaoText = ""; // TODO: temp
+			String[] oaoList = oaoText.split("\\n");
+			for (int i = 0; i<=index; i++) { // TODO: check if line number is indexed starting at 1 or 0
+				String line = oaoList[i].trim();
+				if (line.length()==0) {
+					continue;
+				}
+				String proline = NLPConnector.convertOAOToProlog(line, null);
+				String currFnName = line.split("[\\(\\)]")[0];
+				if (currFnName.equals("action")) {
+					actionf.add(proline);
+				} else if (currFnName.equals("trait")) {
+					traitf.add(proline);
+				}
+				if (i==index) {
+					fnName = currFnName;
+					argNames = line.split("[\\(\\)]")[1].split(",");
+					for (int j = 0; j<argNames.length; j++) {
+						argNames[j] = argNames[j].trim();
+					}
+				}
+			}
+			
+			for (int i = 0; i<fns.length; i++) {
+				if (fnName.equals(fns[i])) {
+					String stmt;
+					if (fnName.equals("action")) {
+						stmt = String.format(NLPConnector.ACTION, argNames[0], argNames[1], argNames[2]);
+					} else if (fnName.equals("trait")) {
+						stmt = String.format(NLPConnector.TRAIT, argNames[0], argNames[1]);
+					} else {
+						stmt = "";
+					}
+					Files.write(Paths.get(TMP), stmt.getBytes(), StandardOpenOption.APPEND);
+				}
+				for (String file : files[i]) {
+					if (file.equals(ACTION_F)) {
+						// use replacement of ACTION_F instead
+						Files.write(Paths.get(TMP), actionf, StandardOpenOption.APPEND);
+					} else if (file.equals(TRAIT_F)) {
+						// use replacement of TRAIT_F instead
+						Files.write(Paths.get(TMP), actionf, StandardOpenOption.APPEND);
+					} else {
+						Files.write(Paths.get(TMP), Files.readAllBytes(Paths.get(file)), StandardOpenOption.APPEND);
+					}
+				}
+			}
+			
+			String[] errorArgNames = new String[argNames.length+NUM_MSG_ARGS+1];
+			errorArgNames[0] = "_";
+			errorArgNames[1] = "_";
+			errorArgNames[2] = fnName;
+			for (int i = 0; i<argNames.length; i++) {
+				errorArgNames[i+NUM_MSG_ARGS+1] = argNames[i];
+			}
+			PrologQueryMaster pqm = new PrologQueryMaster(TMP);
+			String[][] rs = pqm.query("error", errorArgNames);
+			StoryProblemObject[] ret = new StoryProblemObject[rs.length];
+			for (int i = 0; i<rs.length; i++) {
+				ret[i] = new StoryProblemObject(
+						null, //TODO 
+						null, //TODO
+						String.format(rs[i][0].substring(1, rs[i][0].length()-1).replace("\\x20\\", " "), 
+						(Object[])rs[i][1].substring(1, rs[i][1].length()-1).split(",")));
 			}
 			return ret;
 		} catch (IOException e) {
