@@ -19,8 +19,10 @@ public class StoryProblemHandler implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		while (updated) {
-			
+		while (true) {
+			if (!updatedSentencesList.isEmpty()) {
+				
+			}
 		}
 	}
 }
