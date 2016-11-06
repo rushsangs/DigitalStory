@@ -24,6 +24,7 @@ import edu.stanford.nlp.util.CoreMap;
 public class NLPConnector {
 	public final static String ACTION = "action(%s, %s, %s).\n";
 	public final static String TRAIT = "trait(%s, %s).\n";
+
 	public static String analyze(String storytext, String fileURI) {
 		Properties props = new Properties();
 		props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
@@ -77,7 +78,8 @@ public class NLPConnector {
 		}
 		return result;
 	}
-	//this one below is for Questioning, and doesn't write to a file
+
+	// this one below is for Questioning, and doesn't write to a file
 	public static String analyze(String storytext) {
 		Properties props = new Properties();
 		props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
@@ -109,21 +111,21 @@ public class NLPConnector {
 			}
 
 		}
-		
-			for (int i = 0; i < sentences.size(); ++i) {
-				CoreMap test_sentence = sentences.get(i);
-				String tmp = test_sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class)
-						.toString(SemanticGraph.OutputFormat.LIST);
-				for (CorefChainNode ccn : master_coref_list) {
-					if (ccn.line_no - 1 == i) {
-						System.out.println(ccn.word + " replaced by " + ccn.root_word);
-						tmp = tmp.replaceAll(ccn.word, ccn.root_word);
-					}
-				}
-				result += tmp;
 
+		for (int i = 0; i < sentences.size(); ++i) {
+			CoreMap test_sentence = sentences.get(i);
+			String tmp = test_sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class)
+					.toString(SemanticGraph.OutputFormat.LIST);
+			for (CorefChainNode ccn : master_coref_list) {
+				if (ccn.line_no - 1 == i) {
+					System.out.println(ccn.word + " replaced by " + ccn.root_word);
+					tmp = tmp.replaceAll(ccn.word, ccn.root_word);
+				}
 			}
-		
+			result += tmp;
+
+		}
+
 		return result;
 	}
 
@@ -138,9 +140,11 @@ public class NLPConnector {
 		List<String[]> compoundprt = new ArrayList<String[]>();
 
 		for (int i = 0; i < sentences.length; ++i) {
+			
 			String sentence = sentences[i];
 			sentence = sentence.toLowerCase();
 			result += addAmodIfPresent(sentences[i]);
+			int tmp_length = result.length();
 			conjunctions.clear();
 			nsub.clear();
 			dobj.clear();
@@ -164,7 +168,7 @@ public class NLPConnector {
 					if (affordance_dobj.equals(affordance)) {
 						// match found: sequence of afforder affordance affordee
 						result += removeHyphen(afforder) + " " + removeHyphen(affordance) + " " + removeHyphen(affordee)
-								+ "\n";
+								+ ", ";
 						flag = 1;
 					}
 
@@ -174,30 +178,30 @@ public class NLPConnector {
 						if (afforder.equals(conj1) && affordance_dobj.equals(affordance)) {
 							// we have two statements with different afforders
 							result += removeHyphen(conj2) + " " + removeHyphen(affordance) + " "
-									+ removeHyphen(affordee) + "\n";
+									+ removeHyphen(affordee) + ", ";
 
 						}
 						if (affordance.equals(conj1) && affordance_dobj.equals(conj2)) {
 							// we have two statements with the same affordance
 							result += removeHyphen(afforder) + " " + removeHyphen(conj2) + " " + removeHyphen(affordee)
-									+ "\n";
+									+ ", ";
 						}
 						if (affordee.equals(conj1) && affordance_dobj.equals(affordance)) {
 							// we have two statements with different affordees
 							result += removeHyphen(afforder) + " " + removeHyphen(affordance) + " "
-									+ removeHyphen(conj2) + "\n";
+									+ removeHyphen(conj2) + ", ";
 						}
 					}
 
 				}
-				
+
 				for (String[] compoundprt_pair : compoundprt) {
 					String affordance_compoundprt = compoundprt_pair[0].trim();
 					String affordee = compoundprt_pair[1].trim();
 					if (affordance_compoundprt.equals(affordance)) {
 						// match found: sequence of afforder affordance affordee
-						result += removeHyphen(afforder) + " " + removeHyphen(affordance) + "-" + removeHyphen(affordee) + " _"
-								+ "\n";
+						result += removeHyphen(afforder) + " " + removeHyphen(affordance) + "-" + removeHyphen(affordee)
+								+ " _" + ", ";
 						flag = 1;
 					}
 
@@ -207,18 +211,18 @@ public class NLPConnector {
 						if (afforder.equals(conj1) && affordance_compoundprt.equals(affordance)) {
 							// we have two statements with different afforders
 							result += removeHyphen(conj2) + " " + removeHyphen(affordance) + "-"
-									+ removeHyphen(affordee) + "\n";
+									+ removeHyphen(affordee) + ", ";
 
 						}
 						if (affordance.equals(conj1) && affordance_compoundprt.equals(conj2)) {
 							// we have two statements with the same affordance
-							result += removeHyphen(afforder) + " " + removeHyphen(conj2) + "-" + removeHyphen(affordee) + " _"
-									+ "\n";
+							result += removeHyphen(afforder) + " " + removeHyphen(conj2) + "-" + removeHyphen(affordee)
+									+ " _" + ", ";
 						}
 						if (affordee.equals(conj1) && affordance_compoundprt.equals(affordance)) {
 							// we have two statements with different affordees
 							result += removeHyphen(afforder) + " " + removeHyphen(affordance) + "-"
-									+ removeHyphen(conj2) + " _\n";
+									+ removeHyphen(conj2) + " _,";
 						}
 					}
 
@@ -229,8 +233,7 @@ public class NLPConnector {
 					String affordee = cop_pair[1].trim();
 					if (affordee.equals(affordance)) {
 						// match found: sequence of afforder affordance affordee
-						result += removeHyphen(afforder) + " is "
-								+ removeHyphen(affordee) + "\n";
+						result += removeHyphen(afforder) + " is " + removeHyphen(affordee) + ", ";
 						flag = 1;
 					}
 
@@ -239,23 +242,22 @@ public class NLPConnector {
 						String conj2 = cc_result[1].trim();
 						if (afforder.equals(conj1) && affordee.equals(affordance)) {
 							// we have two statements with different afforders
-							result += removeHyphen(conj2) +" is "
-									+ removeHyphen(affordee) + "\n";
+							result += removeHyphen(conj2) + " is " + removeHyphen(affordee) + ", ";
 
 						}
 						if (affordance.equals(conj1) && affordee.equals(conj2)) {
 							// we have two statements with the same affordance
-							result += removeHyphen(afforder) + " is " + removeHyphen(affordee)
-									+ "\n";
+							result += removeHyphen(afforder) + " is " + removeHyphen(affordee) + ", ";
 						}
 						if (affordee.equals(conj1) && affordee.equals(affordance)) {
 							// we have two statements with different affordees
-							result += removeHyphen(afforder) + " is "
-									+ removeHyphen(conj2) + "\n";
+							result += removeHyphen(afforder) + " is " + removeHyphen(conj2) + ", ";
 						}
 					}
 
 				}
+				if (tmp_length != result.length())
+					result = result + "\n";
 			}
 		}
 		out.println(result);
@@ -265,20 +267,31 @@ public class NLPConnector {
 	public static String convertOAOToProlog(String oaotext, String outputFile) {
 		StringBuilder result_action = new StringBuilder();
 		StringBuilder result_trait = new StringBuilder();
-		for (String oao : oaotext.split("\\n")) {
-			String[] args = oao.split(" ");
-			for (int i = 0; i < args.length; i++) {
-				args[i] = args[i].toLowerCase();
+		for (String oao_line : oaotext.split("\\n")) {
+			String[] oao_pieces = oao_line.split(",");
+			if (oao_pieces.length == 0)
+				continue;
+			for (String oao : oao_pieces) {
+				oao =oao.replace(",", "");
+				String[] args = oao.split(" ");
+				if (args.length < 3)
+					continue;
+				for (int i = 0; i < args.length; i++) {
+					args[i] = args[i].toLowerCase();
+				}
+				if (args[1].equalsIgnoreCase("is"))
+					result_trait.append(String.format(TRAIT, args[0], args[2]));
+				else
+					result_action.append(String.format(ACTION, args[0], args[1], args[2]));
 			}
-			if(args[1].equalsIgnoreCase("is"))
-				result_trait.append(String.format(TRAIT, args[0], args[2]));
-			else
-				result_action.append(String.format(ACTION, args[0], args[1], args[2]));
+
 		}
-		if (outputFile!=null) {
+		if (outputFile != null) {
 			try {
-					Files.write(Paths.get(PrologQueryMaster.ACTION_F), result_action.toString().getBytes(), StandardOpenOption.APPEND);
-					Files.write(Paths.get(PrologQueryMaster.TRAIT_F), result_trait.toString().getBytes(), StandardOpenOption.APPEND);
+				Files.write(Paths.get(PrologQueryMaster.ACTION_F), result_action.toString().getBytes(),
+						StandardOpenOption.APPEND);
+				Files.write(Paths.get(PrologQueryMaster.TRAIT_F), result_trait.toString().getBytes(),
+						StandardOpenOption.APPEND);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -296,7 +309,7 @@ public class NLPConnector {
 				String afforder = s.substring(5, s.indexOf(","));
 				String attribute = s.substring(s.indexOf(",") + 1, s.indexOf(")"));
 				result += afforder.substring(0, afforder.lastIndexOf('-')) + " is"
-						+ attribute.substring(0, attribute.lastIndexOf('-')) + "\n";
+						+ attribute.substring(0, attribute.lastIndexOf('-')) + ", \n";
 
 			}
 		}
@@ -393,7 +406,7 @@ public class NLPConnector {
 		return result;
 	}
 
-	//compound:prt works the same as nsub
+	// compound:prt works the same as nsub
 	private static List<String[]> getCompundPrtIfPresent(String sentence) {
 		List<String[]> result = new ArrayList<String[]>();
 		while (sentence.indexOf("compound:prt(") >= 0) {
@@ -415,7 +428,7 @@ public class NLPConnector {
 		}
 		return result;
 	}
-	
+
 	public static int getMinOfTwo(int a, int b) {
 		if (a < 0 && b < 0)
 			return -1;

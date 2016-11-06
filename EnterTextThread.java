@@ -81,8 +81,13 @@ public class EnterTextThread implements Runnable {
 			} else {
 				// user is in the middle and is editing some string with errors
 				System.out.println("editing string");
+				
 				storystring = MyFrame.getEntertxt();
 				problemSentenceNo = cursorCurrentSentence;
+				StoryProblemObject[] problems = MyFrame.problemthread.detectProblems(problemSentenceNo);
+				for(StoryProblemObject problem: problems){
+					System.out.println(problem.errorMessage);
+				}
 				cursorLocation = textArea.getCaretPosition();
 				cursorCurrentSentence = storystring.substring(0, cursorLocation).split("\\.").length - 1;
 				while (cursorCurrentSentence == problemSentenceNo) {
