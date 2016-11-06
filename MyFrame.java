@@ -36,6 +36,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	static StringBuilder storystring = new StringBuilder();
 	static StringBuilder objectstring = new StringBuilder();
 	static StringBuilder affordstring = new StringBuilder();
+	static StringBuilder historystring = new StringBuilder();
 	ArrayList<DigitalObject> objects2;
 	static DigitalStoryWorld world;
 	public static Connection con;
@@ -56,8 +57,15 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JPanel labelpanel = new JPanel();
 	private JLabel storylabel = new JLabel("Input Story");
 	private JScrollPane storypane;
-	public static JTextArea storytxt = new JTextArea(15, 15);
-	public static JTextArea twostorytxt = new JTextArea(15, 15);
+	public static JTextArea storytxt = new JTextArea(8, 8);
+	public static JTextArea twostorytxt = new JTextArea(16, 16);
+	public static JTextArea historytxt = new JTextArea(8, 8);
+	private JPanel subtxtpanel = new JPanel();
+	private JPanel jpanel1 = new JPanel();
+	private JPanel jpanel2 = new JPanel();
+	private JLabel storyoaolabel = new JLabel("Story OAO");
+	private JLabel errorhistorylabel = new JLabel("Error History");
+	private JScrollPane historypane;
 	private JPanel twostorypanel = new JPanel();
 	private JScrollPane twostorypane;
 	// Bottom panel
@@ -75,7 +83,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	private JButton clear = new JButton("Clear");
 	private JButton getfile = new JButton("Get File");
 	private JFileChooser filechooser = new JFileChooser();
-	public String[] mylist = new String[] { "Prolog", "Question", "Story" };
+	public String[] mylist = new String[] {"Prolog", "Question"};
 	private JComboBox<String> mybox = new JComboBox<String>(mylist);
 	
 	public MyFrame(DigitalStoryWorld world, StoryProblemHandler problemthread, EnterTextThread enterthread) {
@@ -105,9 +113,20 @@ public class MyFrame extends JFrame implements ActionListener {
 		storytxtpanel.add(labelpanel, BorderLayout.NORTH);
 		storypane = new JScrollPane(storytxt);
 		twostorypane = new JScrollPane(twostorytxt);
+		historypane = new JScrollPane(historytxt);
+		jpanel1.setLayout(new BorderLayout(10,10));
+		jpanel1.add(storyoaolabel, BorderLayout.NORTH);
+		jpanel1.add(storypane, BorderLayout.CENTER);
+		jpanel2.setLayout(new BorderLayout(10,10));
+		jpanel2.add(errorhistorylabel, BorderLayout.NORTH);
+		jpanel2.add(historypane, BorderLayout.CENTER);
+		historytxt.setEditable(false);
 		twostorypanel.setLayout(new GridLayout(2, 1));
-		twostorypanel.add(storypane);
 		twostorypanel.add(twostorypane);
+		subtxtpanel.setLayout(new GridLayout(1,2));
+		subtxtpanel.add(jpanel1);
+		subtxtpanel.add(jpanel2);
+		twostorypanel.add(subtxtpanel);
 		storytxtpanel.add(twostorypanel, BorderLayout.CENTER);
 		enterpanel.setLayout(new BorderLayout(10, 10));
 		enterpanel.add(enterlabel, BorderLayout.WEST);
@@ -351,7 +370,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		generatepanel.add(addtype);
 		addtype.addActionListener(this);
 		query.addActionListener(this);
-		generatepanel.add(generate);
+		//generatepanel.add(generate);
 		generate.addActionListener(this);
 		generatepanel.add(clear);
 		clear.addActionListener(this);
@@ -929,6 +948,10 @@ public class MyFrame extends JFrame implements ActionListener {
 			// DbHelper.getAllEdges());
 			// gv.visualize();
 		}
+	}
+	public static void updateHistorytxt(String error){
+		historystring.append(error + "\n");
+		historytxt.setText(historystring.toString());
 	}
 	public static void updateOAOtxt(String newOAO, int index){
 		String[] oaoparts = MyFrame.storystring.toString().split("\n");
