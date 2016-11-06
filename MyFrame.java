@@ -469,7 +469,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				boolean isDone = false;
 				System.out.println(entertxt.getText());
 				StringBuilder questionOAO = new StringBuilder(
-						QANLPConnector.convertNLPToOAO(QANLPConnector.analyze(entertxt.getText())));
+						NLPConnector.convertNLPToOAO(NLPConnector.analyze(entertxt.getText())));
 				System.out.print("Query in OAO is:  " + questionOAO.toString() + "\n");
 				String[] oaoparts = questionOAO.toString().split(" ");
 				if (oaoparts.length == 2) {
@@ -869,57 +869,62 @@ public class MyFrame extends JFrame implements ActionListener {
 					// ???????
 					NLPConnector.convertOAOToProlog(storystring2.toString(), PrologQueryMaster.FACTS_FILE);
 					this.storytxt.setText(storystring2.toString().replace("_", ""));
-					String[] parts1 = storystring2.toString().split("\\n+");
+					String[] lines = storystring2.toString().split("\\n+");
 					String[] objects1 = {};
 					String[] affords1;
 					analyze(storystring2.toString(), world);
 					storystring = storystring2;
 
-					for (int j = 0; j < parts1.length; j++) {
-						String[] parts2 = parts1[j].split("\\s+");
-						for (int i = 0; i < 3; ++i) {
-							objects1 = objectstring.toString().split("\\s+");
-							affords1 = affordstring.toString().split("\\s+");
-							if (parts2[i].equals("_")) {
+					for (int l = 0; l < lines.length; l++) {
+						String[] parts1 = lines[l].split(",");
+						for (int j = 0; j < parts1.length; j++) {
+							parts1[j] = parts1[j].trim();
+							String[] parts2 = parts1[j].split("\\s+");
+							if(parts2.length<3)
 								continue;
-							}
-							if (i != 1 && parts2.length != 2) {
+							for (int i = 0; i < 3; ++i) {
+								objects1 = objectstring.toString().split("\\s+");
+								affords1 = affordstring.toString().split("\\s+");
+								if (parts2[i].equals("_")) {
+									continue;
+								}
+								if (i != 1 && parts2.length != 2) {
 
-								// Checks if existing object, if not, then adds
-								// to object string
-								int k;
-								for (k = 0; k < objects1.length; k++) {
-									if (parts2[i].equals(objects1[k])) {
-										break;
+									// Checks if existing object, if not, then adds
+									// to object string
+									int k;
+									for (k = 0; k < objects1.length; k++) {
+										if (parts2[i].equals(objects1[k])) {
+											break;
+										}
+									}
+									if (k == objects1.length) {
+										objectstring.append(parts2[i] + "\n");
+										// objectList.setText(objectstring.toString());
+										continue;
 									}
 								}
-								if (k == objects1.length) {
-									objectstring.append(parts2[i] + "\n");
-									// objectList.setText(objectstring.toString());
-									continue;
-								}
-							}
-							if (i == 1) {
-								// Checks if action is already in the action
-								// string, if not then adds it
-								int k;
-								if (parts2[i].equals("is")) {
-									break;
-								}
-								for (k = 0; k < affords1.length; k++) {
-									if (parts2[i].equals(affords1[k])) {
+								if (i == 1) {
+									// Checks if action is already in the action
+									// string, if not then adds it
+									int k;
+									if (parts2[i].equals("is")) {
 										break;
 									}
-								}
-								if (k == affords1.length) {
-									affordstring.append(parts2[i] + "\n");
-									// affordancesList.setText(affordstring.toString());
-									continue;
+									for (k = 0; k < affords1.length; k++) {
+										if (parts2[i].equals(affords1[k])) {
+											break;
+										}
+									}
+									if (k == affords1.length) {
+										affordstring.append(parts2[i] + "\n");
+										// affordancesList.setText(affordstring.toString());
+										continue;
+									}
 								}
 							}
-						}
+						} 
 					}
-
 					objectList.setText(objectstring.toString());
 					affordancesList.setText(affordstring.toString());
 
@@ -981,15 +986,18 @@ public class MyFrame extends JFrame implements ActionListener {
 	}
 
 	public static boolean checkNewObject(String Object) {
-		String[] objects1 = objectstring.toString().split("\\s+");
-
-		for (int i = 0; i < objects1.length; i++) {
-			if (Object.equals(objects1[i])) {
-				return false;
+		String[] lines = objectstring.toString().split(",");
+		
+		for (int j = 0; j < lines.length; j++) {
+			String[] objects1 = lines[j].split("\\s+");
+			for (int i = 0; i < objects1.length; i++) {
+				if (Object.equals(objects1[i])) {
+					return false;
+				}
 			}
+			objectstring.append(Object + "\n");
+			objectList.setText(objectstring.toString());
 		}
-		objectstring.append(Object + "\n");
-		objectList.setText(objectstring.toString());
 		return true;
 	}
 

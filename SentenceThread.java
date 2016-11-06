@@ -37,31 +37,39 @@ public class SentenceThread extends Thread implements Runnable{
 			}
 			return;
 		}
-		String[] oaoparts = newOAO.toString().split("\\s+");
-		for(int i = 0; i < oaoparts.length; i++){
-			oaoparts[i] = oaoparts[i].toLowerCase();
-		}
-		for(int i = 0; i < oaoparts.length;i++){
-			if(i == 0){
-				object1correct = MyFrame.checkNewObject(oaoparts[0]);
-				if(object1correct == true ){
-					MyFrame.newobjects.add(oaoparts[0]);
-					System.out.println("new object added:" + oaoparts[0]);
+		String[] oaoline = newOAO.toString().split(",");
+		
+		for (int j = 0; j < oaoline.length; j++) {
+			String[] oaoparts = oaoline[j].trim().split("\\s+");
+			if(oaoparts.length<3)
+				continue;
+			for (int i = 0; i < oaoparts.length; i++) {
+				oaoparts[i] = oaoparts[i].toLowerCase();
+			}
+			for (int i = 0; i < oaoparts.length; i++) {
+				if(oaoparts[i].equals(" "))
+					continue;
+				if (i == 0) {
+					object1correct = MyFrame.checkNewObject(oaoparts[0]);
+					if (object1correct == true) {
+						MyFrame.newobjects.add(oaoparts[0]);
+						System.out.println("new object added:" + oaoparts[0]);
+					}
+					continue;
 				}
-				continue;
-			}
-			if(i == 1){
-				actioncorrect = MyFrame.checkNewAffordance(oaoparts[1]);
-				continue;
-			}
-			if( i == 2){
-				object2correct = MyFrame.checkNewObject(oaoparts[2]);
-				if(object2correct == true ){
-					MyFrame.newobjects.add(oaoparts[2]);
-					System.out.println("new object added:" + oaoparts[2]);
+				if (i == 1) {
+					actioncorrect = MyFrame.checkNewAffordance(oaoparts[1]);
+					continue;
 				}
-				continue;
-			}
+				if (i == 2) {
+					object2correct = MyFrame.checkNewObject(oaoparts[2]);
+					if (object2correct == true) {
+						MyFrame.newobjects.add(oaoparts[2]);
+						System.out.println("new object added:" + oaoparts[2]);
+					}
+					continue;
+				}
+			} 
 		}
 		if(isUpdate == false){
 			MyFrame.problemthread.appendSentence(newOAO.toString(), this.sentence);
