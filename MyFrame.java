@@ -95,9 +95,9 @@ public class MyFrame extends JFrame implements ActionListener {
 		objectpanel.add(objectpane, BorderLayout.CENTER);
 		affordpanel.setLayout(new BorderLayout(10, 10));
 		affordancesList.setEditable(false);
-		affordpanel.add(affordances, BorderLayout.NORTH);
+		//affordpanel.add(affordances, BorderLayout.NORTH);
 		affordpane = new JScrollPane(affordancesList);
-		affordpanel.add(affordpane, BorderLayout.CENTER);
+		//affordpanel.add(affordpane, BorderLayout.CENTER);
 		storytxtpanel.setLayout(new BorderLayout(10, 10));
 		storytxt.setEditable(false);
 		labelpanel.setLayout(new BorderLayout(10, 10));
@@ -106,8 +106,8 @@ public class MyFrame extends JFrame implements ActionListener {
 		storypane = new JScrollPane(storytxt);
 		twostorypane = new JScrollPane(twostorytxt);
 		twostorypanel.setLayout(new GridLayout(2, 1));
-		twostorypanel.add(storypane);
 		twostorypanel.add(twostorypane);
+		twostorypanel.add(storypane);
 		storytxtpanel.add(twostorypanel, BorderLayout.CENTER);
 		enterpanel.setLayout(new BorderLayout(10, 10));
 		enterpanel.add(enterlabel, BorderLayout.WEST);
