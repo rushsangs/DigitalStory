@@ -35,7 +35,7 @@ public class EnterTextThread implements Runnable {
 //			System.out.println(storystring+ "       qqqqq      ");
 			int cursorLocation = MyFrame.twostorytxt.getCaretPosition();
 			int cursorCurrentSentence = storystring.substring(0, cursorLocation).split("\\.").length - 1;
-//			System.out.println("Cursor current sentence is " + cursorCurrentSentence + " and number of sentences are " + sentences.length);
+			System.out.println("Cursor current sentence is " + cursorCurrentSentence + " and number of sentences are " + sentences.length);
 			if (cursorCurrentSentence == sentences.length - 1) {
 				// user is towards the end and is editing things
 				while (basecase == false) {
@@ -47,7 +47,8 @@ public class EnterTextThread implements Runnable {
 						continue;
 					} else {
 						String substring = storystring.substring(0, storystring.indexOf("."));
-//						System.out.println(substring + "append sentence");
+						System.out.println(substring + " append sentence");
+						System.out.println("Created new thread for first sentence/ base case");
 						root = new SentenceThread(substring, false, 0); 									
 						root.start();
 						lastdelimiter = storystring.indexOf(".") + 1;
@@ -68,9 +69,10 @@ public class EnterTextThread implements Runnable {
 						String substring = storystring.substring(lastdelimiter,
 								storystring.indexOf(".", lastdelimiter));
 						lastdelimiter = storystring.indexOf(".", lastdelimiter) + 1;
+						
 						System.out.println(substring + "append sentence");
-						// TODO append
-						insertNode(substring, false, problemSentenceNo);
+						System.out.println("Creating thread which is new sentence");
+						insertNode(substring, false, storystring.split("\\.").length-1);
 					}
 					
 
@@ -78,7 +80,7 @@ public class EnterTextThread implements Runnable {
 //				System.out.println("broken out");
 			} else {
 				// user is in the middle and is editing some string with errors
-//				System.out.println("editing string");
+				System.out.println("editing string");
 				storystring = MyFrame.getEntertxt();
 				problemSentenceNo = cursorCurrentSentence;
 				cursorLocation = textArea.getCaretPosition();
@@ -90,13 +92,11 @@ public class EnterTextThread implements Runnable {
 					continue;
 				}
 				// sentence editting complete
+				System.out.println("Thread creaated which is updating edited sentence");
 				String newSentence = storystring.split("\\.")[problemSentenceNo];
 				Thread root = new SentenceThread(newSentence, true, problemSentenceNo);
 				root.start();
-//				System.out.println(newSentence + " updateSentence");
-				// TODO updateSentence
-				//TODO replace OAO in UI when changed
-
+				System.out.println(newSentence + " updateSentence");
 			}
 		}
 	}

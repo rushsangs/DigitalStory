@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 public class Main {
 
 	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
 		//initialize frame
 		//ArrayList<DigitalObject> objects= new ArrayList<DigitalObject>();
 
@@ -19,19 +20,18 @@ public class Main {
 		for (String fileName : PrologQueryMaster.ALL_FILES_TO_CREATE) {
 			Files.write(Paths.get(fileName), "".getBytes());
 		}
-		NLPConnector.analyze("");
-		StoryProblemHandler problemthread = new StoryProblemHandler();
 		EnterTextThread enterthread = new EnterTextThread();
+		HandleNewTypes typethread = new HandleNewTypes();
 		DigitalStoryWorld world= new DigitalStoryWorld(new ArrayList<DigitalObject>(), new ArrayList<DigitalObject>());
-		MyFrame frame = new MyFrame(world, problemthread, enterthread);
+		MyFrame frame = new MyFrame(world, enterthread, typethread);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-		Thread pt = new Thread(problemthread);
-		pt.start();
 		Thread et = new Thread(enterthread);
 		et.start();
+		Thread tt = new Thread(typethread);
+		tt.start();
 //		String[] types = {"human","animal"};
 //		String[] characters = {"bob","alice","wolf"};
 //		String[] results = new String[characters.length];
@@ -82,6 +82,7 @@ public class Main {
 //			
 //			//second word is action, add to active object
 //			object.addAction(new DigitalAction(new DigitalAffordance(words[1]), new ArrayList<DigitalObject>(), new DigitalState(words[1].concat(words[2]))));
+//			//TODO: third word: what do we do with it?
 //			
 //		}
 //		return objects;
