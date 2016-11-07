@@ -959,8 +959,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		}
 	}
 	public static void updateHistorytxt(String error){
-		historystring.append(error + "\n");
-		historytxt.setText(historystring.toString());
+		historytxt.setText(error);
 	}
 	public static void updateOAOtxt(String newOAO, int index){
 		String[] oaoparts = MyFrame.storystring.toString().split("\n");
@@ -1386,6 +1385,12 @@ public class MyFrame extends JFrame implements ActionListener {
 	}
 	
 	public static StoryProblemObject[] detectProblems(int index) {
+		StringBuilder errors = new StringBuilder();
+		for (StoryProblemObject p : problemsList.get(index)) {
+			errors.append(p.errorMessage);
+			errors.append('\n');
+		}
+		updateHistorytxt(errors.toString());
 		return problemsList.get(index);
 	}
 }
