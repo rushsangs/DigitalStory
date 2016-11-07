@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -1385,10 +1386,14 @@ public class MyFrame extends JFrame implements ActionListener {
 	}
 	
 	public static StoryProblemObject[] detectProblems(int index) {
+		HashSet<String> uniqueErrors = new HashSet<String>();
 		StringBuilder errors = new StringBuilder();
 		for (StoryProblemObject p : problemsList.get(index)) {
-			errors.append(p.errorMessage);
-			errors.append('\n');
+			uniqueErrors.add(p.errorMessage);
+		}
+		for (String s : uniqueErrors) {
+			errors.append(s);
+			errors.append("\n");
 		}
 		updateHistorytxt(errors.toString());
 		return problemsList.get(index);
