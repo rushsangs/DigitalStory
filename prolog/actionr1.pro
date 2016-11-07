@@ -9,5 +9,10 @@ action(A, knows, B) :- action(A, met, B).
 action(A, know, B) :- action(A, X, B), type(A, human).
 action(A, knows, B) :- action(A, X, B), type(A, human).
 
+action(A, chop, B) :- action(A, chops, B).
+action(A, chop, B) :- action(A, chopped, B).
+
 action(A, has, B) :- action(A, took, B).
 action(A, have, B) :- action(A, took, B).
+
+action(A, throws, B) :- action(A, threw, B).
