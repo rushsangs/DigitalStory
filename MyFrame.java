@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -28,8 +30,9 @@ import edu.stanford.nlp.io.EncodingPrintWriter.out;
 import java.sql.*;
 
 public class MyFrame extends JFrame implements ActionListener {
+	public static HashMap<Integer, String> oaoList;
+	public static ArrayList<StoryProblemObject[]> problemsList;
 	public static List<String> newobjects;
-	public static StoryProblemHandler problemthread;
 	public static HandleNewTypes typethread;
 	public static EnterTextThread start;
 	public List<StoryProblemObject> problems;
@@ -86,13 +89,14 @@ public class MyFrame extends JFrame implements ActionListener {
 	public String[] mylist = new String[] {"Prolog", "Question"};
 	private JComboBox<String> mybox = new JComboBox<String>(mylist);
 	
-	public MyFrame(DigitalStoryWorld world, StoryProblemHandler problemthread, EnterTextThread enterthread) {
-
+	public MyFrame(DigitalStoryWorld world, EnterTextThread enterthread) {
+		
+		problemsList = new ArrayList<StoryProblemObject[]>();
+		oaoList = new HashMap<Integer, String>();
 		this.initializeDB();
 		this.setTitle("Story World Generator");
 		this.world = world;
 		problems = new ArrayList<StoryProblemObject>();
-		this.problemthread = problemthread;
 		//this.typethread = typethread;
 		newobjects = new ArrayList<String>();
 		this.start = enterthread;
@@ -103,9 +107,9 @@ public class MyFrame extends JFrame implements ActionListener {
 		objectpanel.add(objectpane, BorderLayout.CENTER);
 		affordpanel.setLayout(new BorderLayout(10, 10));
 		affordancesList.setEditable(false);
-		affordpanel.add(affordances, BorderLayout.NORTH);
+		//affordpanel.add(affordances, BorderLayout.NORTH);
 		affordpane = new JScrollPane(affordancesList);
-		affordpanel.add(affordpane, BorderLayout.CENTER);
+		//affordpanel.add(affordpane, BorderLayout.CENTER);
 		storytxtpanel.setLayout(new BorderLayout(10, 10));
 		storytxt.setEditable(false);
 		labelpanel.setLayout(new BorderLayout(10, 10));
@@ -1364,5 +1368,24 @@ public class MyFrame extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 		return types;
+	}
+	
+	public static void appendSentence (String oaoText, String nLText) {
+		problemsList.add(new StoryProblemObject[]{});
+		updateSentence(problemsList.size()-1, oaoText, nLText);
+	}
+	
+	public static void updateSentence(int index, String oaoText, String nLText) {
+		StoryProblemObject[] pset = PrologQueryMaster.getError(index, oaoList, oaoText, nLText);
+		problemsList.set(index, pset);
+		if (pset.length==0) {
+			oaoList.put(index, oaoText);
+			//TODO: put into facts file
+			NLPConnector.convertOAOToProlog(oaoText, "");
+		}
+	}
+	
+	public static StoryProblemObject[] detectProblems(int index) {
+		return problemsList.get(index);
 	}
 }

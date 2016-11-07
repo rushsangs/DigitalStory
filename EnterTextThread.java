@@ -35,7 +35,7 @@ public class EnterTextThread implements Runnable {
 //			System.out.println(storystring+ "       qqqqq      ");
 			int cursorLocation = MyFrame.twostorytxt.getCaretPosition();
 			int cursorCurrentSentence = storystring.substring(0, cursorLocation).split("\\.").length - 1;
-			System.out.println("Cursor current sentence is " + cursorCurrentSentence + " and number of sentences are " + sentences.length);
+			//System.out.println("Cursor current sentence is " + cursorCurrentSentence + " and number of sentences are " + sentences.length);
 			if (cursorCurrentSentence == sentences.length - 1) {
 				// user is towards the end and is editing things
 				while (basecase == false) {
@@ -84,7 +84,8 @@ public class EnterTextThread implements Runnable {
 				
 				storystring = MyFrame.getEntertxt();
 				problemSentenceNo = cursorCurrentSentence;
-				StoryProblemObject[] problems = MyFrame.problemthread.detectProblems(problemSentenceNo);
+				StoryProblemObject[] problems = MyFrame.detectProblems(problemSentenceNo);
+				System.out.println("Problem List: \n");
 				for(StoryProblemObject problem: problems){
 					System.out.println(problem.errorMessage);
 				}

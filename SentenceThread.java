@@ -28,11 +28,11 @@ public class SentenceThread extends Thread implements Runnable{
 		if(newOAO.toString().equals("")){
 			//case invalid OAO
 			if(isUpdate == false){
-				MyFrame.problemthread.appendSentence(newOAO.toString(), this.sentence);
+				MyFrame.appendSentence(newOAO.toString(), this.sentence);
 				MyFrame.updateStorytxt("Invalid OAO " + index + "\n");
 			}
 			else{
-				MyFrame.problemthread.updateSentence(this.index, newOAO.toString(), this.sentence);
+				MyFrame.updateSentence(this.index, newOAO.toString(), this.sentence);
 				MyFrame.updateStorytxt("Invalid OAO" + index + "\n");
 			}
 			return;
@@ -72,11 +72,11 @@ public class SentenceThread extends Thread implements Runnable{
 			} 
 		}
 		if(isUpdate == false){
-			MyFrame.problemthread.appendSentence(newOAO.toString(), this.sentence);
+			MyFrame.appendSentence(newOAO.toString(), this.sentence);
 			MyFrame.updateStorytxt(newOAO.toString());
 		}
 		else{
-			MyFrame.problemthread.updateSentence(this.index, newOAO.toString(), this.sentence);
+			MyFrame.updateSentence(this.index, newOAO.toString(), this.sentence);
 			MyFrame.updateOAOtxt(newOAO.toString(), this.index);
 		}
 

@@ -124,9 +124,9 @@ public class PrologQueryMaster {
 		} catch (IllegalArgumentException e) {
 			// for some reason, always reaches here at the end
 			//e.printStackTrace();
-			return output.stream().map(
-					(u) -> u.toArray(new String[0]))
-					.toArray(String[][]::new);
+//			return output.stream().map(
+//					(u) -> u.toArray(new String[0]))
+//					.toArray(String[][]::new);
 		} catch (PrologException e) {
 			System.out.println(e.getStackTrace());
 		} 
@@ -229,11 +229,9 @@ public class PrologQueryMaster {
 	}
 	
 	public static StoryProblemObject[] getError(int index, 
-			HashMap<Integer, String[]> sentences, 
-			String[] oaoText, String nLText) {
+			HashMap<Integer, String> sentences, 
+			String oaoText, String nLText) {
 		try {
-			String fnName = null;
-			String[] argNames = null;
 			String[] fns = {"action", "trait", "type", "error"};
 			// NOTE: don't actually use ACTION_F or TRAIT_F
 			String[][] files = {
@@ -242,71 +240,61 @@ public class PrologQueryMaster {
 					{TYPE_F},
 					{ERROR_R}
 				};
-			final int NUM_MSG_ARGS = 2;
 			Files.write(Paths.get(TMP), "".getBytes());
 			
 			// set up replacement for ACTION_F and TRAIT_F
 			ArrayList<String> actionf = new ArrayList<String>();
 			ArrayList<String> traitf = new ArrayList<String>();
-			for (int i : sentences.keySet()) {
-				String line = sentences.get(i)[0];
-				String proline = NLPConnector.convertOAOToProlog(line, null);
-				String currFnName = line.split("[\\(\\)]")[0];
+			for (String oao : sentences.values()) {
+				String proline = NLPConnector.convertOAOToProlog(oao, null);
+				String currFnName = proline.split("[\\(\\)]")[0].trim();
 				if (currFnName.equals("action")) {
 					actionf.add(proline);
 				} else if (currFnName.equals("trait")) {
 					traitf.add(proline);
 				}
 			}
-			for (String s : oaoText) {
-				// parse oaoText (new fact to add)
-				fnName = s.split("[\\(\\)]")[0];
-				fnName = fnName.trim();
-				argNames = s.split("[\\(\\)]")[1].split(",");
-				for (int j = 0; j<argNames.length; j++) {
-					argNames[j] = argNames[j].trim();
-				}
+			
+
+			// Create TMP file
+			// NOTE: ASSUME OAO TRANSLATES TO ACTIONS BECAUSE TRAITS AREN'T RETURNED BY OAO-TO-PROLOG ANYWAYS
+			// TODO: (AFTER TRAITS CAN BE OBTAINED) INCORPORATE TRAITS
 				
-				for (int i = 0; i<fns.length; i++) {
-					if (fnName.equals(fns[i])) {
-						String stmt;
-						if (fnName.equals("action")) {
-							stmt = String.format(NLPConnector.ACTION, argNames[0], argNames[1], argNames[2]);
-						} else if (fnName.equals("trait")) {
-							stmt = String.format(NLPConnector.TRAIT, argNames[0], argNames[1]);
-						} else {
-							stmt = "";
-						}
-						Files.write(Paths.get(TMP), stmt.getBytes(), StandardOpenOption.APPEND);
-					}
-					for (String file : files[i]) {
-						if (file.equals(ACTION_F)) {
-							// use replacement of ACTION_F instead
-							Files.write(Paths.get(TMP), actionf, StandardOpenOption.APPEND);
-						} else if (file.equals(TRAIT_F)) {
-							// use replacement of TRAIT_F instead
-							Files.write(Paths.get(TMP), actionf, StandardOpenOption.APPEND);
-						} else {
-							Files.write(Paths.get(TMP), Files.readAllBytes(Paths.get(file)), StandardOpenOption.APPEND);
-						}
+			String actions = NLPConnector.convertOAOToProlog(oaoText, null);
+			if (actions.trim().length()==0) {
+				return new StoryProblemObject[]{};
+			}
+			for (int i = 0; i<fns.length; i++) {
+				if (fns[i].equals("action")) {
+					// place new actions to test into action section of TMP file
+					Files.write(Paths.get(TMP), actions.getBytes(), 
+						StandardOpenOption.APPEND);
+				}
+				for (String file : files[i]) {
+					if (file.equals(ACTION_F)) {
+						// use replacement of ACTION_F instead
+						Files.write(Paths.get(TMP), actionf, StandardOpenOption.APPEND);
+					} else if (file.equals(TRAIT_F)) {
+						// use replacement of TRAIT_F instead
+						Files.write(Paths.get(TMP), actionf, StandardOpenOption.APPEND);
+					} else {
+						Files.write(Paths.get(TMP), Files.readAllBytes(Paths.get(file)), StandardOpenOption.APPEND);
 					}
 				}
 			}
 			
-			String[] errorArgNames = new String[argNames.length+NUM_MSG_ARGS+1];
-			errorArgNames[0] = "_";
-			errorArgNames[1] = "_";
-			errorArgNames[2] = fnName;
-			for (int i = 0; i<argNames.length; i++) {
-				errorArgNames[i+NUM_MSG_ARGS+1] = argNames[i];
-			}
+			// test for errors		
+			String[] errorArgNames = {"_", "_"};
 			PrologQueryMaster pqm = new PrologQueryMaster(TMP);
 			String[][] rs = pqm.query("error", errorArgNames);
+			if (rs==null) {
+				return new StoryProblemObject[]{};
+			}
 			StoryProblemObject[] ret = new StoryProblemObject[rs.length];
 			for (int i = 0; i<rs.length; i++) {
 				ret[i] = new StoryProblemObject(
-						new String[]{sentences.get(index)[0]}, // oaoText
-						sentences.get(index)[1], // nLText
+						new String[]{oaoText}, // oaoText
+						nLText, // nLText
 						String.format(rs[i][0].substring(1, rs[i][0].length()-1).replace("\\x20\\", " "), 
 						(Object[])rs[i][1].substring(1, rs[i][1].length()-1).split(",")));
 			}

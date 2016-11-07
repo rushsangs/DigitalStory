@@ -272,6 +272,7 @@ public class NLPConnector {
 			if (oao_pieces.length == 0)
 				continue;
 			for (String oao : oao_pieces) {
+				oao = oao.trim();
 				oao =oao.replace(",", "");
 				String[] args = oao.split(" ");
 				if (args.length < 3)
