@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -25,6 +26,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+import javax.swing.text.Highlighter.HighlightPainter;
 
 import edu.stanford.nlp.io.EncodingPrintWriter.out;
 
@@ -34,6 +39,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	public static HashMap<Integer, String> oaoList;
 	public static ArrayList<StoryProblemObject[]> problemsList;
 	public static List<String> newobjects;
+	public static ArrayList<String> types;
 	public static HandleNewTypes typethread;
 	public static EnterTextThread start;
 	public List<StoryProblemObject> problems;
@@ -100,6 +106,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		problems = new ArrayList<StoryProblemObject>();
 		//this.typethread = typethread;
 		newobjects = new ArrayList<String>();
+		types = new ArrayList<String>();
 		this.start = enterthread;
 		objectpanel.setLayout(new BorderLayout(10, 10));
 		objectList.setEditable(false);
@@ -407,6 +414,9 @@ public class MyFrame extends JFrame implements ActionListener {
 			frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			frame2.pack();
 			frame2.setVisible(true);
+			for (String type : types_for_objects2) {
+				types.add(type);
+			}
 			try {
 				Files.write(Paths.get(PrologQueryMaster.TYPE_F),
 						getPrologTypesString(objects2, types_for_objects2).getBytes(),
@@ -415,6 +425,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 			MyFrame.newobjects.clear();
+			objectList.setText(appendTypes(objectstring.toString()));
 			break;
 		case "Add Type":
 			String type = entertxt.getText().trim();
@@ -644,7 +655,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						// newOAO.append(" " + "new object " + oaoparts[0] + "
 						// added \n");
 						objectstring.append(oaoparts[0] + "\n");
-						objectList.setText(objectstring.toString());
+						objectList.setText(appendTypes(objectstring.toString()));
 						String[] types_for_objects1 = new String[1];
 						String[] objects1 = { oaoparts[0] };
 						SelectTypeFrame frame1 = new SelectTypeFrame(objects1, getTypes(), types_for_objects1);
@@ -686,7 +697,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						// newOAO.append(" " + "new object " + oaoparts[0] + "
 						// added \n");
 						objectstring.append(oaoparts[0] + "\n");
-						objectList.setText(objectstring.toString());
+						objectList.setText(appendTypes(objectstring.toString()));
 						String[] types_for_objects1 = new String[1];
 						String[] objects1 = { oaoparts[0] };
 						SelectTypeFrame frame1 = new SelectTypeFrame(objects1, getTypes(), types_for_objects1);
@@ -724,7 +735,7 @@ public class MyFrame extends JFrame implements ActionListener {
 						// newOAO.append(" " + "new object " + oaoparts[0] + "
 						// added \n");
 						objectstring.append(oaoparts[0] + "\n");
-						objectList.setText(objectstring.toString());
+						objectList.setText(appendTypes(objectstring.toString()));
 						String[] types_for_objects1 = new String[1];
 						String[] objects1 = { oaoparts[0] };
 						SelectTypeFrame frame1 = new SelectTypeFrame(objects1, getTypes(), types_for_objects1);
@@ -747,7 +758,7 @@ public class MyFrame extends JFrame implements ActionListener {
 							break;
 						}
 						objectstring.append(oaoparts[2] + "\n");
-						objectList.setText(objectstring.toString());
+						objectList.setText(appendTypes(objectstring.toString()));
 						String[] types_for_objects1 = new String[1];
 						String[] objects1 = { oaoparts[2] };
 						SelectTypeFrame frame1 = new SelectTypeFrame(objects1, getTypes(), types_for_objects1);
@@ -930,7 +941,7 @@ public class MyFrame extends JFrame implements ActionListener {
 							}
 						} 
 					}
-					objectList.setText(objectstring.toString());
+					objectList.setText(appendTypes(objectstring.toString()));
 					affordancesList.setText(affordstring.toString());
 
 					String[] types_for_objects1 = new String[objects1.length];
@@ -1000,7 +1011,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				}
 			}
 			objectstring.append(Object + "\n");
-			objectList.setText(objectstring.toString());
+			objectList.setText(appendTypes(objectstring.toString()));
 		}
 		return true;
 	}
@@ -1376,6 +1387,16 @@ public class MyFrame extends JFrame implements ActionListener {
 	}
 	
 	public static void updateSentence(int index, String oaoText, String nLText) {
+		if (oaoText.length()==0) {
+			StoryProblemObject[] pset = {new StoryProblemObject(
+					new String[]{},
+					nLText,
+					"Invalid OAO."
+				)
+			};
+			problemsList.set(index, pset);
+			return;
+		}
 		StoryProblemObject[] pset = PrologQueryMaster.getError(index, oaoList, oaoText, nLText);
 		problemsList.set(index, pset);
 		if (pset.length==0) {
@@ -1396,6 +1417,44 @@ public class MyFrame extends JFrame implements ActionListener {
 			errors.append("\n");
 		}
 		updateHistorytxt(errors.toString());
+		highlight(index);
 		return problemsList.get(index);
+	}
+	
+	public static void highlight(int sentenceIndex) {
+		System.out.println("highlight everything before " + sentenceIndex);
+		Highlighter highlighter = twostorytxt.getHighlighter();
+		highlighter.removeAllHighlights();
+		HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
+		String[] splitText = twostorytxt.getText().split("\\.");
+		int highlighterIndex = 0;
+		for (int i = 0; i<sentenceIndex; i++) {
+			int newHighlighterIndex = highlighterIndex + splitText[i].length();
+			if (MyFrame.problemsList.get(i).length>0) {
+				System.out.println(i + " " + problemsList.get(i).length);
+				try {
+					highlighter.addHighlight(highlighterIndex, newHighlighterIndex, painter);
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+			}
+			highlighterIndex = newHighlighterIndex+1;
+		}
+	}
+	
+	public static String appendTypes(String objectString) {
+		StringBuilder s = new StringBuilder();
+		String[] objects = objectString.split("\\s+");
+		for (int i = 0; i<objects.length; i++) {
+			s.append(objects[i]);
+			s.append(" - ");
+			if (i<types.size()) {
+				s.append(types.get(i));
+			} else {
+				s.append("?");
+			}
+			s.append("\n");
+		}
+		return s.toString();
 	}
 }
