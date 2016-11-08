@@ -1421,6 +1421,12 @@ public class MyFrame extends JFrame implements ActionListener {
 		return problemsList.get(index);
 	}
 	
+	public static void clearProblemData() {
+		oaoList = new HashMap<Integer, String>();
+		problemsList = new ArrayList<StoryProblemObject[]>();
+		highlight(-1);
+	}
+	
 	public static void highlight(int sentenceIndex) {
 		System.out.println("highlight everything before " + sentenceIndex);
 		Highlighter highlighter = twostorytxt.getHighlighter();
