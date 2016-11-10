@@ -1386,6 +1386,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	public static void appendSentence (String oaoText, String nLText) {
 		problemsList.add(new StoryProblemObject[]{});
 		updateSentence(problemsList.size()-1, oaoText, nLText);
+		MyFrame.highlight(0);
 	}
 	
 	public static void updateSentence(int index, String oaoText, String nLText) {
@@ -1430,13 +1431,16 @@ public class MyFrame extends JFrame implements ActionListener {
 	}
 	
 	public static void highlight(int sentenceIndex) {
-		System.out.println("highlight everything before " + sentenceIndex);
+		// System.out.println("highlight everything before " + sentenceIndex);
 		Highlighter highlighter = twostorytxt.getHighlighter();
 		highlighter.removeAllHighlights();
+		if (sentenceIndex==-1) {
+			return;
+		}
 		HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
 		String[] splitText = twostorytxt.getText().split("\\.");
 		int highlighterIndex = 0;
-		for (int i = 0; i<sentenceIndex; i++) {
+		for (int i = 0; i<problemsList.size(); i++) {
 			int newHighlighterIndex = highlighterIndex + splitText[i].length();
 			if (MyFrame.problemsList.get(i).length>0) {
 				System.out.println(i + " " + problemsList.get(i).length);
