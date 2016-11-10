@@ -30,15 +30,15 @@ public class SentenceThread extends Thread implements Runnable{
 				NLPConnector.convertNLPToOAO(NLPConnector.analyze(this.storystring)));
 		String[] storyparts= newOAO.toString().split("\\n");
 		System.out.print("Input in OAO is:  " + newOAO.toString() + " and this sentence is " + this.sentence + "\n");
-		if(storyparts.length <= index && storyparts[index].equals("")){
+		if(storyparts.length <= index ||storyparts[index].equals("")){
 			//case invalid OAO
 			if(isUpdate == false){
-				MyFrame.appendSentence(storyparts[index], this.sentence);
+				MyFrame.appendSentence("", this.sentence);
 				MyFrame.updateStorytxt("Invalid OAO " + index + "\n");
 			}
 			else{
-				MyFrame.updateSentence(this.index, storyparts[index], this.sentence);
-				MyFrame.updateOAOtxt(storystring, "Invalid OAO" + index + "\n", index);
+				MyFrame.updateSentence(this.index, "", this.sentence);
+				MyFrame.updateOAOtxt(newOAO.toString(), "Invalid OAO" + index + "\n", index);
 			}
 			return;
 		}
@@ -82,7 +82,7 @@ public class SentenceThread extends Thread implements Runnable{
 		}
 		else{
 			MyFrame.updateSentence(this.index, storyparts[index], this.sentence);
-			MyFrame.updateOAOtxt(storystring, storyparts[index], this.index);
+			MyFrame.updateOAOtxt(newOAO.toString(), storyparts[index], this.index);
 		}
 
 		return;

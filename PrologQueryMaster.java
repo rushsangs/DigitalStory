@@ -246,28 +246,28 @@ public class PrologQueryMaster {
 			ArrayList<String> actionf = new ArrayList<String>();
 			ArrayList<String> traitf = new ArrayList<String>();
 			for (String oao : sentences.values()) {
-				String prolines = NLPConnector.convertOAOToProlog(oao, null);
-				actionf.add(prolines.split("---", -1)[0]);
-				traitf.add(prolines.split("---", -1)[1]);
+				String proline = NLPConnector.convertOAOToProlog(oao, null);
+				String currFnName = proline.split("[\\(\\)]")[0].trim();
+				if (currFnName.equals("action")) {
+					actionf.add(proline);
+				} else if (currFnName.equals("trait")) {
+					traitf.add(proline);
+				}
 			}
 			
 
 			// Create TMP file
+			// NOTE: ASSUME OAO TRANSLATES TO ACTIONS BECAUSE TRAITS AREN'T RETURNED BY OAO-TO-PROLOG ANYWAYS
+			// TODO: (AFTER TRAITS CAN BE OBTAINED) INCORPORATE TRAITS
 				
-			String prolines = NLPConnector.convertOAOToProlog(oaoText, null);
-			String actions = prolines.split("---", -1)[0];
-			String traits = prolines.split("---", -1)[1];
-			if (prolines.trim().length()==0) {
+			String actions = NLPConnector.convertOAOToProlog(oaoText, null);
+			if (actions.trim().length()==0) {
 				return new StoryProblemObject[]{};
 			}
 			for (int i = 0; i<fns.length; i++) {
 				if (fns[i].equals("action")) {
 					// place new actions to test into action section of TMP file
 					Files.write(Paths.get(TMP), actions.getBytes(), 
-						StandardOpenOption.APPEND);
-				} else if (fns[i].equals("trait")) {
-					// place new traits to test into trait section of TMP file
-					Files.write(Paths.get(TMP), traits.getBytes(),
 						StandardOpenOption.APPEND);
 				}
 				for (String file : files[i]) {
@@ -284,7 +284,7 @@ public class PrologQueryMaster {
 			}
 			
 			// test for errors		
-			String[] errorArgNames = {"_", "_", "_"};
+			String[] errorArgNames = {"_", "_"};
 			PrologQueryMaster pqm = new PrologQueryMaster(TMP);
 			String[][] rs = pqm.query("error", errorArgNames);
 			if (rs==null) {
@@ -293,11 +293,10 @@ public class PrologQueryMaster {
 			StoryProblemObject[] ret = new StoryProblemObject[rs.length];
 			for (int i = 0; i<rs.length; i++) {
 				ret[i] = new StoryProblemObject(
-						Integer.parseInt(rs[i][0]),
 						new String[]{oaoText}, // oaoText
 						nLText, // nLText
-						String.format(rs[i][1].substring(1, rs[i][1].length()-1).replace("\\x20\\", " "), 
-						(Object[])rs[i][2].substring(1, rs[i][2].length()-1).split(",")));
+						String.format(rs[i][0].substring(1, rs[i][0].length()-1).replace("\\x20\\", " "), 
+						(Object[])rs[i][1].substring(1, rs[i][1].length()-1).split(",")));
 			}
 			return ret;
 		} catch (IOException e) {

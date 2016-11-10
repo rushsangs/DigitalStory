@@ -256,7 +256,7 @@ public class NLPConnector {
 					}
 
 				}
-				if (tmp_length != result.length())
+				//if (tmp_length != result.length())
 					result = result + "\n";
 			}
 		}
@@ -297,7 +297,7 @@ public class NLPConnector {
 				e.printStackTrace();
 			}
 		}
-		return result_action.toString() + "---" + result_trait.toString();
+		return result_action.toString();
 	}
 
 	private static String addAmodIfPresent(String NLPCode) {

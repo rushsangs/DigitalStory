@@ -1037,12 +1037,12 @@ public class MyFrame extends JFrame implements ActionListener {
 					StringBuilder newOAO = new StringBuilder();
 					for(int i = 0 ; i< storyparts.length; i++){
 						String sentences = "";
-						for(int j = 0; j < i; j++){
-							sentences += storyparts[j] + ". ";
+						for(int j = 0; j <= i; j++){
+							sentences += storyparts[j] + ". ";	
 						}
-						SentenceThread t = new SentenceThread(sentences,storyparts[i], false, i);
-						t.start();
-						t.join();
+
+						// this is where we call the function for sentence thread
+						sentenceThreadFn(sentences, storyparts[i], false, i);
 					}
 //					StringBuilder storystring2 = new StringBuilder(
 //							NLPConnector.convertNLPToOAO(NLPConnector.analyze(storytxt, "abc.txt")));
@@ -1632,4 +1632,120 @@ public class MyFrame extends JFrame implements ActionListener {
 		}
 		return s.toString();
 	}
+	
+	
+	
+	//sentence thread function
+	public  static void sentenceThreadFn(String storystring, String sentence, boolean isUpdate, int index){
+		boolean object1correct = false;
+		boolean actioncorrect = false;
+		boolean object2correct = false;
+		if(sentence.equals(""))
+			return;
+		StringBuilder newOAO = new StringBuilder(
+				NLPConnector.convertNLPToOAO(NLPConnector.analyze(storystring)));
+		String[] storyparts= newOAO.toString().split("\\n");
+		System.out.print("Input in OAO is:  " + newOAO.toString() + " and this sentence is " + sentence + "\n");
+		if(storyparts.length <= index ||storyparts[index].equals("")){
+			//case invalid OAO
+			if(isUpdate == false){
+				MyFrame.appendSentence("", sentence);
+				MyFrame.updateStorytxt("Invalid OAO " + index + "\n");
+			}
+			else{
+				MyFrame.updateSentence(index, "", sentence);
+				MyFrame.updateOAOtxt(newOAO.toString(), "Invalid OAO" + index + "\n", index);
+			}
+			return;
+		}
+		String[] oaoline = storyparts[index].split(",");
+		
+		for (int j = 0; j < oaoline.length; j++) {
+			String[] oaoparts = oaoline[j].trim().split("\\s+");
+			if(oaoparts.length<3)
+				continue;
+			for (int i = 0; i < oaoparts.length; i++) {
+				oaoparts[i] = oaoparts[i].toLowerCase();
+			}
+			for (int i = 0; i < oaoparts.length; i++) {
+				if(oaoparts[i].equals(" "))
+					continue;
+				if (i == 0) {
+					object1correct = MyFrame.checkNewObject(oaoparts[0]);
+					if (object1correct == true) {
+						MyFrame.newobjects.add(oaoparts[0]);
+						System.out.println("new object added:" + oaoparts[0]);
+					}
+					continue;
+				}
+				if (i == 1) {
+					actioncorrect = MyFrame.checkNewAffordance(oaoparts[1]);
+					continue;
+				}
+				if (i == 2) {
+					object2correct = MyFrame.checkNewObject(oaoparts[2]);
+					if (object2correct == true) {
+						MyFrame.newobjects.add(oaoparts[2]);
+						System.out.println("new object added:" + oaoparts[2]);
+					}
+					continue;
+				}
+			} 
+		}
+		if(isUpdate == false){
+			MyFrame.appendSentence(storyparts[index], sentence);
+			MyFrame.updateStorytxt(storyparts[index] + "\n");
+		}
+		else{
+			MyFrame.updateSentence(index, storyparts[index], sentence);
+			MyFrame.updateOAOtxt(newOAO.toString(), storyparts[index], index);
+		}
+
+		return;
+		//this.notifyAll();
+		//TODO CALL PATRICK FUNCTION FOR POSSIBLE ERROR
+//		this.stop();
+//		while(!running){
+//			continue;
+//		}
+//		//start handling problems
+//		System.out.println("object1correct" + object1correct);
+//		System.out.println("object1correct" + actioncorrect);
+//		System.out.println("object1correct" + object2correct);
+//		if(object1correct == false){
+//			String[] types_for_objects1 = new String[1];
+//			String[] objects1 = {oaoparts[0]};
+//			SelectTypeFrame frame1 = new SelectTypeFrame(objects1, MyFrame.getTypes(), types_for_objects1);
+//			frame1.setLocationRelativeTo(null);
+//			frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//			frame1.pack();
+//			frame1.setVisible(true);
+//			try {
+//				Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
+//						MyFrame.getPrologTypesString(objects1, types_for_objects1).getBytes(), 
+//						StandardOpenOption.APPEND);
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+//		}
+//		if(actioncorrect == false){
+//			NLPConnector.convertOAOToProlog(newOAO.toString(), PrologQueryMaster.FACTS_FILE);			}
+//		if(object2correct == false && oaoparts.length == 3){
+//			String[] types_for_objects1 = new String[1];
+//			String[] objects1 = {oaoparts[2]};
+//			SelectTypeFrame frame1 = new SelectTypeFrame(objects1, MyFrame.getTypes(), types_for_objects1);
+//			frame1.setLocationRelativeTo(null);
+//			frame1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//			frame1.pack();
+//			frame1.setVisible(true);
+//			try {
+//				Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
+//						MyFrame.getPrologTypesString(objects1, types_for_objects1).getBytes(), 
+//						StandardOpenOption.APPEND);
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+//		}
+	}
+
 }
