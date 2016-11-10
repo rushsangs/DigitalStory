@@ -9,9 +9,11 @@ import javax.swing.JOptionPane;
 public class SentenceThread extends Thread implements Runnable{
 	public String sentence;
 	public boolean isUpdate;
+	public String storystring;
 	public int index;
 	public SentenceThread next;
-	public SentenceThread(String sentence, boolean isUpdate, int index){
+	public SentenceThread(String storystring, String sentence, boolean isUpdate, int index){
+		this.storystring = storystring;
 		this.isUpdate = isUpdate;
 		this.sentence = sentence;
 		this.index = index;
@@ -25,21 +27,22 @@ public class SentenceThread extends Thread implements Runnable{
 		if(this.sentence.equals(""))
 			return;
 		StringBuilder newOAO = new StringBuilder(
-				NLPConnector.convertNLPToOAO(NLPConnector.analyze(this.sentence)));
+				NLPConnector.convertNLPToOAO(NLPConnector.analyze(this.storystring)));
+		String[] storyparts= newOAO.toString().split("\\n");
 		System.out.print("Input in OAO is:  " + newOAO.toString() + " and this sentence is " + this.sentence + "\n");
-		if(newOAO.toString().equals("")){
+		if(storyparts.length <= index && storyparts[index].equals("")){
 			//case invalid OAO
 			if(isUpdate == false){
-				MyFrame.appendSentence(newOAO.toString(), this.sentence);
+				MyFrame.appendSentence(storyparts[index], this.sentence);
 				MyFrame.updateStorytxt("Invalid OAO " + index + "\n");
 			}
 			else{
-				MyFrame.updateSentence(this.index, newOAO.toString(), this.sentence);
-				MyFrame.updateOAOtxt("Invalid OAO" + index + "\n", index);
+				MyFrame.updateSentence(this.index, storyparts[index], this.sentence);
+				MyFrame.updateOAOtxt(storystring, "Invalid OAO" + index + "\n", index);
 			}
 			return;
 		}
-		String[] oaoline = newOAO.toString().split(",");
+		String[] oaoline = storyparts[index].split(",");
 		
 		for (int j = 0; j < oaoline.length; j++) {
 			String[] oaoparts = oaoline[j].trim().split("\\s+");
@@ -74,12 +77,12 @@ public class SentenceThread extends Thread implements Runnable{
 			} 
 		}
 		if(isUpdate == false){
-			MyFrame.appendSentence(newOAO.toString(), this.sentence);
-			MyFrame.updateStorytxt(newOAO.toString());
+			MyFrame.appendSentence(storyparts[index], this.sentence);
+			MyFrame.updateStorytxt(storyparts[index] + "\n");
 		}
 		else{
-			MyFrame.updateSentence(this.index, newOAO.toString(), this.sentence);
-			MyFrame.updateOAOtxt(newOAO.toString(), this.index);
+			MyFrame.updateSentence(this.index, storyparts[index], this.sentence);
+			MyFrame.updateOAOtxt(storystring, storyparts[index], this.index);
 		}
 
 		return;

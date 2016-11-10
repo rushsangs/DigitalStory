@@ -59,7 +59,7 @@ public class EnterTextThread implements Runnable {
 						System.out.println(substring + " append sentence");
 						System.out.println("Created new thread for first sentence/ base case");
 						MyFrame.sentences++;
-						root = new SentenceThread(substring, false, 0); 									
+						root = new SentenceThread(storystring, substring, false, 0); 									
 						root.start();
 						lastdelimiter = storystring.indexOf(".") + 1;
 						basecase = true;
@@ -84,7 +84,7 @@ public class EnterTextThread implements Runnable {
 						MyFrame.sentences++;
 						System.out.println(substring + "append sentence");
 						System.out.println("Creating thread which is new sentence");
-						insertNode(substring, false, storystring.split("\\.").length-1);
+						insertNode(storystring, substring, false, storystring.split("\\.").length-1);
 					}
 					
 
@@ -116,7 +116,7 @@ public class EnterTextThread implements Runnable {
 				// sentence editting complete
 				System.out.println("Thread creaated which is updating edited sentence");
 				String newSentence = storystring.split("\\.")[problemSentenceNo];
-				Thread root = new SentenceThread(newSentence, true, problemSentenceNo);
+				Thread root = new SentenceThread(storystring, newSentence, true, problemSentenceNo);
 				root.start();
 				System.out.println(newSentence + " updateSentence");
 			}
@@ -127,12 +127,12 @@ public class EnterTextThread implements Runnable {
 		this.running = false;
 	}
 
-	public void insertNode(String string, Boolean isUpdate, int index) {
+	public void insertNode(String storystring, String string, Boolean isUpdate, int index) {
 		SentenceThread temp = root;
 		while (temp != null) {
 			temp = temp.next;
 		}
-		temp = new SentenceThread(string, isUpdate, index);
+		temp = new SentenceThread(storystring, string, isUpdate, index);
 		temp.start();
 		return;
 	}
