@@ -28,13 +28,22 @@ public class EnterTextThread implements Runnable {
 		}
 		textArea = MyFrame.twostorytxt;
 		while (true) {
-			while ((storystring = MyFrame.getEntertxt()) == null) {
+			while ((storystring = MyFrame.twostorytxt.getText()) == null) {
 				continue;
 			}
-			String [] sentences = storystring.split("\\.");
+			
 //			System.out.println(storystring+ "       qqqqq      ");
 			int cursorLocation = MyFrame.twostorytxt.getCaretPosition();
-			int cursorCurrentSentence = storystring.substring(0, cursorLocation).split("\\.").length - 1;
+			String [] sentences = storystring.split("\\.");
+			MyFrame.sentences = sentences.length;
+			int cursorCurrentSentence = -1;
+			try{
+				cursorCurrentSentence = storystring.substring(0, cursorLocation).split("\\.").length - 1;
+			}
+			catch(StringIndexOutOfBoundsException e){
+				continue;
+			}
+			
 			//System.out.println("Cursor current sentence is " + cursorCurrentSentence + " and number of sentences are " + sentences.length);
 			if (cursorCurrentSentence == sentences.length - 1) {
 				// user is towards the end and is editing things
@@ -49,6 +58,7 @@ public class EnterTextThread implements Runnable {
 						String substring = storystring.substring(0, storystring.indexOf("."));
 						System.out.println(substring + " append sentence");
 						System.out.println("Created new thread for first sentence/ base case");
+						MyFrame.sentences++;
 						root = new SentenceThread(substring, false, 0); 									
 						root.start();
 						lastdelimiter = storystring.indexOf(".") + 1;
@@ -57,19 +67,21 @@ public class EnterTextThread implements Runnable {
 				}
 				while (running) {
 					// System.out.println("inside while");
-					storystring = MyFrame.getEntertxt();
+					storystring = MyFrame.twostorytxt.getText();
 					// System.out.println(storystring);
 					// System.out.println(lastdelimiter + "\n");
 					if(textArea.getCaretPosition()<lastdelimiter)
 						break;
 					if (storystring.indexOf(".", lastdelimiter) == -1) {
-						storystring = MyFrame.getEntertxt();
+						storystring = MyFrame.twostorytxt.getText();
 						continue;
 					} else {
 						String substring = storystring.substring(lastdelimiter,
 								storystring.indexOf(".", lastdelimiter));
 						lastdelimiter = storystring.indexOf(".", lastdelimiter) + 1;
-						
+						if(substring.trim().equals(""))
+							continue;
+						MyFrame.sentences++;
 						System.out.println(substring + "append sentence");
 						System.out.println("Creating thread which is new sentence");
 						insertNode(substring, false, storystring.split("\\.").length-1);
@@ -82,7 +94,7 @@ public class EnterTextThread implements Runnable {
 				// user is in the middle and is editing some string with errors
 				System.out.println("editing string");
 				
-				storystring = MyFrame.getEntertxt();
+				storystring = MyFrame.twostorytxt.getText();
 				problemSentenceNo = cursorCurrentSentence;
 				StoryProblemObject[] problems = MyFrame.detectProblems(problemSentenceNo);
 				System.out.println("Problem List: \n");
@@ -91,12 +103,16 @@ public class EnterTextThread implements Runnable {
 				}
 				cursorLocation = textArea.getCaretPosition();
 				cursorCurrentSentence = storystring.substring(0, cursorLocation).split("\\.").length - 1;
+				String tmp_storystring=storystring;
 				while (cursorCurrentSentence == problemSentenceNo) {
-					storystring = MyFrame.getEntertxt();
+					System.out.println("The user is inside problem sentence");
+					tmp_storystring = MyFrame.twostorytxt.getText();
 					cursorLocation = textArea.getCaretPosition();
-					cursorCurrentSentence = storystring.substring(0, cursorLocation).split("\\.").length - 1;
+					cursorCurrentSentence = tmp_storystring.substring(0, cursorLocation).split("\\.").length - 1;
 					continue;
 				}
+				lastdelimiter += (tmp_storystring.length() - storystring.length());
+				storystring = tmp_storystring;
 				// sentence editting complete
 				System.out.println("Thread creaated which is updating edited sentence");
 				String newSentence = storystring.split("\\.")[problemSentenceNo];

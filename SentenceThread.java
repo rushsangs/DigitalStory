@@ -22,9 +22,11 @@ public class SentenceThread extends Thread implements Runnable{
 		boolean object1correct = false;
 		boolean actioncorrect = false;
 		boolean object2correct = false;
+		if(this.sentence.equals(""))
+			return;
 		StringBuilder newOAO = new StringBuilder(
 				NLPConnector.convertNLPToOAO(NLPConnector.analyze(this.sentence)));
-		System.out.print("Input in OAO is:  " + newOAO.toString() + "\n");
+		System.out.print("Input in OAO is:  " + newOAO.toString() + " and this sentence is " + this.sentence + "\n");
 		if(newOAO.toString().equals("")){
 			//case invalid OAO
 			if(isUpdate == false){
@@ -33,7 +35,7 @@ public class SentenceThread extends Thread implements Runnable{
 			}
 			else{
 				MyFrame.updateSentence(this.index, newOAO.toString(), this.sentence);
-				MyFrame.updateStorytxt("Invalid OAO" + index + "\n");
+				MyFrame.updateOAOtxt("Invalid OAO" + index + "\n", index);
 			}
 			return;
 		}

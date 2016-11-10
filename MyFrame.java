@@ -36,6 +36,7 @@ import edu.stanford.nlp.io.EncodingPrintWriter.out;
 import java.sql.*;
 
 public class MyFrame extends JFrame implements ActionListener {
+	public static int sentences;
 	public static HashMap<Integer, String> oaoList;
 	public static ArrayList<StoryProblemObject[]> problemsList;
 	public static List<String> newobjects;
@@ -98,6 +99,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	
 	public MyFrame(DigitalStoryWorld world, EnterTextThread enterthread) {
 		
+		sentences = 0;
 		problemsList = new ArrayList<StoryProblemObject[]>();
 		oaoList = new HashMap<Integer, String>();
 		this.initializeDB();
@@ -977,7 +979,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		String[] oaoparts = MyFrame.storystring.toString().split("\n");
 		oaoparts[index] = newOAO;
 		StringBuilder newstorystring = new StringBuilder();
-		for(int i = 0; i < oaoparts.length; i++){
+		for(int i = 0; i < sentences; i++){
 			if(i == index){
 				newstorystring.append(oaoparts[i]);
 				continue;
