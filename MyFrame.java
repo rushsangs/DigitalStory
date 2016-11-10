@@ -43,7 +43,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	public static ArrayList<String> types;
 	public static HandleNewTypes typethread;
 	public static EnterTextThread start;
-	public List<StoryProblemObject> problems;
+	public static List<StoryProblemObject> problems;
 	static StringBuilder storystring = new StringBuilder();
 	static StringBuilder objectstring = new StringBuilder();
 	static StringBuilder affordstring = new StringBuilder();
@@ -1031,10 +1031,9 @@ public class MyFrame extends JFrame implements ActionListener {
 					while (input.hasNextLine()) {
 						storytxt += input.nextLine();
 					}
-					twostorytxt.setText(storytxt);
 					input.close();
+					twostorytxt.setText(storytxt);					
 					String[] storyparts = storytxt.split("\\.");
-					StringBuilder newOAO = new StringBuilder();
 					for(int i = 0 ; i< storyparts.length; i++){
 						String sentences = "";
 						for(int j = 0; j <= i; j++){
@@ -1051,6 +1050,11 @@ public class MyFrame extends JFrame implements ActionListener {
 					}
 					System.out.println(MyFrame.start.lastdelimiter);
 					MyFrame.start.start();
+				}
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+					
 //					StringBuilder storystring2 = new StringBuilder(
 //							NLPConnector.convertNLPToOAO(NLPConnector.analyze(storytxt, "abc.txt")));
 //					System.out.println("OAO facts are : \n" + storystring2.toString());
@@ -1124,10 +1128,7 @@ public class MyFrame extends JFrame implements ActionListener {
 //					frame1.setVisible(true);
 //					Files.write(Paths.get(PrologQueryMaster.TYPE_F),
 //							getPrologTypesString(objects1, types_for_objects1).getBytes(), StandardOpenOption.APPEND);
-				}
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
+			
 			break;
 		case "Generate Graph":
 			try {
@@ -1657,11 +1658,12 @@ public class MyFrame extends JFrame implements ActionListener {
 			//case invalid OAO
 			if(isUpdate == false){
 				MyFrame.appendSentence("", sentence);
-				MyFrame.updateStorytxt("Invalid OAO " + index + "\n");
+				MyFrame.updateStorytxt("Ambiguous Sentence at line : " + (index+1) + "\n");
 			}
 			else{
-				MyFrame.updateSentence(index, "", sentence);
-				MyFrame.updateOAOtxt(newOAO.toString(), "Invalid OAO" + index + "\n", index);
+				//MyFrame.updateSentence(index, "", sentence);
+				//MyFrame.updateOAOtxt(newOAO.toString(), "Ambiguous Sentence at line :" + (index+1) + "\n", index);
+				MyFrame.getFileFn();
 			}
 			return;
 		}
@@ -1753,6 +1755,43 @@ public class MyFrame extends JFrame implements ActionListener {
 //				e1.printStackTrace();
 //			}
 //		}
+	}
+	public static void getFileFn(){
+		sentences = 0;
+		oaoList.clear();
+		problemsList.clear();
+		newobjects.clear();
+		types.clear();
+		problems.clear();
+		historystring = new StringBuilder();
+		objectstring = new StringBuilder();
+		affordstring = new StringBuilder();
+		storystring = new StringBuilder();
+		String mystorytxt = MyFrame.twostorytxt.getText();
+		objectList.setText("");
+		affordancesList.setText("");
+		//storytxt.setText("");
+		//historytxt.setText("");
+		//twostorytxt.setText("");
+		MyFrame.start.basecase = false;
+		String storytxt2 = MyFrame.twostorytxt.getText();
+		String[] storyparts = storytxt2.split("\\.");
+		for(int i = 0 ; i< storyparts.length; i++){
+			String sentences = "";
+			for(int j = 0; j <= i; j++){
+				sentences += storyparts[j] + ". ";	
+			}
+
+			// this is where we call the function for sentence thread
+			sentenceThreadFn(sentences, storyparts[i], false, i);
+		}
+		MyFrame.start.basecase = true;
+		MyFrame.start.lastdelimiter = storytxt2.indexOf(".") + 1;
+		while((storytxt2.indexOf(".", MyFrame.start.lastdelimiter) != -1)){
+			MyFrame.start.lastdelimiter = storytxt2.indexOf(".", MyFrame.start.lastdelimiter)+1;
+		}
+		System.out.println(MyFrame.start.lastdelimiter);
+		//MyFrame.start.start();
 	}
 
 }
