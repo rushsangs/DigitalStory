@@ -297,7 +297,7 @@ public class NLPConnector {
 				e.printStackTrace();
 			}
 		}
-		return result_action.toString();
+		return result_action.toString() + "---" + result_trait.toString();
 	}
 
 	private static String addAmodIfPresent(String NLPCode) {
