@@ -34,11 +34,11 @@ public class SentenceThread extends Thread implements Runnable{
 			//case invalid OAO
 			if(isUpdate == false){
 				MyFrame.appendSentence("", this.sentence);
-				MyFrame.updateStorytxt("Invalid OAO " + index + "\n");
+				MyFrame.updateStorytxt("Ambiguous Sentence on line : " + (index+1) + "\n");
 			}
 			else{
 				MyFrame.updateSentence(this.index, "", this.sentence);
-				MyFrame.updateOAOtxt(newOAO.toString(), "Invalid OAO" + index + "\n", index);
+				MyFrame.updateOAOtxt(newOAO.toString(), "Ambiguous Sentence on line : " + (index+1) + "\n", index);
 			}
 			return;
 		}

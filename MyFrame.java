@@ -1044,6 +1044,13 @@ public class MyFrame extends JFrame implements ActionListener {
 						// this is where we call the function for sentence thread
 						sentenceThreadFn(sentences, storyparts[i], false, i);
 					}
+					MyFrame.start.basecase = true;
+					MyFrame.start.lastdelimiter = storytxt.indexOf(".") + 1;
+					while((storytxt.indexOf(".", MyFrame.start.lastdelimiter) != -1)){
+						MyFrame.start.lastdelimiter = storytxt.indexOf(".", MyFrame.start.lastdelimiter)+1;
+					}
+					System.out.println(MyFrame.start.lastdelimiter);
+					MyFrame.start.start();
 //					StringBuilder storystring2 = new StringBuilder(
 //							NLPConnector.convertNLPToOAO(NLPConnector.analyze(storytxt, "abc.txt")));
 //					System.out.println("OAO facts are : \n" + storystring2.toString());
@@ -1549,7 +1556,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	public static void appendSentence (String oaoText, String nLText) {
 		problemsList.add(new StoryProblemObject[]{});
 		updateSentence(problemsList.size()-1, oaoText, nLText);
-		MyFrame.highlight(0);
+		//MyFrame.highlight(0);
 	}
 	
 	public static void updateSentence(int index, String oaoText, String nLText) {
@@ -1583,7 +1590,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			errors.append("\n");
 		}
 		updateHistorytxt(errors.toString());
-		highlight(index);
+		//highlight(index);
 		return problemsList.get(index);
 	}
 	

@@ -2,7 +2,7 @@ import java.util.List;
 
 import javax.swing.JTextArea;
 
-public class EnterTextThread implements Runnable {
+public class EnterTextThread extends Thread {
 	public SentenceThread root;
 	public int firstdelimiter;
 	public int lastdelimiter;
@@ -66,7 +66,7 @@ public class EnterTextThread implements Runnable {
 					}
 				}
 				while (running) {
-					// System.out.println("inside while");
+					System.out.println("inside while " + lastdelimiter);
 					storystring = MyFrame.twostorytxt.getText();
 					// System.out.println(storystring);
 					// System.out.println(lastdelimiter + "\n");
@@ -123,9 +123,9 @@ public class EnterTextThread implements Runnable {
 		}
 	}
 
-	public void stop() {
-		this.running = false;
-	}
+//	public void stop() {
+//		this.running = false;
+//	}
 
 	public void insertNode(String storystring, String string, Boolean isUpdate, int index) {
 		SentenceThread temp = root;
