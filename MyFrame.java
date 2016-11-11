@@ -1050,7 +1050,8 @@ public class MyFrame extends JFrame implements ActionListener {
 						MyFrame.start.lastdelimiter = storytxt.indexOf(".", MyFrame.start.lastdelimiter)+1;
 					}
 					System.out.println(MyFrame.start.lastdelimiter);
-					MyFrame.start.start();
+					if(!MyFrame.start.isAlive())
+						MyFrame.start.start();
 				}
 			} catch (Exception e1) {
 				e1.printStackTrace();
@@ -1809,15 +1810,15 @@ public class MyFrame extends JFrame implements ActionListener {
 		sentences = 0;
 		oaoList.clear();
 		problemsList.clear();
-		newobjects.clear();
-		types.clear();
+//		newobjects.clear();
+//		types.clear();
 		problems.clear();
 		historystring = new StringBuilder();
 		objectstring = new StringBuilder();
 		affordstring = new StringBuilder();
 		storystring = new StringBuilder();
 		String mystorytxt = MyFrame.twostorytxt.getText();
-		objectList.setText("");
+//		objectList.setText("");
 		affordancesList.setText("");
 		//storytxt.setText("");
 		//historytxt.setText("");
@@ -1840,7 +1841,9 @@ public class MyFrame extends JFrame implements ActionListener {
 			MyFrame.start.lastdelimiter = storytxt2.indexOf(".", MyFrame.start.lastdelimiter)+1;
 		}
 		System.out.println(MyFrame.start.lastdelimiter);
-		//MyFrame.start.start();
+		if(!MyFrame.start.isAlive())
+			MyFrame.start.start();
+		return;
 	}
 
 }

@@ -27,7 +27,7 @@ public class SelectTypeFrame extends JDialog implements ActionListener{
 		listcharacters = new JLabel[characters.length];
 		for(int i = 0; i < characters.length ; i++){
 			typelist[i] = new JComboBox(types);
-			typelist[i].setSelectedIndex(32);
+//			typelist[i].setSelectedIndex(32);
 			typelist[i].setMaximumRowCount(3);
 			listcharacters[i] = new JLabel(characters[i]);
 			gridpanel.add(listcharacters[i]);
