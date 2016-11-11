@@ -24,7 +24,7 @@ public class SentenceThread extends Thread implements Runnable{
 		boolean object1correct = false;
 		boolean actioncorrect = false;
 		boolean object2correct = false;
-		if(this.sentence.equals(""))
+		if(this.sentence.trim().equals(""))
 			return;
 		StringBuilder newOAO = new StringBuilder(
 				NLPConnector.convertNLPToOAO(NLPConnector.analyze(this.storystring)));
@@ -37,8 +37,9 @@ public class SentenceThread extends Thread implements Runnable{
 				MyFrame.updateStorytxt("Ambiguous Sentence on line : " + (index+1) + "\n");
 			}
 			else{
-				MyFrame.updateSentence(this.index, "", this.sentence);
-				MyFrame.updateOAOtxt(newOAO.toString(), "Ambiguous Sentence on line : " + (index+1) + "\n", index);
+//				MyFrame.updateSentence(this.index, "", this.sentence);
+//				MyFrame.updateOAOtxt(newOAO.toString(), "Ambiguous Sentence on line : " + (index+1) + "\n", index);
+				MyFrame.getFileFn();
 			}
 			return;
 		}
@@ -81,8 +82,9 @@ public class SentenceThread extends Thread implements Runnable{
 			MyFrame.updateStorytxt(storyparts[index] + "\n");
 		}
 		else{
-			MyFrame.updateSentence(this.index, storyparts[index], this.sentence);
-			MyFrame.updateOAOtxt(newOAO.toString(), storyparts[index], this.index);
+//			MyFrame.updateSentence(this.index, storyparts[index], this.sentence);
+//			MyFrame.updateOAOtxt(newOAO.toString(), storyparts[index], this.index);
+			MyFrame.getFileFn();
 		}
 
 		return;

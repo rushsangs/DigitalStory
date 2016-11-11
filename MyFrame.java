@@ -567,7 +567,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 			MyFrame.newobjects.clear();
-			updateObjectList(objectstring);
+			objectList.setText(appendTypes(objectstring.toString()));
 			break;
 		case "Add Type":
 			String type = entertxt.getText().trim();
@@ -1184,7 +1184,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				}
 			}
 			objectstring.append(Object + "\n");
-			updateObjectList(objectstring);
+			objectList.setText(appendTypes(objectstring.toString()));
 		}
 		return true;
 	}
@@ -1557,16 +1557,15 @@ public class MyFrame extends JFrame implements ActionListener {
 	public static void appendSentence (String oaoText, String nLText) {
 		problemsList.add(new StoryProblemObject[]{});
 		updateSentence(problemsList.size()-1, oaoText, nLText);
-		MyFrame.highlight(0);
+		//MyFrame.highlight(0);
 	}
 	
 	public static void updateSentence(int index, String oaoText, String nLText) {
 		if (oaoText.length()==0) {
 			StoryProblemObject[] pset = {new StoryProblemObject(
-					1,
 					new String[]{},
 					nLText,
-					"Ambiguous Sentence Error: \nSentence cannot be parsed."
+					"Invalid OAO."
 				)
 			};
 			problemsList.set(index, pset);
@@ -1576,6 +1575,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		problemsList.set(index, pset);
 		if (pset.length==0) {
 			oaoList.put(index, oaoText);
+			//TODO: put into facts file
 			NLPConnector.convertOAOToProlog(oaoText, "");
 		}
 	}
@@ -1614,36 +1614,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		for (int i = 0; i<problemsList.size(); i++) {
 			int newHighlighterIndex = highlighterIndex + splitText[i].length();
 			if (MyFrame.problemsList.get(i).length>0) {
-				//System.out.println(i + " " + problemsList.get(i).length);
-				// determine color
-				Color c;
-				int maxSeverity = -1;
-				for (StoryProblemObject p : problemsList.get(i)) {
-					if (p.severity > maxSeverity) {
-						maxSeverity = p.severity;
-					}
-				}
-				switch (maxSeverity) {
-				case 1:
-					c = Color.YELLOW;
-					break;
-				case 2:
-					c = Color.ORANGE;
-					break;
-				case 3:
-					c = Color.PINK;
-					break;
-				case 4:
-					c = Color.MAGENTA;
-					break;
-				case 5:
-					c = Color.RED;
-					break;
-				default:
-					c = Color.LIGHT_GRAY;
-				}
-				// highlight
-				painter = new DefaultHighlighter.DefaultHighlightPainter(c);
+				System.out.println(i + " " + problemsList.get(i).length);
 				try {
 					highlighter.addHighlight(highlighterIndex, newHighlighterIndex, painter);
 				} catch (BadLocationException e) {
@@ -1670,26 +1641,6 @@ public class MyFrame extends JFrame implements ActionListener {
 		return s.toString();
 	}
 	
-	public static void updateObjectList(StringBuilder objectstring) {
-		objectList.setText(appendTypes(objectstring.toString()));
-		// highlight
-		Highlighter highlighter = objectList.getHighlighter();
-		highlighter.removeAllHighlights();
-		HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.ORANGE);
-		int hlp1 = 0;
-		for (String s : objectList.getText().split("\n")) {
-			int hlp2 = hlp1 + s.length();
-			if (s.contains("?")) {
-				try {
-					highlighter.addHighlight(hlp1, hlp2, painter);
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				}
-			}
-			hlp1 = hlp2 + 1;
-		}
-	}
-	
 	
 	
 	//sentence thread function
@@ -1697,7 +1648,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		boolean object1correct = false;
 		boolean actioncorrect = false;
 		boolean object2correct = false;
-		if(sentence.equals(""))
+		if(sentence.trim().equals(""))
 			return;
 		StringBuilder newOAO = new StringBuilder(
 				NLPConnector.convertNLPToOAO(NLPConnector.analyze(storystring)));

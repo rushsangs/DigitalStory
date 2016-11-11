@@ -66,7 +66,7 @@ public class EnterTextThread extends Thread {
 					}
 				}
 				while (running) {
-					System.out.println("inside while " + lastdelimiter);
+					//System.out.println("inside while " + lastdelimiter);
 					storystring = MyFrame.twostorytxt.getText();
 					// System.out.println(storystring);
 					// System.out.println(lastdelimiter + "\n");

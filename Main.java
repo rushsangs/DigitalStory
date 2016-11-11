@@ -28,7 +28,7 @@ public class Main {
 		frame.pack();
 		frame.setVisible(true);
 		//Thread et = new Thread(enterthread);
-		enterthread.run();
+		enterthread.start();
 //		String[] types = {"human","animal"};
 //		String[] characters = {"bob","alice","wolf"};
 //		String[] results = new String[characters.length];
