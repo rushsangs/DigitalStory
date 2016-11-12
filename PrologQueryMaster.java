@@ -298,7 +298,7 @@ public class PrologQueryMaster {
 						Integer.parseInt(rs[i][0]),
 						new String[]{oaoText}, // oaoText
 						nLText, // nLText
-						String.format(rs[i][1].substring(1, rs[i][1].length()-1).replace("\\x20\\", " "), 
+						String.format(rs[i][1].substring(1, rs[i][1].length()-1).replace("\\x20\\", " ").replace("\\n", "\n"), 
 						(Object[])rs[i][2].substring(1, rs[i][2].length()-1).split(",")));
 			}
 			return ret;
