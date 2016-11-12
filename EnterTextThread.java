@@ -67,11 +67,12 @@ public class EnterTextThread extends Thread {
 				}
 				while (running) {
 					//System.out.println("inside while " + lastdelimiter);
-					storystring = MyFrame.twostorytxt.getText();
+					
 					// System.out.println(storystring);
 					// System.out.println(lastdelimiter + "\n");
 					if(textArea.getCaretPosition()<lastdelimiter)
 						break;
+					storystring = MyFrame.twostorytxt.getText();
 					if (storystring.indexOf(".", lastdelimiter) == -1) {
 						storystring = MyFrame.twostorytxt.getText();
 						continue;
