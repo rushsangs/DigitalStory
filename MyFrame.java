@@ -10,11 +10,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -111,7 +113,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		problemsList = new ArrayList<StoryProblemObject[]>();
 		oaoList = new HashMap<Integer, String>();
 		this.initializeDB();
-		this.setTitle("Intelligent Story Assisting Tool");
+		this.setTitle("Lexically Intelligent Story Assistant");
 		this.world = world;
 		problems = new ArrayList<StoryProblemObject>();
 		//this.typethread = typethread;
@@ -186,7 +188,9 @@ public class MyFrame extends JFrame implements ActionListener {
 									}
 								}
 							}
-							JOptionPane.showMessageDialog(MyFrame.this, entertxt.getText() + "\n" + output.toString());
+							String output2 = Arrays.stream(output.toString().split("\n"))
+									.distinct().collect(Collectors.joining("\n"));
+							JOptionPane.showMessageDialog(MyFrame.this, entertxt.getText() + "\n" + output2);
 							isDone = true;
 							entertxt.setText("Ask a Question or Insert a Type!");
 							break;
@@ -197,7 +201,8 @@ public class MyFrame extends JFrame implements ActionListener {
 						PrologQueryMaster.updateFacts();
 						PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
 						String firstpart1 = "trait";
-						JOptionPane.showMessageDialog(MyFrame.this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+						JOptionPane.showMessageDialog(MyFrame.this, entertxt.getText() + "\n" +
+								((pqm.verify(firstpart1, oaoparts))? "Yes." : "No."));
 						entertxt.setText("Ask a Question or Insert a Type!");
 					}
 					return;
@@ -224,7 +229,9 @@ public class MyFrame extends JFrame implements ActionListener {
 							}
 						}
 					}
-					JOptionPane.showMessageDialog(MyFrame.this, entertxt.getText() + "\n" + output.toString());
+					String output2 = Arrays.stream(output.toString().split("\n"))
+							.distinct().collect(Collectors.joining("\n"));
+					JOptionPane.showMessageDialog(MyFrame.this, entertxt.getText() + "\n" + output2);
 					entertxt.setText("Ask a Question or Insert a Type!");
 					return;
 				}
@@ -251,7 +258,9 @@ public class MyFrame extends JFrame implements ActionListener {
 							}
 						}
 					}
-					JOptionPane.showMessageDialog(MyFrame.this, entertxt.getText() + "\n" + output.toString());
+					String output2 = Arrays.stream(output.toString().split("\n"))
+							.distinct().collect(Collectors.joining("\n"));
+					JOptionPane.showMessageDialog(MyFrame.this, entertxt.getText() + "\n" + output2);
 					entertxt.setText("Ask a Question or Insert a Type!");
 					return;
 				}
@@ -278,7 +287,9 @@ public class MyFrame extends JFrame implements ActionListener {
 							}
 						}
 					}
-					JOptionPane.showMessageDialog(MyFrame.this, entertxt.getText() + "\n" + output.toString());
+					String output2 = Arrays.stream(output.toString().split("\n"))
+							.distinct().collect(Collectors.joining("\n"));
+					JOptionPane.showMessageDialog(MyFrame.this, entertxt.getText() + "\n" + output2);
 					entertxt.setText("Ask a Question or Insert a Type!");
 					return;
 				}
@@ -290,7 +301,8 @@ public class MyFrame extends JFrame implements ActionListener {
 					String firstpart1 = "action";
 					PrologQueryMaster.updateFacts();
 					PrologQueryMaster pqm = new PrologQueryMaster(PrologQueryMaster.FACTS_FILE);
-					JOptionPane.showMessageDialog(MyFrame.this, entertxt.getText() + pqm.verify(firstpart1, oaoparts));
+					JOptionPane.showMessageDialog(MyFrame.this, entertxt.getText() + "\n" +
+							((pqm.verify(firstpart1, oaoparts))? "Yes." : "No."));
 					entertxt.setText("Ask a Question or Insert a Type!");
 				}
 				return;
@@ -1743,6 +1755,11 @@ public class MyFrame extends JFrame implements ActionListener {
 					continue;
 				}
 				if (i == 2) {
+					if(oaoparts[i-1].trim().equals("is") || oaoparts[i-1].trim().equals("was") ||
+							oaoparts[i-1].trim().equals("were"))
+					{
+						continue;
+					}
 					object2correct = MyFrame.checkNewObject(oaoparts[2]);
 					if (object2correct == true) {
 						MyFrame.newobjects.add(oaoparts[2]);
@@ -1866,7 +1883,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				newtypes.put(obj, oldtypes.get(obj));
 				try {
 					Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
-							String.format("type({},{}).", obj, oldtypes.get(obj)).getBytes(), 
+							String.format("type(%s, %s).", obj, oldtypes.get(obj)).getBytes(), 
 							StandardOpenOption.APPEND);
 				} catch (IOException e) {
 					e.printStackTrace();

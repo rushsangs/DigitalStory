@@ -68,6 +68,11 @@ public class SentenceThread extends Thread implements Runnable{
 					continue;
 				}
 				if (i == 2) {
+					if(oaoparts[i-1].trim().equals("is") || oaoparts[i-1].trim().equals("was") ||
+							oaoparts[i-1].trim().equals("were"))
+					{
+						continue;
+					}
 					object2correct = MyFrame.checkNewObject(oaoparts[2]);
 					if (object2correct == true) {
 						MyFrame.newobjects.add(oaoparts[2]);
