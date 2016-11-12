@@ -1809,7 +1809,9 @@ public class MyFrame extends JFrame implements ActionListener {
 //		}
 	}
 	public static void getFileFn(){
-		//start.interrupt();
+//		if(MyFrame.start.isAlive()){
+//			start.stop();
+//		}
 		sentences = 0;
 		oaoList.clear();
 		problemsList.clear();
@@ -1826,6 +1828,8 @@ public class MyFrame extends JFrame implements ActionListener {
 		//historytxt.setText("");
 		//twostorytxt.setText("");
 		MyFrame.start.basecase = false;
+		MyFrame.start.firstdelimiter = 0;
+		MyFrame.start.lastdelimiter = 0;
 		String storytxt2 = MyFrame.twostorytxt.getText();
 		String[] storyparts = storytxt2.split("\\.");
 		for(int i = 0 ; i< storyparts.length; i++){
@@ -1844,8 +1848,9 @@ public class MyFrame extends JFrame implements ActionListener {
 			MyFrame.start.lastdelimiter = storytxt2.indexOf(".", MyFrame.start.lastdelimiter)+1;
 		}
 		System.out.println(MyFrame.start.lastdelimiter);
-		if(!MyFrame.start.isAlive())
-			MyFrame.start.start();
+//		if(MyFrame.start.isAlive())
+//			My
+		MyFrame.start.start();
 		return;
 	}
 	
