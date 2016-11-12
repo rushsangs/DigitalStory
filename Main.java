@@ -17,7 +17,11 @@ public class Main {
 			Files.createDirectory(Paths.get(PrologQueryMaster.DIR));
 		}
 		for (String fileName : PrologQueryMaster.ALL_FILES_TO_CREATE) {
-			Files.write(Paths.get(fileName), "".getBytes());
+			if (fileName.equals(PrologQueryMaster.TYPE_F)) {
+				Files.write(Paths.get(fileName), "type(null,null).".getBytes());
+			} else {
+				Files.write(Paths.get(fileName), "".getBytes());
+			}
 		}
 		NLPConnector.analyze("");
 		EnterTextThread enterthread = new EnterTextThread();

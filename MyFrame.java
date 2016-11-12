@@ -1848,9 +1848,8 @@ public class MyFrame extends JFrame implements ActionListener {
 			MyFrame.start.lastdelimiter = storytxt2.indexOf(".", MyFrame.start.lastdelimiter)+1;
 		}
 		System.out.println(MyFrame.start.lastdelimiter);
-//		if(MyFrame.start.isAlive())
-//			My
-		MyFrame.start.start();
+		if(!MyFrame.start.isAlive())
+			MyFrame.start.start();
 		return;
 	}
 	
@@ -1858,7 +1857,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		// assume objectstring is already already repopulated
 		HashMap<String, String> newtypes = new HashMap<String, String>();
 		try {
-			Files.write(Paths.get(PrologQueryMaster.TYPE_F), "type(_,_).".getBytes());
+			Files.write(Paths.get(PrologQueryMaster.TYPE_F), "type(null,null).".getBytes());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

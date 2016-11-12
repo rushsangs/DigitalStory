@@ -74,6 +74,8 @@ public class EnterTextThread extends Thread {
 					if(textArea.getCaretPosition()<lastdelimiter)
 						break;
 					storystring = MyFrame.twostorytxt.getText();
+					if(storystring==null)
+						continue;
 					if (storystring.indexOf(".", lastdelimiter) == -1) {
 						storystring = MyFrame.twostorytxt.getText();
 						continue;
