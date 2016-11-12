@@ -124,9 +124,9 @@ public class PrologQueryMaster {
 		} catch (IllegalArgumentException e) {
 			// for some reason, always reaches here at the end
 			//e.printStackTrace();
-//			return output.stream().map(
-//					(u) -> u.toArray(new String[0]))
-//					.toArray(String[][]::new);
+			return output.stream().map(
+					(u) -> u.toArray(new String[0]))
+					.toArray(String[][]::new);
 		} catch (PrologException e) {
 			System.out.println(e.getStackTrace());
 		} 
@@ -276,10 +276,11 @@ public class PrologQueryMaster {
 						Files.write(Paths.get(TMP), actionf, StandardOpenOption.APPEND);
 					} else if (file.equals(TRAIT_F)) {
 						// use replacement of TRAIT_F instead
-						Files.write(Paths.get(TMP), actionf, StandardOpenOption.APPEND);
+						Files.write(Paths.get(TMP), traitf, StandardOpenOption.APPEND);
 					} else {
 						Files.write(Paths.get(TMP), Files.readAllBytes(Paths.get(file)), StandardOpenOption.APPEND);
 					}
+					Files.write(Paths.get(TMP), "\n".getBytes(), StandardOpenOption.APPEND);
 				}
 			}
 			
@@ -288,6 +289,7 @@ public class PrologQueryMaster {
 			PrologQueryMaster pqm = new PrologQueryMaster(TMP);
 			String[][] rs = pqm.query("error", errorArgNames);
 			if (rs==null) {
+				System.out.println("issue with errors");
 				return new StoryProblemObject[]{};
 			}
 			StoryProblemObject[] ret = new StoryProblemObject[rs.length];
