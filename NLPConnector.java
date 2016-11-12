@@ -310,7 +310,7 @@ public class NLPConnector {
 				String afforder = s.substring(5, s.indexOf(","));
 				String attribute = s.substring(s.indexOf(",") + 1, s.indexOf(")"));
 				result += afforder.substring(0, afforder.lastIndexOf('-')) + " is"
-						+ attribute.substring(0, attribute.lastIndexOf('-')) + ", \n";
+						+ attribute.substring(0, attribute.lastIndexOf('-'));
 
 			}
 		}

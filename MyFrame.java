@@ -38,9 +38,9 @@ import java.sql.*;
 public class MyFrame extends JFrame implements ActionListener {
 	public static int sentences;
 	public static HashMap<Integer, String> oaoList;
+	public static HashMap<String, String> oldtypes;
 	public static ArrayList<StoryProblemObject[]> problemsList;
 	public static List<String> newobjects;
-	public static ArrayList<String> types;
 	public static HandleNewTypes typethread;
 	public static EnterTextThread start;
 	public static List<StoryProblemObject> problems;
@@ -98,6 +98,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	//private JComboBox<String> mybox = new JComboBox<String>(mylist);
 	
 	public MyFrame(DigitalStoryWorld world, EnterTextThread enterthread) {
+		oldtypes = new HashMap<String, String>();
 		entertxt.setHorizontalAlignment(JTextField.CENTER);
 		twostorytxt.setLineWrap(true);
 		storytxt.setLineWrap(true);
@@ -115,7 +116,6 @@ public class MyFrame extends JFrame implements ActionListener {
 		problems = new ArrayList<StoryProblemObject>();
 		//this.typethread = typethread;
 		newobjects = new ArrayList<String>();
-		types = new ArrayList<String>();
 		this.start = enterthread;
 		objectpanel.setLayout(new BorderLayout(10, 10));
 		objectList.setEditable(false);
@@ -556,8 +556,9 @@ public class MyFrame extends JFrame implements ActionListener {
 			frame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			frame2.pack();
 			frame2.setVisible(true);
-			for (String type : types_for_objects2) {
-				types.add(type);
+			String[] objects = objectstring.toString().split("\n");
+			for (int i = 0; i<types_for_objects2.length; i++) {
+				oldtypes.put(objects[i], types_for_objects2[i]);
 			}
 			try {
 				Files.write(Paths.get(PrologQueryMaster.TYPE_F),
@@ -1010,7 +1011,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			oaoList.clear();
 			problemsList.clear();
 			newobjects.clear();
-			types.clear();
+			redoTypes();
 			problems.clear();
 			historystring = new StringBuilder();
 			objectstring = new StringBuilder();
@@ -1614,7 +1615,8 @@ public class MyFrame extends JFrame implements ActionListener {
 		HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
 		String[] splitText = twostorytxt.getText().split("\\.");
 		int highlighterIndex = 0;
-		for (int i = 0; i<problemsList.size(); i++) {
+
+		for (int i = 0; i<Math.min(problemsList.size(), splitText.length); i++) {
 			int newHighlighterIndex = highlighterIndex + splitText[i].length();
 			if (MyFrame.problemsList.get(i).length>0) {
 				Color c;
@@ -1660,8 +1662,8 @@ public class MyFrame extends JFrame implements ActionListener {
 		for (int i = 0; i<objects.length; i++) {
 			s.append(objects[i]);
 			s.append(" - ");
-			if (i<types.size()) {
-				s.append(types.get(i));
+			if (oldtypes.containsKey(objects[i])) {
+				s.append(oldtypes.get(objects[i]));
 			} else {
 				s.append("?");
 			}
@@ -1807,11 +1809,11 @@ public class MyFrame extends JFrame implements ActionListener {
 //		}
 	}
 	public static void getFileFn(){
+		//start.interrupt();
 		sentences = 0;
 		oaoList.clear();
 		problemsList.clear();
-//		newobjects.clear();
-//		types.clear();
+		newobjects.clear();
 		problems.clear();
 		historystring = new StringBuilder();
 		objectstring = new StringBuilder();
@@ -1835,6 +1837,7 @@ public class MyFrame extends JFrame implements ActionListener {
 			// this is where we call the function for sentence thread
 			sentenceThreadFn(sentences, storyparts[i], false, i);
 		}
+		redoTypes();
 		MyFrame.start.basecase = true;
 		MyFrame.start.lastdelimiter = storytxt2.indexOf(".") + 1;
 		while((storytxt2.indexOf(".", MyFrame.start.lastdelimiter) != -1)){
@@ -1844,6 +1847,29 @@ public class MyFrame extends JFrame implements ActionListener {
 		if(!MyFrame.start.isAlive())
 			MyFrame.start.start();
 		return;
+	}
+	
+	public static void redoTypes() {
+		// assume objectstring is already already repopulated
+		HashMap<String, String> newtypes = new HashMap<String, String>();
+		try {
+			Files.write(Paths.get(PrologQueryMaster.TYPE_F), "type(_,_).".getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		for (String obj : objectstring.toString().split("\n")) {
+			if (oldtypes.containsKey(obj)) {
+				newtypes.put(obj, oldtypes.get(obj));
+				try {
+					Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
+							String.format("type({},{}).", obj, oldtypes.get(obj)).getBytes(), 
+							StandardOpenOption.APPEND);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		oldtypes = newtypes;
 	}
 
 }

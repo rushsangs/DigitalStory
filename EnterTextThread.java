@@ -59,8 +59,9 @@ public class EnterTextThread extends Thread {
 						System.out.println(substring + " append sentence");
 						System.out.println("Created new thread for first sentence/ base case");
 						MyFrame.sentences++;
-						root = new SentenceThread(storystring, substring, false, 0); 									
-						root.start();
+						//root = new SentenceThread(storystring, substring, false, 0); 									
+						//root.start();
+						MyFrame.sentenceThreadFn(storystring, substring, false, 0);
 						lastdelimiter = storystring.indexOf(".") + 1;
 						basecase = true;
 					}
@@ -85,7 +86,8 @@ public class EnterTextThread extends Thread {
 						MyFrame.sentences++;
 						System.out.println(substring + "append sentence");
 						System.out.println("Creating thread which is new sentence");
-						insertNode(storystring, substring, false, storystring.split("\\.").length-1);
+						//insertNode(storystring, substring, false, storystring.split("\\.").length-1);
+						MyFrame.sentenceThreadFn(storystring, substring, false, storystring.split("\\.").length-1);
 					}
 					
 
@@ -106,7 +108,7 @@ public class EnterTextThread extends Thread {
 				cursorCurrentSentence = storystring.substring(0, cursorLocation).split("\\.").length - 1;
 				String tmp_storystring=storystring;
 				while (cursorCurrentSentence == problemSentenceNo) {
-					System.out.println("The user is inside problem sentence");
+//					System.out.println("The user is inside problem sentence");
 					tmp_storystring = MyFrame.twostorytxt.getText();
 					cursorLocation = textArea.getCaretPosition();
 					cursorCurrentSentence = tmp_storystring.substring(0, cursorLocation).split("\\.").length - 1;
@@ -117,8 +119,9 @@ public class EnterTextThread extends Thread {
 				// sentence editting complete
 				System.out.println("Thread creaated which is updating edited sentence");
 				String newSentence = storystring.split("\\.")[problemSentenceNo];
-				Thread root = new SentenceThread(storystring, newSentence, true, problemSentenceNo);
-				root.start();
+//				Thread root = new SentenceThread(storystring, newSentence, true, problemSentenceNo);
+//				root.start();
+				MyFrame.sentenceThreadFn(storystring, newSentence, true, problemSentenceNo);
 				System.out.println(newSentence + " updateSentence");
 			}
 		}
