@@ -10,3 +10,11 @@ error(2, 'Invalid Type Error: \n%s cannot visit entities that are not humans or 
 	action(A, visits, B),
 	\+ type(B, human),
 	\+ type(B, location).
+
+error(3, 'Invalid Action Error: \n%s fell from %s, but %s was never chopped down', [A, B, B]) :-
+	action(A, fall, _),
+	action(A, on, B),
+	\+ action(_, chop, B).
+error(3, 'Invalid Action Error: \n%s fell down, but %s is standing on solid ground', [A]) :-
+	action(A, fell-down, _),
+	\+ action(A, on, B).

@@ -29,8 +29,24 @@ action(A, visits, B) :- action(A, visit, B).
 action(A, throws, B) :- action(A, threw, B).
 action(A, throws, B) :- action(A, throw, B).
 
+action(A, reach, B) :- action(A, reached, B).
+action(A, reach, B) :- action(A, reaches, B).
+
+action(A, climb, B) :- action(A, climbed, B).
+action(A, climb, B) :- action(A, climbs, B).
+
+action(A, descend, B) :- action(A, descended, B).
+action(A, descend, B) :- action(A, descends, B).
+
+action(A, plummet, _) :- action(A, plummeted-down, _).
+
 action(A, has, B) :- action(A, took, B).
 action(A, has, B) :- action(A, owns, B).
 action(A, has, B) :- action(A, gets, B).
+
+action(A, on, B) :- action(A, climb, B).
+action(A, on, B) :- action(A, descend, B).
+
+action(A, fall, _) :- action(A, plummet, _).
 
 action(A, possess, B) :- action(A, have, B).
