@@ -113,7 +113,7 @@ public class MyFrame extends JFrame implements ActionListener {
 		problemsList = new ArrayList<StoryProblemObject[]>();
 		oaoList = new HashMap<Integer, String>();
 		this.initializeDB();
-		this.setTitle("Lexically Intelligent Story Assistant");
+		this.setTitle("L.I.S.A. - Lexically Intelligent Story Assistant");
 		this.world = world;
 		problems = new ArrayList<StoryProblemObject>();
 		//this.typethread = typethread;
@@ -1865,8 +1865,8 @@ public class MyFrame extends JFrame implements ActionListener {
 			MyFrame.start.lastdelimiter = storytxt2.indexOf(".", MyFrame.start.lastdelimiter)+1;
 		}
 		System.out.println(MyFrame.start.lastdelimiter);
-		if(!MyFrame.start.isAlive())
-			MyFrame.start.start();
+//		if(!MyFrame.start.isAlive())
+//			MyFrame.start.start();
 		return;
 	}
 	
@@ -1883,7 +1883,7 @@ public class MyFrame extends JFrame implements ActionListener {
 				newtypes.put(obj, oldtypes.get(obj));
 				try {
 					Files.write(Paths.get(PrologQueryMaster.TYPE_F), 
-							String.format("type(%s, %s).", obj, oldtypes.get(obj)).getBytes(), 
+							String.format("type(%s, %s). \n", obj.toLowerCase(), oldtypes.get(obj)).toLowerCase().getBytes(), 
 							StandardOpenOption.APPEND);
 				} catch (IOException e) {
 					e.printStackTrace();

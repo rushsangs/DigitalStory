@@ -31,8 +31,8 @@ public class Main {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-		//Thread et = new Thread(enterthread);
-		//enterthread.start();
+		Thread et = new Thread(enterthread);
+		enterthread.start();
 //		String[] types = {"human","animal"};
 //		String[] characters = {"bob","alice","wolf"};
 //		String[] results = new String[characters.length];
