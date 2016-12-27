@@ -22,3 +22,10 @@ error(3, 'Invalid Action Error: \n%s fell down, but %s is standing on solid grou
 error(3, 'Invalid Action Error: \n%s borrowed %s, but %s did not visit anyone who has %s', [A, B, A, B]) :-
     action(A, borrow, B),
     \+ (action(A, visit, C), action(C, has, B)).
+    
+:- discontiguous action/3.
+action(alice, has, ingredients).
+:- discontiguous error/3.
+error(3, 'Invalid Action Error: \nalice is baking a cake, but alice does not own all the ingredients she needs', []) :-
+    action(alice, bake, cake),
+    (action(alice, need, X), \+ action(alice, has, X)).

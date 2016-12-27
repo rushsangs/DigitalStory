@@ -43,6 +43,12 @@ action(A, plummet, _) :- action(A, plummeted-down, _).
 action(A, borrow, B) :- action(A, borrowed, B).
 action(A, borrow, B) :- action(A, borrows, B).
 
+action(A, need, B) :- action(A, needed, B).
+action(A, need, B) :- action(A, needs, B).
+
+action(A, bake, B) :- action(A, baked, B).
+action(A, bake, B) :- action(A, bakes, B).
+
 action(A, has, B) :- action(A, took, B).
 action(A, has, B) :- action(A, own, B).
 action(A, has, B) :- action(A, gets, B).
