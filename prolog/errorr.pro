@@ -18,3 +18,7 @@ error(3, 'Invalid Action Error: \n%s fell from %s, but %s was never chopped down
 error(3, 'Invalid Action Error: \n%s fell down, but %s is standing on solid ground', [A, A]) :-
 	action(A, fall, _),
 	\+ action(A, on, _).
+	
+error(3, 'Invalid Action Error: \n%s borrowed %s, but %s did not visit anyone who has %s', [A, B, A, B]) :-
+    action(A, borrow, B),
+    \+ (action(A, visit, C), action(C, has, B)).
