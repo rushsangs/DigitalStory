@@ -7,7 +7,7 @@ error(3, 'Invalid Action Error: \n%s cannot sell %s unless they possess %s', [A,
 	\+ action(A, has, C).
 
 error(2, 'Invalid Type Error: \n%s cannot visit entities that are not humans or locations', [A]) :-
-	action(A, visits, B),
+	action(A, visit, B),
 	\+ type(B, human),
 	\+ type(B, location).
 
